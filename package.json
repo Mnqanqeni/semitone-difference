@@ -1,0 +1,22 @@
+{
+  "name": "ndiyakholwa-mnqanqeni-199-semitone-difference-basic-algorithm-javascript",
+  "version": "1.0.0",
+  "description": "This project is a game devolopmemt to practice basic music notes",
+  "main": "index.js",
+  "scripts": {
+    "test": "jasmine"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Umuzi-org/Ndiyakholwa-Mnqanqeni-199-semitone-difference-basic-algorithm-javascript.git"
+  },
+  "author": "Ndiyakholwa Mnqanqeni",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Umuzi-org/Ndiyakholwa-Mnqanqeni-199-semitone-difference-basic-algorithm-javascript/issues"
+  },
+  "homepage": "https://github.com/Umuzi-org/Ndiyakholwa-Mnqanqeni-199-semitone-difference-basic-algorithm-javascript#readme",
+  "devDependencies": {
+    "jasmine": "^5.1.0"
+  }
+}
