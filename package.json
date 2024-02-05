@@ -1,8 +1,8 @@
 {
   "name": "ndiyakholwa-mnqanqeni-199-semitone-difference-basic-algorithm-javascript",
   "version": "1.0.0",
-  "description": "This project is a game devolopmemt to practice basic music notes",
-  "main": "index.js",
+  "description": "This project is a game development to practice basic music notes.",
+  "main": "./src/jam_buddy.js",
   "scripts": {
     "test": "jasmine"
   },

@@ -1,5 +1,5 @@
 const errorMessages = {
-    inputError: "Invalid input",
-  };
+  inputError: "Invalid input.",
+};
 
-  module.exports = { errorMessages };
+module.exports = { errorMessages };
