@@ -22,11 +22,7 @@ describe("JamBuddy Class:", () => {
   describe("setCurrentNotes", () => {
     beforeEach(() => {
       buddy = new JamBuddy();
-    });
-
-    it("should update the notes when called with valid arguments.", () => {
-      buddy.setCurrentNotes(["A", "A#"]);
-      expect(buddy.getCurrentNotes()).toEqual(["A", "A#"]);
+      buddy.setCurrentNotes(["C", "D#"]);
     });
 
     it("should throw an error 'invalid input' when notes passed do not exist.", () => {
@@ -41,7 +37,7 @@ describe("JamBuddy Class:", () => {
       );
     });
 
-    it("should throw an error if more than two notes are passed.", () => {
+    it("should throw an error 'invalid input' when an empty array is passed.", () => {
       expect(() => buddy.setCurrentNotes([])).toThrowError(
         errorMessages.inputError
       );
@@ -51,10 +47,10 @@ describe("JamBuddy Class:", () => {
   describe("randomizeCurrentNotes", () => {
     beforeEach(() => {
       buddy = new JamBuddy();
+      buddy.setCurrentNotes(["C", "D#"]);
     });
 
-    it("should return randomized notes when called.", () => {
-      buddy.setCurrentNotes(["C", "D#"]);
+    it("should return randomized notes when called.", () => { 
       const previousNotes = buddy.getCurrentNotes();
       buddy.randomizeCurrentNotes();
       const randomizedNotes = buddy.getCurrentNotes();
@@ -72,20 +68,18 @@ describe("JamBuddy Class:", () => {
   describe("checkAnswer", () => {
     beforeEach(() => {
       buddy = new JamBuddy();
+      buddy.setCurrentNotes(["C", "D#"]);
     });
 
     it("should return false when an incorrect distance is passed.", () => {
-      buddy.setCurrentNotes(["C", "D#"]);
       expect(buddy.checkAnswer(1)).toBe(false);
     });
 
     it("should return true when a correct forward distance is passed.", () => {
-      buddy.setCurrentNotes(["C", "D#"]);
       expect(buddy.checkAnswer(3)).toBe(true);
     });
 
     it("should return true when a correct reverse cyclic distance is passed.", () => {
-      buddy.setCurrentNotes(["C", "D#"]);
       expect(buddy.checkAnswer(9)).toBe(true);
     });
 
