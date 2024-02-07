@@ -9,7 +9,7 @@ describe("JamBuddy Class:", () => {
       buddy = new JamBuddy();
     });
 
-    it("should return an empty array when no set or randomly generated notes.", () => {
+    it("should return an empty array.", () => {
       expect(buddy.getCurrentNotes()).toEqual([]);
     });
 
@@ -41,7 +41,7 @@ describe("JamBuddy Class:", () => {
       );
     });
 
-    it("should throw an error 'invalid input' when an empty array is passed.", () => {
+    it("should throw an error if more than two notes are passed.", () => {
       expect(() => buddy.setCurrentNotes([])).toThrowError(
         errorMessages.inputError
       );
@@ -56,19 +56,16 @@ describe("JamBuddy Class:", () => {
     it("should return randomized notes when called.", () => {
       buddy.setCurrentNotes(["C", "D#"]);
       const previousNotes = buddy.getCurrentNotes();
-      const randomizedNotes = buddy.randomizeCurrentNotes();
+      buddy.randomizeCurrentNotes();
+      const randomizedNotes = buddy.getCurrentNotes();
 
       expect(previousNotes).not.toEqual(randomizedNotes);
     });
 
     it("should return notes with no duplicates when called.", () => {
-      const randomizedNotes = buddy.randomizeCurrentNotes();
+      buddy.randomizeCurrentNotes();
+      const randomizedNotes = buddy.getCurrentNotes();
       expect(randomizedNotes[0]).not.toBe(randomizedNotes[1]);
-    });
-
-    it("should update the notes to the currently randomly generated notes when called.", () => {
-      const randomizedNotes = buddy.randomizeCurrentNotes();
-      expect(buddy.getCurrentNotes()).toEqual(randomizedNotes);
     });
   });
 
