@@ -38,7 +38,7 @@ class JamBuddy {
     this.setCurrentNotes([firstNote, secondNote]);
   }
 
-  getCurrentNotes() {.
+  getCurrentNotes() {
     return this.#currentNotes;
   }
 
