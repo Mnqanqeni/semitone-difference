@@ -23,21 +23,27 @@ describe("JamBuddy Class:", () => {
 
   describe("setCurrentNotes", () => {
 
-    it("should throw an error 'invalid input' when notes passed do not exist.", () => {
+    it("should throw an error when notes passed do not exist.", () => {
       expect(() => buddy.setCurrentNotes(["X", "Y"])).toThrowError(
-        errorMessages.inputError
+        errorMessages.notesNotValid
       );
     });
 
-    it("should throw an error 'invalid input' when an array of elements not equal to two is passed.", () => {
+    it("should throw an error when notes passed do not exist.", () => {
+      expect(() => buddy.setCurrentNotes(["A", "A"])).toThrowError(
+        errorMessages.noteDuplicated
+      );
+    });
+
+    it("should throw an error when an array of elements not equal to two is passed.", () => {
       expect(() => buddy.setCurrentNotes(["A", "B", "C"])).toThrowError(
-        errorMessages.inputError
+        errorMessages.notTwoElements
       );
     });
 
-    it("should throw an error 'invalid input' when an empty array is passed.", () => {
+    it("should throw an error when an empty array is passed.", () => {
       expect(() => buddy.setCurrentNotes([])).toThrowError(
-        errorMessages.inputError
+        errorMessages.notTwoElements
       );
     });
   });
@@ -83,6 +89,18 @@ describe("JamBuddy Class:", () => {
       expect(buddy.checkAnswer(3)).toBe(true);
       expect(buddy.checkAnswer(9)).toBe(true);
       expect(buddy.checkAnswer(1)).toBe(false);
+    });
+    
+    it("should throw an error when distance is out of range.", () => {
+      expect(() => buddy.checkAnswer(12)).toThrowError(
+        errorMessages.distanceOutOfRange
+      );
+    });
+    
+    it("should throw an error when distance is out of range.", () => {
+      expect(() => buddy.checkAnswer(-1)).toThrowError(
+        errorMessages.negativeDistance
+      );
     });
   });
 });

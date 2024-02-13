@@ -1,4 +1,4 @@
-const { shuffleArray, validateNotesArray } = require("./helper_functions");
+const { validateDistance,validateNotesArray } = require("./helper_functions");
 const { errorMessages } = require("./helper_objects");
 
 class JamBuddy {
@@ -43,14 +43,12 @@ class JamBuddy {
   }
 
   setCurrentNotes(arrayNotes) {
-    if (validateNotesArray(arrayNotes, JamBuddy.#musicalElements)) {
-      this.#currentNotes = arrayNotes;
-    } else {
-      throw new Error(errorMessages.inputError);
-    }
+    validateNotesArray(arrayNotes, JamBuddy.#musicalElements)
+    this.#currentNotes = arrayNotes;
   }
 
   checkAnswer(distance) {
+    validateDistance(distance)
     const index1 = JamBuddy.#musicalElements.indexOf(this.getCurrentNotes()[0]);
     const index2 = JamBuddy.#musicalElements.indexOf(this.getCurrentNotes()[1]);
 
@@ -63,7 +61,6 @@ class JamBuddy {
       absDiff,
       JamBuddy.#musicalElements.length - absDiff,
     ];
-
     return cyclicDistance.includes(distance);
   }
 }
