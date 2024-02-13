@@ -10,7 +10,6 @@ describe("JamBuddy Class:", () => {
   });
 
   describe("getCurrentNotes", () => {
-    
     it("should return the initially set arry ['C','D#'].", () => {
       expect(buddy.getCurrentNotes()).toEqual(["C", "D#"]);
     });
@@ -22,7 +21,6 @@ describe("JamBuddy Class:", () => {
   });
 
   describe("setCurrentNotes", () => {
-
     it("should throw an error when notes passed do not exist.", () => {
       expect(() => buddy.setCurrentNotes(["X", "Y"])).toThrowError(
         errorMessages.notesNotValid
@@ -49,8 +47,7 @@ describe("JamBuddy Class:", () => {
   });
 
   describe("randomizeCurrentNotes", () => {
-
-    it("should return randomized notes when called.", () => { 
+    it("should return randomized notes when called.", () => {
       const previousNotes = buddy.getCurrentNotes();
       buddy.randomizeCurrentNotes();
       const randomizedNotes = buddy.getCurrentNotes();
@@ -66,7 +63,6 @@ describe("JamBuddy Class:", () => {
   });
 
   describe("checkAnswer", () => {
-
     it("should return false when an incorrect distance is passed.", () => {
       expect(buddy.checkAnswer(1)).toBe(false);
     });
@@ -90,13 +86,13 @@ describe("JamBuddy Class:", () => {
       expect(buddy.checkAnswer(9)).toBe(true);
       expect(buddy.checkAnswer(1)).toBe(false);
     });
-    
+
     it("should throw an error when distance is out of range.", () => {
       expect(() => buddy.checkAnswer(12)).toThrowError(
         errorMessages.distanceOutOfRange
       );
     });
-    
+
     it("should throw an error when distance is out of range.", () => {
       expect(() => buddy.checkAnswer(-1)).toThrowError(
         errorMessages.negativeDistance

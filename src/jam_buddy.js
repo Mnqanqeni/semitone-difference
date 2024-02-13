@@ -1,4 +1,8 @@
-const { validateDistance,validateNotesArray } = require("./helper_functions");
+const {
+  validateDistance,
+  validateNotesArray,
+  getIndexes,
+} = require("./helper_functions");
 const { errorMessages } = require("./helper_objects");
 
 class JamBuddy {
@@ -43,14 +47,16 @@ class JamBuddy {
   }
 
   setCurrentNotes(arrayNotes) {
-    validateNotesArray(arrayNotes, JamBuddy.#musicalElements)
+    validateNotesArray(arrayNotes, JamBuddy.#musicalElements);
     this.#currentNotes = arrayNotes;
   }
 
   checkAnswer(distance) {
-    validateDistance(distance)
-    const index1 = JamBuddy.#musicalElements.indexOf(this.getCurrentNotes()[0]);
-    const index2 = JamBuddy.#musicalElements.indexOf(this.getCurrentNotes()[1]);
+    validateDistance(distance);
+    const [index1, index2] = getIndexes(
+      JamBuddy.#musicalElements,
+      this.getCurrentNotes()
+    );
 
     if (index1 === -1 || index2 === -1) {
       return false;
