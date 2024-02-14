@@ -80,7 +80,7 @@ describe("JamBuddy Class:", () => {
       expect(buddy.checkAnswer(1)).toBe(false);
       expect(buddy.checkAnswer(3)).toBe(true);
       expect(buddy.checkAnswer(9)).toBe(true);
-      expect(buddy.checkAnswer(1)).toBe(false);
+      expect(buddy.checkAnswer(5)).toBe(false);
     });
 
     it("should throw an error when distance is out of range.", () => {
