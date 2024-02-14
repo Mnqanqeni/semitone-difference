@@ -3,7 +3,6 @@ const {
   validateNotesArray,
   getIndexes,
 } = require("./helper_functions");
-const { errorMessages } = require("./helper_objects");
 
 class JamBuddy {
   static #musicalElements = [

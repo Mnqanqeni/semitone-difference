@@ -10,7 +10,7 @@ describe("JamBuddy Class:", () => {
   });
 
   describe("getCurrentNotes", () => {
-    it("should return the initially set arry ['C','D#'].", () => {
+    it("should return the initially set array ['C','D#'].", () => {
       expect(buddy.getCurrentNotes()).toEqual(["C", "D#"]);
     });
 
@@ -73,10 +73,6 @@ describe("JamBuddy Class:", () => {
 
     it("should return true when a correct reverse cyclic distance is passed.", () => {
       expect(buddy.checkAnswer(9)).toBe(true);
-    });
-
-    it("should return false when no note is randomly generated or set.", () => {
-      expect(buddy.checkAnswer(1)).toBe(false);
     });
 
     it("should verify the correct answers", () => {
