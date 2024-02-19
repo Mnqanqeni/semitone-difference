@@ -10,6 +10,7 @@ function validateNotesArray(arrayNotes, musicalElementsArray) {
     throw new Error(errorMessages.noteDuplicated);
   }
 }
+
 function getIndexes(musicalElements, currentNotes) {
   const index1 = musicalElements.indexOf(currentNotes[0]);
   const index2 = musicalElements.indexOf(currentNotes[1]);
@@ -17,10 +18,15 @@ function getIndexes(musicalElements, currentNotes) {
 }
 
 function validateDistance(distance) {
-  if (distance > maxDistance) {
+  if (typeof distance !== "number") {
+    throw new Error(errorMessages.onlyDatatypeOfNumber);
+  } else if (!Number.isInteger(distance)) {
+    throw new Error(errorMessages.mustBeWholeNumber);
+  } else if (distance > maxDistance || distance === 0) {
     throw new Error(errorMessages.distanceOutOfRange);
   } else if (distance < 0) {
     throw new Error(errorMessages.negativeDistance);
   }
 }
+
 module.exports = { validateDistance, validateNotesArray, getIndexes };

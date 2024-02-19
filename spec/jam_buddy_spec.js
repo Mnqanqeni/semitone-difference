@@ -14,26 +14,26 @@ describe("JamBuddy Class:", () => {
       expect(buddy.getCurrentNotes()).toEqual(["C", "D#"]);
     });
 
-    it("should return the currently updated notes when notes have been updated.", () => {
+    it("should return the currently updated notes when notes have been modified.", () => {
       buddy.setCurrentNotes(["A", "B"]);
       expect(buddy.getCurrentNotes()).toEqual(["A", "B"]);
     });
   });
 
   describe("setCurrentNotes", () => {
-    it("should throw an error when notes passed do not exist.", () => {
+    it("should throw an error when non-existent notes are passed.", () => {
       expect(() => buddy.setCurrentNotes(["X", "Y"])).toThrowError(
         errorMessages.notesNotValid
       );
     });
 
-    it("should throw an error when notes passed do not exist.", () => {
+    it("should throw an error when duplicate notes are passed.", () => {
       expect(() => buddy.setCurrentNotes(["A", "A"])).toThrowError(
         errorMessages.noteDuplicated
       );
     });
 
-    it("should throw an error when an array of elements not equal to two is passed.", () => {
+    it("should throw an error when an array with elements other than two is passed.", () => {
       expect(() => buddy.setCurrentNotes(["A", "B", "C"])).toThrowError(
         errorMessages.notTwoElements
       );
@@ -75,7 +75,7 @@ describe("JamBuddy Class:", () => {
       expect(buddy.checkAnswer(9)).toBe(true);
     });
 
-    it("should verify the correct answers", () => {
+    it("should verify the correctness of answers", () => {
       buddy.setCurrentNotes(["C", "D#"]);
       expect(buddy.checkAnswer(1)).toBe(false);
       expect(buddy.checkAnswer(3)).toBe(true);
@@ -83,15 +83,27 @@ describe("JamBuddy Class:", () => {
       expect(buddy.checkAnswer(5)).toBe(false);
     });
 
-    it("should throw an error when distance is out of range.", () => {
+    it("should throw an error when the distance is out of range.", () => {
       expect(() => buddy.checkAnswer(12)).toThrowError(
         errorMessages.distanceOutOfRange
       );
     });
 
-    it("should throw an error when distance is out of range.", () => {
+    it("should throw an error when a negative distance is passed.", () => {
       expect(() => buddy.checkAnswer(-1)).toThrowError(
         errorMessages.negativeDistance
+      );
+    });
+
+    it("should throw an error when a non-whole number distance is passed.", () => {
+      expect(() => buddy.checkAnswer(5.4)).toThrowError(
+        errorMessages.mustBeWholeNumber
+      );
+    });
+
+    it("should throw an error when a data type other than 'number' is passed.", () => {
+      expect(() => buddy.checkAnswer("two")).toThrowError(
+        errorMessages.onlyDatatypeOfNumber
       );
     });
   });
