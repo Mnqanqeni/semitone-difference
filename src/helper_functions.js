@@ -1,4 +1,7 @@
-const { errorMessages } = require("./helper_objects");
+const {
+  errorMessages,
+  musicalElementsNotesObject,
+} = require("./helper_objects");
 const maxDistance = 11;
 
 function validateNotesArray(arrayNotes, musicalElementsArray) {
@@ -8,12 +11,19 @@ function validateNotesArray(arrayNotes, musicalElementsArray) {
     throw new Error(errorMessages.notesNotValid);
   } else if (arrayNotes[0] === arrayNotes[1]) {
     throw new Error(errorMessages.noteDuplicated);
+  } else if (
+    musicalElementsNotesObject[arrayNotes[0]] ===
+    musicalElementsNotesObject[arrayNotes[1]]
+  ) {
+    throw new Error(
+      errorMessages.inharmonicEquivalentNotesError(arrayNotes[0], arrayNotes[1])
+    );
   }
 }
 
-function getIndexes(musicalElements, currentNotes) {
-  const index1 = musicalElements.indexOf(currentNotes[0]);
-  const index2 = musicalElements.indexOf(currentNotes[1]);
+function getIndexes(currentNotes) {
+  const index1 = musicalElementsNotesObject[currentNotes[0]];
+  const index2 = musicalElementsNotesObject[currentNotes[1]];
   return [index1, index2];
 }
 
