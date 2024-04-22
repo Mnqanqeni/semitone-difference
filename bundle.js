@@ -39,7 +39,7 @@ for (let i = 0; i < distanceButtons.length; i++) {
                 showIncorrectMessage();
                 streaks=0;
             }
-            setTimeout(switchMessageOff, 1000);
+            delayedCode();
             showStreakMessage();
     });
 }
@@ -74,28 +74,45 @@ function switchMessageOff() {
     incorrectMessage.style.display = "none";
 }
 
+function delay(milliseconds) {
+    return new Promise(resolve => setTimeout(resolve, milliseconds));
+}
+async function delayedCode() {
+    await delay(2000);
+}
+
 let canvas = document.querySelector("canvas");
 canvas.width = 1000;
 canvas.height = 100;
 let ctx = canvas.getContext("2d");
 
-// Get the coordinates
-let canvasX = canvas.width / 11; // Divide canvas width into 11 parts for 11 circles
-let canvasY = canvas.height / 2; // Place circles at the center of the canvas height
-ctx.font = "30px Arial";
-ctx.fillStyle = "black";
-ctx.fillText("'A', 'A#', 'Bb', 'B', 'C', 'C#', 'Db', 'D', 'D#', 'Eb', 'E', 'F', 'F#', 'Gb', 'G', 'G#'", canvasX, canvasY);
+let canvasX = 50; // Starting X position
+let canvasY = canvas.height / 2;
+ctx.font = "20px Arial";
+ctx.fillStyle = "blue";
 
-for (let i = 0; i < 11; i++) {
+// Define the starting and ending semitones
+let startSemitone = 1; // Start at A#
+let endSemitone = 10; // End at G#
+
+// Array of note names
+let noteNames = ["A", "A#/Bb", "B", "C", "C#/Db", "D", "D#/Eb", "E", "F", "F#/Gb", "G","G#"];
+
+// Draw note names
+for (let i = 0; i <=11; i++) {
+    ctx.fillText(noteNames[i], canvasX - 20, canvasY + 20);
+    canvasX += 80;
+}
+
+// Draw circles
+canvasX = 60; // Reset X position
+for (let i = 0; i <= 11; i++) {
     ctx.beginPath();
-    ctx.arc(canvasX, canvasY, 30, 0,Math.PI,true); // Multiply canvasX by (i + 0.5) to place circles equidistantly
-    canvasX+=60;
+    ctx.arc(canvasX, canvasY, 40, 0, Math.PI,true);
+    canvasX += 76;
     ctx.strokeStyle = "gold";
     ctx.stroke();
 }
-
-
-
 
 },{"./src/jam_buddy":4}],2:[function(require,module,exports){
 const { errorMessages } = require("./helper_objects");
