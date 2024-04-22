@@ -1,0 +1,95 @@
+/* Mobile First Styles */
+/* Variables*/
+:root {
+    --first: black;
+    --second: rgb(218, 40, 40);
+    --third: Beige;
+    --fourth: red;
+    --size: 2em;
+  }
+  
+  /* Reset*/
+  * {
+    margin: 0;
+    padding: 0;
+    font-family: "poppins", sans-serif;
+    box-sizing: border-box;
+    text-decoration: none;
+    list-style: none;
+  }
+  
+/* styles.css */
+
+body {
+    background-color: #f0f0f0;
+    display:flex;
+    height: 100hv;
+    align-items: center;
+    text-align: center;
+    background-image: url(./guitar-music-background-vector-20658388.jpg);
+
+}
+
+#container {
+    max-width: 100%;
+    margin: 50px auto;
+    padding: 10%;
+}
+.distance-btn{
+    border-radius: 5px;
+}
+#randomize-btn{
+ border-radius: 5px;
+}
+
+h1 {
+    color:  #007bff;
+    
+}
+
+p {
+    color:  #007bff;
+    font-size: 30px;
+}
+
+#notes-display {
+    margin-bottom: 20px;
+}
+
+button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    margin: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+#correctMessage,
+#incorrectMessage, #streak{
+    display: none;
+    font-size: 20px;
+    padding: 10px;
+    margin: 10px;
+    border-radius: 5px;
+}
+
+#correctMessage {
+    background-color: lightgreen;
+}
+
+#incorrectMessage {
+    background-color: salmon;
+}
+#streak{
+    display: block;
+    background-color: #f0f0f0;
+}
+
+canvas{
+    border:3px solid green;
+}

@@ -1,6 +1,6 @@
 {
   "spec_dir": "spec",
-  "spec_files": ["jam_buddy_spec.js"],
+  "spec_files": ["jam_buddy_spec.js","script_spec.js"],
   "helpers": ["helper_*.js"],
   "env": {
     "stopSpecOnExpectationFailure": false,
