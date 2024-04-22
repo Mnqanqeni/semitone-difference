@@ -95,18 +95,38 @@ describe("JamBuddy Class:", () => {
       expect(buddy.checkAnswer(9)).toBe(true);
     });
 
-    it("should give the correct answers for valid note sets.", () => {
+    it("should return true when the correct answers are passed, where valid set notes are set.", () => {
       buddy.setCurrentNotes(["C", "D#"]);
-      expect(buddy.checkAnswer(1)).toBe(false);
       expect(buddy.checkAnswer(3)).toBe(true);
       expect(buddy.checkAnswer(9)).toBe(true);
+    });
+
+    it("should return false when incorrect answers are passed, where valid note set are set.", () => {
+      buddy.setCurrentNotes(["C", "D#"]);
+      expect(buddy.checkAnswer(1)).toBe(false);
       expect(buddy.checkAnswer(5)).toBe(false);
     });
 
-    it("should give the correct answers, accounting for sharp and flat notes.", () => {
+    it("should return true when correct answers are passed, where sharp notes are set.", () => {
       buddy.setCurrentNotes(["A", "A#"]);
       expect(buddy.checkAnswer(1)).toBe(true);
       expect(buddy.checkAnswer(11)).toBe(true);
+    });
+
+    it("should return true when correct answers are passed, where flat notes are set.", () => {
+      buddy.setCurrentNotes(["A", "Bb"]);
+      expect(buddy.checkAnswer(1)).toBe(true);
+      expect(buddy.checkAnswer(11)).toBe(true);
+    });
+
+    it("should return false when incorrect answers are passed, where sharp notes are set.", () => {
+      buddy.setCurrentNotes(["A", "A#"]);
+      expect(buddy.checkAnswer(9)).toBe(false);
+      expect(buddy.checkAnswer(5)).toBe(false);
+    });
+
+    it("should return false when incorrect answers are passed, where flat notes are set.", () => {
+      buddy.setCurrentNotes(["A", "Bb"]);
       expect(buddy.checkAnswer(9)).toBe(false);
       expect(buddy.checkAnswer(5)).toBe(false);
     });

@@ -2,6 +2,7 @@ const {
   validateDistance,
   validateNotesArray,
   getIndexes,
+  getRandomNote,
 } = require("./helper_functions");
 const { musicalElementsNotesObject } = require("./helper_objects");
 
@@ -23,17 +24,12 @@ class JamBuddy {
   }
 
   randomizeCurrentNotes() {
-    let tempArray = Object.keys(JamBuddy.#musicalElements);
-
-    let firstNoteIndex = Math.floor(Math.random() * tempArray.length);
-    let firstNote = tempArray[firstNoteIndex];
-
-    let secondNoteIndex;
-    let secondNote;
+    const tempArray = Object.keys(JamBuddy.#musicalElements);
+    let firstNote, secondNote;
 
     do {
-      secondNoteIndex = Math.floor(Math.random() * tempArray.length);
-      secondNote = tempArray[secondNoteIndex];
+      firstNote = getRandomNote(tempArray);
+      secondNote = getRandomNote(tempArray);
     } while (
       JamBuddy.#musicalElements[firstNote] ===
       JamBuddy.#musicalElements[secondNote]

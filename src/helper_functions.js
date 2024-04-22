@@ -39,4 +39,12 @@ function validateDistance(distance) {
   }
 }
 
-module.exports = { validateDistance, validateNotesArray, getIndexes };
+const getRandomNote = (arrayOfAllNotes) =>
+  arrayOfAllNotes[Math.floor(Math.random() * arrayOfAllNotes.length)];
+
+module.exports = {
+  validateDistance,
+  validateNotesArray,
+  getIndexes,
+  getRandomNote,
+};
