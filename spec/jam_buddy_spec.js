@@ -10,7 +10,7 @@ describe("JamBuddy Class:", () => {
   });
 
   describe("getCurrentNotes", () => {
-    it("should return the initially set array ['C','D#'].", () => {
+    it("should return the initially set array ['C', 'D#'].", () => {
       expect(buddy.getCurrentNotes()).toEqual(["C", "D#"]);
     });
 
@@ -39,6 +39,15 @@ describe("JamBuddy Class:", () => {
       );
     });
 
+    it("should throw an error when notes are harmonic equivalents.", () => {
+      expect(() => buddy.setCurrentNotes(["F#", "Gb"])).toThrowError(
+        errorMessages.inharmonicEquivalentNotesError("F#", "Gb")
+      );
+      expect(() => buddy.setCurrentNotes(["C#", "Db"])).toThrowError(
+        errorMessages.inharmonicEquivalentNotesError("C#", "Db")
+      );
+    });
+
     it("should throw an error when an empty array is passed.", () => {
       expect(() => buddy.setCurrentNotes([])).toThrowError(
         errorMessages.notTwoElements
@@ -60,6 +69,17 @@ describe("JamBuddy Class:", () => {
       const randomizedNotes = buddy.getCurrentNotes();
       expect(randomizedNotes[0]).not.toBe(randomizedNotes[1]);
     });
+
+    it("should not select inharmonic equivalent notes when randomizing current notes", () => {
+      buddy.randomizeCurrentNotes();
+
+      const [firstNote, secondNote] = buddy.getCurrentNotes();
+      const isHarmonicEquivalent =
+        JamBuddy.musicalElements[firstNote] ===
+        JamBuddy.musicalElements[secondNote];
+
+      expect(isHarmonicEquivalent).toBe(false);
+    });
   });
 
   describe("checkAnswer", () => {
@@ -75,11 +95,39 @@ describe("JamBuddy Class:", () => {
       expect(buddy.checkAnswer(9)).toBe(true);
     });
 
-    it("should verify the correctness of answers", () => {
+    it("should return true when the correct answers are passed, where valid set notes are set.", () => {
       buddy.setCurrentNotes(["C", "D#"]);
-      expect(buddy.checkAnswer(1)).toBe(false);
       expect(buddy.checkAnswer(3)).toBe(true);
       expect(buddy.checkAnswer(9)).toBe(true);
+    });
+
+    it("should return false when incorrect answers are passed, where valid note set are set.", () => {
+      buddy.setCurrentNotes(["C", "D#"]);
+      expect(buddy.checkAnswer(1)).toBe(false);
+      expect(buddy.checkAnswer(5)).toBe(false);
+    });
+
+    it("should return true when correct answers are passed, where sharp notes are set.", () => {
+      buddy.setCurrentNotes(["A", "A#"]);
+      expect(buddy.checkAnswer(1)).toBe(true);
+      expect(buddy.checkAnswer(11)).toBe(true);
+    });
+
+    it("should return true when correct answers are passed, where flat notes are set.", () => {
+      buddy.setCurrentNotes(["A", "Bb"]);
+      expect(buddy.checkAnswer(1)).toBe(true);
+      expect(buddy.checkAnswer(11)).toBe(true);
+    });
+
+    it("should return false when incorrect answers are passed, where sharp notes are set.", () => {
+      buddy.setCurrentNotes(["A", "A#"]);
+      expect(buddy.checkAnswer(9)).toBe(false);
+      expect(buddy.checkAnswer(5)).toBe(false);
+    });
+
+    it("should return false when incorrect answers are passed, where flat notes are set.", () => {
+      buddy.setCurrentNotes(["A", "Bb"]);
+      expect(buddy.checkAnswer(9)).toBe(false);
       expect(buddy.checkAnswer(5)).toBe(false);
     });
 

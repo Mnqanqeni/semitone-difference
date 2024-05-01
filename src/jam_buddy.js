@@ -2,43 +2,16 @@ const {
   validateDistance,
   validateNotesArray,
   getIndexes,
+  getRandomNote,
 } = require("./helper_functions");
+const { musicalElementsNotesObject } = require("./helper_objects");
 
 class JamBuddy {
-  static #musicalElements = [
-    "A",
-    "A#",
-    "B",
-    "C",
-    "C#",
-    "D",
-    "D#",
-    "E",
-    "F",
-    "F#",
-    "G",
-    "G#",
-  ];
-
+  static #musicalElements = musicalElementsNotesObject;
   #currentNotes = [];
 
   static get musicalElements() {
     return this.#musicalElements;
-  }
-
-  randomizeCurrentNotes() {
-    let tempArray = [...JamBuddy.#musicalElements];
-
-    const firstNoteIndex = Math.floor(Math.random() * tempArray.length);
-    const firstNote = tempArray[firstNoteIndex];
-    tempArray = tempArray
-      .slice(0, firstNoteIndex)
-      .concat(tempArray.slice(firstNoteIndex + 1));
-
-    const secondNoteIndex = Math.floor(Math.random() * tempArray.length);
-    const secondNote = tempArray[secondNoteIndex];
-
-    this.setCurrentNotes([firstNote, secondNote]);
   }
 
   getCurrentNotes() {
@@ -46,26 +19,31 @@ class JamBuddy {
   }
 
   setCurrentNotes(arrayNotes) {
-    validateNotesArray(arrayNotes, JamBuddy.#musicalElements);
+    validateNotesArray(arrayNotes, Object.keys(JamBuddy.#musicalElements));
     this.#currentNotes = arrayNotes;
+  }
+
+  randomizeCurrentNotes() {
+    const tempArray = Object.keys(JamBuddy.#musicalElements);
+    let firstNote, secondNote;
+
+    do {
+      firstNote = getRandomNote(tempArray);
+      secondNote = getRandomNote(tempArray);
+    } while (
+      JamBuddy.#musicalElements[firstNote] ===
+      JamBuddy.#musicalElements[secondNote]
+    );
+
+    this.setCurrentNotes([firstNote, secondNote]);
   }
 
   checkAnswer(distance) {
     validateDistance(distance);
-    const [index1, index2] = getIndexes(
-      JamBuddy.#musicalElements,
-      this.getCurrentNotes()
-    );
-
-    if (index1 === -1 || index2 === -1) {
-      return false;
-    }
-
+    const [index1, index2] = getIndexes(this.getCurrentNotes());
+    const totalHarmonicNotes = 12;
     const absDiff = Math.abs(index1 - index2);
-    const cyclicDistance = [
-      absDiff,
-      JamBuddy.#musicalElements.length - absDiff,
-    ];
+    const cyclicDistance = [absDiff, totalHarmonicNotes - absDiff];
     return cyclicDistance.includes(distance);
   }
 }
