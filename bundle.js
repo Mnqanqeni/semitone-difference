@@ -39,20 +39,19 @@ for (let i = 0; i < distanceButtons.length; i++) {
                 showIncorrectMessage();
                 streaks=0;
             }
-            delayedCode();
-            showStreakMessage();
+            delayCode();
     });
 }
 
 
-// Get references to the message div
 const correctMessage = document.getElementById("correctMessage");
 const incorrectMessage = document.getElementById("incorrectMessage");
 const streak=document.getElementById("streak");
 console.log(streak);
 let streakNumber=document.getElementById("streak-number");
 console.log(streakNumber);
-// Function to show correct message
+
+
 function showCorrectMessage() {
     correctMessage.style.display = "block";
 
@@ -64,7 +63,7 @@ function showStreakMessage(){
 function switchOffStreakMessage(){
     streak.style.display="none";
 }
-// Function to show incorrect message
+
 function showIncorrectMessage() {
     incorrectMessage.style.display = "block";
 }
@@ -74,48 +73,26 @@ function switchMessageOff() {
     incorrectMessage.style.display = "none";
 }
 
-function delay(milliseconds) {
-    return new Promise(resolve => setTimeout(resolve, milliseconds));
+function delayCode() {
+    setTimeout(function() {
+        switchMessageOff();
+        showStreakMessage();
+    }, 3000);
 }
-async function delayedCode() {
-    await delay(2000);
-}
 
-let canvas = document.querySelector("canvas");
-canvas.width = 1000;
-canvas.height = 100;
-let ctx = canvas.getContext("2d");
 
-let canvasX = 50; // Starting X position
-let canvasY = canvas.height / 2;
-ctx.font = "20px Arial";
-ctx.fillStyle = "blue";
 
-// Define the starting and ending semitones
-let startSemitone = 1; // Start at A#
-let endSemitone = 10; // End at G#
+let startSemitone = 1; 
+let endSemitone = 10; 
 
-// Array of note names
+
 let noteNames = ["A", "A#/Bb", "B", "C", "C#/Db", "D", "D#/Eb", "E", "F", "F#/Gb", "G","G#"];
 
-// Draw note names
-for (let i = 0; i <=11; i++) {
-    ctx.fillText(noteNames[i], canvasX - 20, canvasY + 20);
-    canvasX += 80;
-}
-
-// Draw circles
-canvasX = 60; // Reset X position
-for (let i = 0; i <= 11; i++) {
-    ctx.beginPath();
-    ctx.arc(canvasX, canvasY, 40, 0, Math.PI,true);
-    canvasX += 76;
-    ctx.strokeStyle = "gold";
-    ctx.stroke();
-}
-
 },{"./src/jam_buddy":4}],2:[function(require,module,exports){
-const { errorMessages } = require("./helper_objects");
+const {
+  errorMessages,
+  musicalElementsNotesObject,
+} = require("./helper_objects");
 const maxDistance = 11;
 
 function validateNotesArray(arrayNotes, musicalElementsArray) {
@@ -125,12 +102,19 @@ function validateNotesArray(arrayNotes, musicalElementsArray) {
     throw new Error(errorMessages.notesNotValid);
   } else if (arrayNotes[0] === arrayNotes[1]) {
     throw new Error(errorMessages.noteDuplicated);
+  } else if (
+    musicalElementsNotesObject[arrayNotes[0]] ===
+    musicalElementsNotesObject[arrayNotes[1]]
+  ) {
+    throw new Error(
+      errorMessages.inharmonicEquivalentNotesError(arrayNotes[0], arrayNotes[1])
+    );
   }
 }
 
-function getIndexes(musicalElements, currentNotes) {
-  const index1 = musicalElements.indexOf(currentNotes[0]);
-  const index2 = musicalElements.indexOf(currentNotes[1]);
+function getIndexes(currentNotes) {
+  const index1 = musicalElementsNotesObject[currentNotes[0]];
+  const index2 = musicalElementsNotesObject[currentNotes[1]];
   return [index1, index2];
 }
 
@@ -146,13 +130,21 @@ function validateDistance(distance) {
   }
 }
 
-module.exports = { validateDistance, validateNotesArray, getIndexes };
+const getRandomNote = (arrayOfAllNotes) =>
+  arrayOfAllNotes[Math.floor(Math.random() * arrayOfAllNotes.length)];
+
+module.exports = {
+  validateDistance,
+  validateNotesArray,
+  getIndexes,
+  getRandomNote,
+};
 
 },{"./helper_objects":3}],3:[function(require,module,exports){
 const errorMessages = {
   notTwoElements: "The input must consist of exactly two elements to be valid.",
   notesNotValid:
-    "The provided notes are not valid. Please refer to the following array for valid notes: [A, A#, B, C, C#, D, D#, E, F, F#, G, G#].",
+    "The provided notes are not valid. Please refer to the following array for valid notes: ['A', 'A#', 'Bb', 'B', 'C', 'C#', 'Db', 'D', 'D#', 'Eb', 'E', 'F', 'F#', 'Gb', 'G', 'G#'].",
   noteDuplicated: "Each note in the input must be unique and not duplicated.",
   distanceOutOfRange:
     "The provided answer is out of range. Please input a value from 1 to 11.",
@@ -162,52 +154,46 @@ const errorMessages = {
     "The provided number must be a whole number, e.g., 5, not a decimal number like 5.1.",
   onlyDatatypeOfNumber:
     "Only the data type 'number' is valid, e.g., 5, not 'five', '5', or {}.",
+  inharmonicEquivalentNotesError: (note1, note2) =>
+    `${note1} and ${note2} are inharmonic equivalent notes; there is no semitone between them.`,
 };
 
-module.exports = { errorMessages };
+const musicalElementsNotesObject = {
+  A: 0,
+  "A#": 1,
+  Bb: 1,
+  B: 2,
+  C: 3,
+  "C#": 4,
+  Db: 4,
+  D: 5,
+  "D#": 6,
+  Eb: 6,
+  E: 7,
+  F: 8,
+  "F#": 9,
+  Gb: 9,
+  G: 10,
+  "G#": 11,
+};
+
+module.exports = { errorMessages, musicalElementsNotesObject };
 
 },{}],4:[function(require,module,exports){
 const {
   validateDistance,
   validateNotesArray,
   getIndexes,
+  getRandomNote,
 } = require("./helper_functions");
+const { musicalElementsNotesObject } = require("./helper_objects");
 
 class JamBuddy {
-  static #musicalElements = [
-    "A",
-    "A#",
-    "B",
-    "C",
-    "C#",
-    "D",
-    "D#",
-    "E",
-    "F",
-    "F#",
-    "G",
-    "G#",
-  ];
-
+  static #musicalElements = musicalElementsNotesObject;
   #currentNotes = [];
 
   static get musicalElements() {
     return this.#musicalElements;
-  }
-
-  randomizeCurrentNotes() {
-    let tempArray = [...JamBuddy.#musicalElements];
-
-    const firstNoteIndex = Math.floor(Math.random() * tempArray.length);
-    const firstNote = tempArray[firstNoteIndex];
-    tempArray = tempArray
-      .slice(0, firstNoteIndex)
-      .concat(tempArray.slice(firstNoteIndex + 1));
-
-    const secondNoteIndex = Math.floor(Math.random() * tempArray.length);
-    const secondNote = tempArray[secondNoteIndex];
-
-    this.setCurrentNotes([firstNote, secondNote]);
   }
 
   getCurrentNotes() {
@@ -215,30 +201,35 @@ class JamBuddy {
   }
 
   setCurrentNotes(arrayNotes) {
-    validateNotesArray(arrayNotes, JamBuddy.#musicalElements);
+    validateNotesArray(arrayNotes, Object.keys(JamBuddy.#musicalElements));
     this.#currentNotes = arrayNotes;
+  }
+
+  randomizeCurrentNotes() {
+    const tempArray = Object.keys(JamBuddy.#musicalElements);
+    let firstNote, secondNote;
+
+    do {
+      firstNote = getRandomNote(tempArray);
+      secondNote = getRandomNote(tempArray);
+    } while (
+      JamBuddy.#musicalElements[firstNote] ===
+      JamBuddy.#musicalElements[secondNote]
+    );
+
+    this.setCurrentNotes([firstNote, secondNote]);
   }
 
   checkAnswer(distance) {
     validateDistance(distance);
-    const [index1, index2] = getIndexes(
-      JamBuddy.#musicalElements,
-      this.getCurrentNotes()
-    );
-
-    if (index1 === -1 || index2 === -1) {
-      return false;
-    }
-
+    const [index1, index2] = getIndexes(this.getCurrentNotes());
+    const totalHarmonicNotes = 12;
     const absDiff = Math.abs(index1 - index2);
-    const cyclicDistance = [
-      absDiff,
-      JamBuddy.#musicalElements.length - absDiff,
-    ];
+    const cyclicDistance = [absDiff, totalHarmonicNotes - absDiff];
     return cyclicDistance.includes(distance);
   }
 }
 
 module.exports = { JamBuddy };
 
-},{"./helper_functions":2}]},{},[1]);
+},{"./helper_functions":2,"./helper_objects":3}]},{},[1]);
