@@ -31,9 +31,10 @@ body {
 }
 
 #container {
-    max-width: 100%;
-    margin: 50px auto;
-    padding: 10%;
+    /* max-width: 100%; */
+    margin: 0px auto;
+    padding: 5% 0;
+    border: solid yellow;
 }
 
 .distance-btn {
@@ -54,10 +55,16 @@ p {
     font-size: 30px;
 }
 
+p span{
+    background-color:  #fff;
+}
 #notes-display {
     margin-bottom: 20px;
 }
 
+.mg-top{
+    margin-top: 5%;
+}
 button {
     background-color: #007bff;
     color: #fff;
@@ -94,21 +101,12 @@ button:hover {
     background-color: #f0f0f0;
 }
 
-
-body {
-    margin: 0;
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: #f0f0f0;
-  }
-  .container {
+.container {
     position: relative;
     width: 300px;
     height: 300px;
     border: 2px solid #333;
-    border-radius: 50%;
+    
     display: flex;
     justify-content: center;
     align-items: center;
@@ -116,10 +114,9 @@ body {
   }
   .box {
     position: absolute;
-    width: 40px;
+    width: 60px;
     height: 20px; 
     background-color: #ccc;
-    display: flex;
     justify-content: center;
     align-items: center;
     border-radius: 5px;

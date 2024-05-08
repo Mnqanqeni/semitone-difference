@@ -77,16 +77,41 @@ function delayCode() {
     setTimeout(function() {
         switchMessageOff();
         showStreakMessage();
-    }, 3000);
+    }, 500);
 }
 
+[noteOne,noteTwo]=buddy.getCurrentNotes();
+console.log(noteOne,noteTwo)
+console.log(document.querySelector(`#a${JamBuddy.musicalElements[noteOne]}`));
+document.querySelector(`#a${JamBuddy.musicalElements[noteOne]}`).style.backgroundColor="red";
+console.log(document.querySelector(`#a${JamBuddy.musicalElements[noteTwo]}`));
+document.querySelector(`#a${JamBuddy.musicalElements[noteTwo]}`).style.backgroundColor="Yellow";
+let one=JamBuddy.musicalElements[noteOne];
+let two=JamBuddy.musicalElements[noteTwo];
 
+if (one < two) {
+    doCount(one, two, document.querySelector("#clockwise-answer"), true);
+    doCount(one, two, document.querySelector("#anti-clockwise-answer"), false);
+} else {
+    doCount(one, two, document.querySelector("#clockwise-answer"), false);
+    doCount(one, two, document.querySelector("#anti-clockwise-answer"), true);
+}
 
-let startSemitone = 1; 
-let endSemitone = 10; 
-
-
-let noteNames = ["A", "A#/Bb", "B", "C", "C#/Db", "D", "D#/Eb", "E", "F", "F#/Gb", "G","G#"];
+function doCount(num1, num2, id, clockwise) {
+    let count = 1;
+    id.innerText = count;
+    while (num1 !== num2) {
+        id.innerText = count;
+        console.log(count);
+        if (clockwise) {
+            num1 = (num1 + 1) % 11;
+        } else {
+            num1 = (num1 - 1) % 11; 
+        }
+        count++;
+    }
+    id.innerText = count;
+}
 
 },{"./src/jam_buddy":4}],2:[function(require,module,exports){
 const {
@@ -159,21 +184,21 @@ const errorMessages = {
 };
 
 const musicalElementsNotesObject = {
-  A: 0,
+  "A": 0,
   "A#": 1,
-  Bb: 1,
-  B: 2,
-  C: 3,
+  "Bb": 1,
+  "B": 2,
+  "C": 3,
   "C#": 4,
-  Db: 4,
-  D: 5,
+  "Db": 4,
+  "D": 5,
   "D#": 6,
-  Eb: 6,
-  E: 7,
-  F: 8,
+  "Eb": 6,
+  "E": 7,
+  "F": 8,
   "F#": 9,
-  Gb: 9,
-  G: 10,
+  "Gb": 9,
+  "G": 10,
   "G#": 11,
 };
 
