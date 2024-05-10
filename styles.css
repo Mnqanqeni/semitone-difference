@@ -44,8 +44,10 @@ body {
 #randomize-btn {
     border-radius: 5px;
 }
-
-h1 {
+#explanation{
+    display: none;
+}
+h1,h3 {
     color: #007bff;
 
 }
@@ -58,12 +60,21 @@ p {
 p span{
     background-color:  #fff;
 }
+
+h3 span{
+    background-color:  #fff;
+}
 #notes-display {
-    margin-bottom: 20px;
+    margin: 2%;
 }
 
-.mg-top{
-    margin-top: 5%;
+.question{
+    margin: 2%;
+    font-weight: bold;
+}
+#main-counter{
+    font-size: 100px;
+    color: #007bff;
 }
 button {
     background-color: #007bff;

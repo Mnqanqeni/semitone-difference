@@ -3,26 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- stylesheet -->
+
     <link rel="stylesheet" href="styles.css">
-    <!-- global fonts -->
+
 
     <title>Semitone Game</title>
 </head>
 
 <body>
     <div id="container">
-        <h1>Semitones</h1>
-        <p class="mg-top">How many sem-tones between the following two notes</p>
+        <h1>Semitones</h1>   
         <div id="notes-display">
             <p>First Note: <span id="first-note"></span></p>
             <p>Second Note: <span id="second-note"></span></p>
         </div>
-        <div>
-        <button id="give-up-btn">Give Up</button>
-        <button id="randomize-btn">Randomize Notes</button>
-        <button id="restart-btn">Restart</button>
-        </div>
+        <p class="question">How many semi-tones between between the above notes?</p>
+
         <div id="distance-btn">
             <button id="distance-btn1" class="distance-btn">1</button>
             <button id="distance-btn2" class="distance-btn">2</button>
@@ -37,25 +33,43 @@
             <button id="distance-btn11" class="distance-btn">11</button>
         </div>
         <div>
-            <h3>The correct clockwise answer is :<span id="clockwise-answer"></span></h3>
-            <h3>The correct anti-clockwise answer is :<span id="anti-clockwise-answer"></span></h3>
+            <button id="give-up-btn">Give Up</button>
+            <button id="randomize-btn">Randomize Notes</button>
+            <button id="restart-btn">Restart</button>
         </div>
-        <div class="container">
-            <div class="box" style="transform: rotate(0deg) translate(140px) rotate(0deg);" id="a3"><span>C</span></div>
-            <div class="box" style="transform: rotate(30deg) translate(140px) rotate(-30deg);" id="a4"><span>C#/Db</span></div>
-            <div class="box" style="transform: rotate(60deg) translate(140px) rotate(-60deg);" id="a5"><span>D</span></div>
-            <div class="box" style="transform: rotate(90deg) translate(140px) rotate(-90deg);" id="a6"><span>D#/Eb</span></div>
-            <div class="box" style="transform: rotate(120deg) translate(140px) rotate(-120deg);" id="a7"><span>E</span></div>
-            <div class="box" style="transform: rotate(150deg) translate(140px) rotate(-150deg);" id="a8"><span>F</span></div>
-            <div class="box" style="transform: rotate(180deg) translate(140px) rotate(-180deg);" id="a9"><span>F#/Gb</span></div>
-            <div class="box" style="transform: rotate(210deg) translate(140px) rotate(-210deg);"id="a10"><span>G</span></div>
-            <div class="box" style="transform: rotate(240deg) translate(140px) rotate(-240deg);" id="a11"><span>G#</span></div>
-            <div class="box" style="transform: rotate(270deg) translate(140px) rotate(-270deg);" id="a0"><span>A</span></div>
-            <div class="box" style="transform: rotate(300deg) translate(140px) rotate(-300deg);" id="a1"><span>A#/Bb</span></div>
-            <div class="box" style="transform: rotate(330deg) translate(140px) rotate(-330deg);" id="a2"><span>B</span></div>
+        <div id="explanation">
+            <div id="answer-text">
+                <h3>The correct clockwise answer is : <span id="clockwise-answer"></span></h3>
+                <h3>The correct anti-clockwise answer is : <span id="anti-clockwise-answer"></span></h3>
+            </div>
+            <div class="container">
+                <div><span id="main-counter"></span></div>
+                <div class="box" style="transform: rotate(0deg) translate(140px) rotate(0deg);" id="a3"><span>C</span>
+                </div>
+                <div class="box" style="transform: rotate(30deg) translate(140px) rotate(-30deg);" id="a4">
+                    <span>C#/Db</span></div>
+                <div class="box" style="transform: rotate(60deg) translate(140px) rotate(-60deg);" id="a5">
+                    <span>D</span></div>
+                <div class="box" style="transform: rotate(90deg) translate(140px) rotate(-90deg);" id="a6">
+                    <span>D#/Eb</span></div>
+                <div class="box" style="transform: rotate(120deg) translate(140px) rotate(-120deg);" id="a7">
+                    <span>E</span></div>
+                <div class="box" style="transform: rotate(150deg) translate(140px) rotate(-150deg);" id="a8">
+                    <span>F</span></div>
+                <div class="box" style="transform: rotate(180deg) translate(140px) rotate(-180deg);" id="a9">
+                    <span>F#/Gb</span></div>
+                <div class="box" style="transform: rotate(210deg) translate(140px) rotate(-210deg);" id="a10">
+                    <span>G</span></div>
+                <div class="box" style="transform: rotate(240deg) translate(140px) rotate(-240deg);" id="a11">
+                    <span>G#</span></div>
+                <div class="box" style="transform: rotate(270deg) translate(140px) rotate(-270deg);" id="a0">
+                    <span>A</span></div>
+                <div class="box" style="transform: rotate(300deg) translate(140px) rotate(-300deg);" id="a1">
+                    <span>A#/Bb</span></div>
+                <div class="box" style="transform: rotate(330deg) translate(140px) rotate(-330deg);" id="a2">
+                    <span>B</span></div>
+            </div>
         </div>
-        
-
         <div id="correctMessage">Correct</div>
         <div id="incorrectMessage">incorrect</div>
         <div id="streak">Streak: <span id="streak-number">0</span></div>
