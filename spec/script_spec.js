@@ -51,118 +51,118 @@ describe('DOM Manipulation', function() {
       expect(mockWindow.location.reload).toHaveBeenCalled();
     });
 
-    // it('should reload the page when restart button is clicked', function() {
+    it('should reload the page when restart button is clicked', function() {
   
-    //   document.getElementById('restart-btn').click();
-    //   expect(script.reloadPage).toHaveBeenCalled();
-    // });
+      document.getElementById('restart-btn').click();
+      expect(script.reloadPage).toHaveBeenCalled();
+    });
 
 
   })
 
-  // describe("give up event listener: ",function(){
+  describe("give up event listener: ",function(){
 
-  //   beforeEach(function() {
+    beforeEach(function() {
 
-  //     document.getElementById('give-up-btn').addEventListener("click", function() {
-  //       script.disableSubmitAndGiveUpButton();
-  //       script.clearTheBoxes();
-  //       script.doTheExplanation(script.noteOne, script.noteTwo); 
-  //     });
-  //   });
+      document.getElementById('give-up-btn').addEventListener("click", function() {
+        script.disableSubmitAndGiveUpButton();
+        script.clearTheBoxes();
+        script.doTheExplanation(script.noteOne, script.noteTwo); 
+      });
+    });
 
-  //   it('should call appropriate functions when give up button is clicked', function() {
-  //     spyOn(script,'disableSubmitAndGiveUpButton');
-  //     spyOn(script,'clearTheBoxes');
-  //     spyOn(script,'doTheExplanation');
+    it('should call appropriate functions when give up button is clicked', function() {
+      spyOn(script,'disableSubmitAndGiveUpButton');
+      spyOn(script,'clearTheBoxes');
+      spyOn(script,'doTheExplanation');
 
-  //     document.getElementById('give-up-btn').click();
+      document.getElementById('give-up-btn').click();
     
-  //     expect(script.disableSubmitAndGiveUpButton).toHaveBeenCalled();
-  //     expect(script.clearTheBoxes).toHaveBeenCalled();
-  //     expect(script.doTheExplanation).toHaveBeenCalled();
-  //   });
+      expect(script.disableSubmitAndGiveUpButton).toHaveBeenCalled();
+      expect(script.clearTheBoxes).toHaveBeenCalled();
+      expect(script.doTheExplanation).toHaveBeenCalled();
+    });
 
-  // })
+  })
 
-  // describe("randomize event listener: ",function(){
+  describe("randomize event listener: ",function(){
 
-  //   beforeEach(function() {
+    beforeEach(function() {
 
-  //     document.getElementById('randomize-btn').addEventListener("click", () => {
-  //       script.clearTheBoxes();
-  //       script.switchOffAnswer();
-  //       script.ableSubmitAndGiveUpButton();
-  //       document.querySelector("#submit-distance").disabled=false;
-  //       jamBuddy.randomizeCurrentNotes();
-  //       [noteOne, noteTwo] = jamBuddy.getCurrentNotes();
-  //       firstNoteElement.innerText = noteOne;
-  //       secondNoteElement.innerText = noteTwo;
-  //     });
+      document.getElementById('randomize-btn').addEventListener("click", () => {
+        script.clearTheBoxes();
+        script.switchOffAnswer();
+        script.ableSubmitAndGiveUpButton();
+        document.querySelector("#submit-distance").disabled=false;
+        jamBuddy.randomizeCurrentNotes();
+        [noteOne, noteTwo] = jamBuddy.getCurrentNotes();
+        firstNoteElement.innerText = noteOne;
+        secondNoteElement.innerText = noteTwo;
+      });
     
-  //   });
+    });
 
-  //   it('should update notes when randomize button is clicked', function() {
+    it('should update notes when randomize button is clicked', function() {
 
-  //     spyOn(script,'clearTheBoxes');
-  //     spyOn(script,'switchOffAnswer');
-  //     spyOn(script,'ableSubmitAndGiveUpButton');
+      spyOn(script,'clearTheBoxes');
+      spyOn(script,'switchOffAnswer');
+      spyOn(script,'ableSubmitAndGiveUpButton');
 
-  //     document.getElementById('randomize-btn').click();
+      document.getElementById('randomize-btn').click();
   
-  //     expect(script.clearTheBoxes).toHaveBeenCalled();
-  //     expect(script.switchOffAnswer).toHaveBeenCalled();
-  //     expect(script.ableSubmitAndGiveUpButton).toHaveBeenCalled();
-  //   });
+      expect(script.clearTheBoxes).toHaveBeenCalled();
+      expect(script.switchOffAnswer).toHaveBeenCalled();
+      expect(script.ableSubmitAndGiveUpButton).toHaveBeenCalled();
+    });
 
-  // })
+  })
 
-  // describe("submit event listener: ",function(){
+  describe("submit event listener: ",function(){
 
-  //   beforeEach(function() {
+    beforeEach(function() {
     
-  //     document.getElementById('submit-distance-form').addEventListener("submit", function(event) {
-  //       event.preventDefault();
-  //       const distanceInputElement = document.getElementById('distance-input');
-  //       const distance = parseInt(distanceInputElement.value);
-  //       if (isNaN(distance)) {
-  //           alert("Input can't be empty");
-  //           return;
-  //       }
+      document.getElementById('submit-distance-form').addEventListener("submit", function(event) {
+        event.preventDefault();
+        const distanceInputElement = document.getElementById('distance-input');
+        const distance = parseInt(distanceInputElement.value);
+        if (isNaN(distance)) {
+            alert("Input can't be empty");
+            return;
+        }
         
-  //       distanceInputElement.value = "";
-  //       script.switchOffAnswer();
-  //       script.switchOffStreakMessage();
+        distanceInputElement.value = "";
+        script.switchOffAnswer();
+        script.switchOffStreakMessage();
       
-  //       if (jamBuddy.checkAnswer(distance)) {
-  //           confetti({
-  //               particleCount: 100,
-  //               spread: 160,
-  //               origin: { y: 0.6 }
-  //           });
-  //           script.showCorrectMessage();
-  //           script.showAnswer(noteOne, noteTwo);
-  //           script.streakCounter++;
-  //           document.querySelector("#submit-distance").disabled=true;
-  //       } else {
-  //           script.showIncorrectMessage();
-  //           script.streakCounter = 0;
-  //       }
+        if (jamBuddy.checkAnswer(distance)) {
+            confetti({
+                particleCount: 100,
+                spread: 160,
+                origin: { y: 0.6 }
+            });
+            script.showCorrectMessage();
+            script.showAnswer(noteOne, noteTwo);
+            script.streakCounter++;
+            document.querySelector("#submit-distance").disabled=true;
+        } else {
+            script.showIncorrectMessage();
+            script.streakCounter = 0;
+        }
       
-  //       script.delayCode(); 
-  //     });
-  //   })
+        script.delayCode(); 
+      });
+    })
 
-  //   it('should call appropriate functions when submit button is clicked', function() {
-  //     spyOn(script,'switchOffAnswer');
-  //     spyOn(script,'switchOffStreakMessage');
+    it('should call appropriate functions when submit button is clicked', function() {
+      spyOn(script,'switchOffAnswer');
+      spyOn(script,'switchOffStreakMessage');
 
-  //     document.getElementById('submit-distance-form').submit();
+      document.getElementById('submit-distance-form').submit();
 
-  //     expect(script.switchOffAnswer).toHaveBeenCalled();
-  //     expect(script.switchOffStreakMessage).toHaveBeenCalled();
-  //   });
-  // })
+      expect(script.switchOffAnswer).toHaveBeenCalled();
+      expect(script.switchOffStreakMessage).toHaveBeenCalled();
+    });
+  })
 });
 
 
