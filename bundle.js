@@ -880,95 +880,130 @@
 })(), module, false));
 
 },{}],2:[function(require,module,exports){
+// Importing modules
 const { JamBuddy } = require("./src/jam_buddy");
 const confetti = require('canvas-confetti');
-const buddy = new JamBuddy();
-let streaks =0;
 
-buddy.randomizeCurrentNotes();
-let [noteOne,noteTwo]=buddy.getCurrentNotes();
-const firstNote=document.querySelector("#first-note");
-const secondNote=document.querySelector("#second-note");
-const randomBtn=document.querySelector("#randomize-btn");
+// Initializing variables
+const jamBuddy = new JamBuddy();
+let streakCounter = 0;
+let noteOne,noteTwo;
+const correctMessageElement = document.getElementById("correctMessage");
+const incorrectMessageElement = document.getElementById("incorrectMessage");
+const streakElement = document.getElementById("streak");
+const streakNumberElement = document.getElementById("streak-number");
 
-document.getElementById("restart-btn").addEventListener("click", function() {
-    location.reload();
-});
+// Getting DOM elements
+const firstNoteElement = document.querySelector("#first-note");
+const secondNoteElement = document.querySelector("#second-note");
+const restartButton = document.getElementById("restart-btn");
+const giveUpButton = document.getElementById("give-up-btn");
+const randomizeButton = document.querySelector("#randomize-btn");
+const distanceForm = document.getElementById("distance-input-form");
+const distanceInputElement = document.getElementById("distance-input");
 
-document.getElementById("give-up-btn").addEventListener("click", function() {
-    clearTheBoxes();
-    doTheExplanation(noteOne,noteTwo);
-});
+// initializing the random notes
+init();
+function init(){
+    jamBuddy.randomizeCurrentNotes();
+[noteOne, noteTwo] = jamBuddy.getCurrentNotes();
+firstNoteElement.innerText = noteOne;
+secondNoteElement.innerText = noteTwo;
 
-firstNote.innerText=noteOne;
-secondNote.innerText=noteTwo;
+}
 
-randomBtn.addEventListener("click",()=>{
-    location.reload()
-    buddy.randomizeCurrentNotes()
-    noteOne,noteTwo=buddy.getCurrentNotes();
-    firstNote.innerText=noteOne;
-    secondNote.innerText=noteTwo;
-})
+// Event listeners
+function reloadPage(window) {
+    console.log("")
+    window.location.reload();
+  }
+  
+document.getElementById('restart-btn').addEventListener('click', function() {
+    reloadPage(window);
+  });
 
 
-const distanceBlock = document.querySelector('#distance-btn');
-const distanceButtons = distanceBlock.children;
-for (let i = 0; i < distanceButtons.length; i++) {
-    distanceButtons[i].addEventListener('click', function() {
-            switchOffAnswer();
-            switchOffStreakMessage();
-            if(buddy.checkAnswer(i+1)){
-                confetti({
-                    particleCount: 100,
-                    spread: 160,
-                    origin: { y: 0.6 }
-                  });
-                showCorrectMessage();
-                showAnswer(noteOne,noteTwo);
-                buddy.randomizeCurrentNotes();
-                [noteOne,noteTwo]=buddy.getCurrentNotes();
-                firstNote.innerText=noteOne;
-                secondNote.innerText=noteTwo;
-                streaks+=1;
-                
-            }else{
-                showIncorrectMessage();
-                streaks=0;
-            }
-            delayCode();
+    giveUpButton.addEventListener("click", function() {
+        disableSubmitAndGiveUpButton();
+        clearTheBoxes();
+        doTheExplanation(noteOne, noteTwo);
+        console.log("click");
     });
-}
+    
+randomizeButton.addEventListener("click", () => {
+    clearTheBoxes();
+    switchOffAnswer()
+    ableSubmitAndGiveUpButton();
+    document.querySelector("#submit-distance").disabled=false;
+    jamBuddy.randomizeCurrentNotes();
+    [noteOne, noteTwo] = jamBuddy.getCurrentNotes();
+    firstNoteElement.innerText = noteOne;
+    secondNoteElement.innerText = noteTwo;
+});
 
-const correctMessage = document.getElementById("correctMessage");
-const incorrectMessage = document.getElementById("incorrectMessage");
-const streak=document.getElementById("streak");
+distanceForm.addEventListener("submit", function(event) {
+    event.preventDefault();
+    const distance = parseInt(distanceInputElement.value);
+    if (isNaN(distance)) {
+        alert("Input can't be empty");
+        return;
+    }
+    
+    distanceInputElement.value = "";
+    switchOffAnswer();
+    switchOffStreakMessage();
 
-let streakNumber=document.getElementById("streak-number");
-console.log(streakNumber);
+    if (jamBuddy.checkAnswer(distance)) {
+        confetti({
+            particleCount: 100,
+            spread: 160,
+            origin: { y: 0.6 }
+        });
+        showCorrectMessage();
+        showAnswer(noteOne, noteTwo);
+        streakCounter++;
+        document.querySelector("#submit-distance").disabled=true;
+    } else {
+        showIncorrectMessage();
+        streakCounter = 0;
+    }
 
+    delayCode();
+    
+});
 
+// Functions
 function showCorrectMessage() {
-    correctMessage.style.display = "block";
+    correctMessageElement.style.display = "block";
+}
 
+function showStreakMessage() {
+    streakNumberElement.innerText = streakCounter;
+    streakElement.style.display = "block";
 }
-function showStreakMessage(){
-    streakNumber.innerText=streaks;
-    streak.style.display="block";
-}
-function switchOffStreakMessage(){
-    streak.style.display="none";
+
+function switchOffStreakMessage() {
+    streakElement.style.display = "none";
 }
 
 function showIncorrectMessage() {
-    incorrectMessage.style.display = "block";
+    incorrectMessageElement.style.display = "block";
 }
 
 function switchMessageOff() {
-    correctMessage.style.display = "none";
-    incorrectMessage.style.display = "none";
+    correctMessageElement.style.display = "none";
+    incorrectMessageElement.style.display = "none";
 }
 
+function disableSubmitAndGiveUpButton() {
+    document.querySelector("#submit-distance").disabled = true;
+    giveUpButton.disabled = true;
+}
+
+function ableSubmitAndGiveUpButton() {
+    document.querySelector("#submit-distance").disabled = false;
+    giveUpButton.disabled = false;
+}
 
 function delayCode() {
     setTimeout(function() {
@@ -976,28 +1011,31 @@ function delayCode() {
         showStreakMessage();
     }, 600);
 }
-function switchOffAnswer(){
-    document.querySelector("#explanation").style.display="none";
-    document.querySelector(`#a${JamBuddy.musicalElements[noteOne]}`).style.backgroundColor="#ccc";
-    document.querySelector(`#a${JamBuddy.musicalElements[noteTwo]}`).style.backgroundColor="#ccc";
+
+function switchOffAnswer() {
+    document.querySelector("#explanation").style.display = "none";
+    document.querySelector(`#a${JamBuddy.musicalElements[noteOne]}`).style.backgroundColor = "#ccc";
+    document.querySelector(`#a${JamBuddy.musicalElements[noteTwo]}`).style.backgroundColor = "#ccc";
 }
 
-function clearTheBoxes(){
-    for(let i =0;i<12;i++){
-        document.querySelector(`#a${i}`).style.backgroundColor="#ccc";
+function clearTheBoxes() {
+    for (let i = 0; i < 12; i++) {
+        document.querySelector(`#a${i}`).style.backgroundColor = "#ccc";
     }
 }
-function showAnswer(noteOne,noteTwo){
-    document.querySelector("#explanation").style.display="block";
-    document.querySelector("#answer-text").style.display="none";
-    document.querySelector(`#a${JamBuddy.musicalElements[noteOne]}`).style.backgroundColor="red";
-    document.querySelector(`#a${JamBuddy.musicalElements[noteTwo]}`).style.backgroundColor="Yellow";
+
+function showAnswer(noteOne, noteTwo) {
+    document.querySelector("#explanation").style.display = "block";
+    document.querySelector("#answer-text").style.display = "none";
+    document.querySelector(`#a${JamBuddy.musicalElements[noteOne]}`).style.backgroundColor = "red";
+    document.querySelector(`#a${JamBuddy.musicalElements[noteTwo]}`).style.backgroundColor = "Yellow";
 }
-function doTheExplanation(noteOne,noteTwo){
-    showAnswer(noteOne,noteTwo);
-    document.querySelector("#answer-text").style.display="block";
-    const one=JamBuddy.musicalElements[noteOne];
-    const two=JamBuddy.musicalElements[noteTwo];
+
+function doTheExplanation(noteOne, noteTwo) {
+    showAnswer(noteOne, noteTwo);
+    document.querySelector("#answer-text").style.display = "block";
+    const one = JamBuddy.musicalElements[noteOne];
+    const two = JamBuddy.musicalElements[noteTwo];
 
     if (one < two) {
         doCount(one, two, document.querySelector("#clockwise-answer"), function() {
@@ -1008,7 +1046,6 @@ function doTheExplanation(noteOne,noteTwo){
             doCount(one, two, document.querySelector("#anti-clockwise-answer"));
         });
     }
-
 }
 
 function doCount(num1, num2, id, callback) {
@@ -1020,30 +1057,41 @@ function doCount(num1, num2, id, callback) {
         if (num1 !== num2) {
             num1 = (num1 + 1) % totalNotes;
             count++;
-
-            console.log(`run ${count}`);
             id.innerText = count;
-            document.querySelector("#main-counter").innerText=count;
-            console.group(`${count}`);
-            
+            document.querySelector("#main-counter").innerText = count;
+
             const element = document.querySelector(`#a${num1}`);
             store = element.style.backgroundColor;
             element.style.backgroundColor = "blue";
-
             setTimeout(() => {
                 element.style.backgroundColor = store;
             }, 600);
-            
         } else {
             clearInterval(intervalId);
             if (typeof callback === 'function') {
-                callback(); 
+                callback();
             }
-            document.querySelector("#main-counter").innerText="";
+            document.querySelector("#main-counter").innerText = "";
         }
-        
     }, 600);
 }
+
+module.exports = {
+    init,
+    reloadPage,
+    showCorrectMessage,
+    showStreakMessage,
+    switchOffStreakMessage,
+    showIncorrectMessage,
+    switchMessageOff,
+    disableSubmitAndGiveUpButton,
+    ableSubmitAndGiveUpButton,
+    delayCode,
+    switchOffAnswer,
+    clearTheBoxes,
+    showAnswer,
+    doTheExplanation,
+};
 
 },{"./src/jam_buddy":5,"canvas-confetti":1}],3:[function(require,module,exports){
 const {

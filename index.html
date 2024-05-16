@@ -13,25 +13,19 @@
 <body>
     <div id="container">
         <h1>Semitones</h1>   
+        <p class="question">How many semi-tones between the notes below?</p>
         <div id="notes-display">
             <p>First Note: <span id="first-note"></span></p>
             <p>Second Note: <span id="second-note"></span></p>
         </div>
-        <p class="question">How many semi-tones between between the above notes?</p>
 
-        <div id="distance-btn">
-            <button id="distance-btn1" class="distance-btn">1</button>
-            <button id="distance-btn2" class="distance-btn">2</button>
-            <button id="distance-btn3" class="distance-btn">3</button>
-            <button id="distance-btn4" class="distance-btn">4</button>
-            <button id="distance-btn5" class="distance-btn">5</button>
-            <button id="distance-btn6" class="distance-btn">6</button>
-            <button id="distance-btn7" class="distance-btn">7</button>
-            <button id="distance-btn8" class="distance-btn">8</button>
-            <button id="distance-btn9" class="distance-btn">9</button>
-            <button id="distance-btn10" class="distance-btn">10</button>
-            <button id="distance-btn11" class="distance-btn">11</button>
+        <div id="distance-form">
+            <form id="distance-input-form">
+                <input type="number" id="distance-input" name="distance" min="1" max="11" placeholder="Enter the semi-tones">
+                <button type="submit" id="submit-distance">Submit</button>
+            </form>
         </div>
+        
         <div>
             <button id="give-up-btn">Give Up</button>
             <button id="randomize-btn">Randomize Notes</button>
