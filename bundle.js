@@ -880,76 +880,68 @@
 })(), module, false));
 
 },{}],2:[function(require,module,exports){
-// Importing modules
 const { JamBuddy } = require("./src/jam_buddy");
-const confetti = require('canvas-confetti');
+const confetti = require("canvas-confetti");
 
-// Initializing variables
 const jamBuddy = new JamBuddy();
 let streakCounter = 0;
-let noteOne,noteTwo;
-const correctMessageElement = document.getElementById("correctMessage");
-const incorrectMessageElement = document.getElementById("incorrectMessage");
+let noteOne, noteTwo;
 const streakElement = document.getElementById("streak");
 const streakNumberElement = document.getElementById("streak-number");
 
-// Getting DOM elements
-const firstNoteElement = document.querySelector("#first-note");
-const secondNoteElement = document.querySelector("#second-note");
-const restartButton = document.getElementById("restart-btn");
-const giveUpButton = document.getElementById("give-up-btn");
-const randomizeButton = document.querySelector("#randomize-btn");
-const distanceForm = document.getElementById("distance-input-form");
-const distanceInputElement = document.getElementById("distance-input");
+const inputField = document.getElementById("input-field");
+const form = document.getElementById("distance-input-form");
+let colorOne="#007bff"
+let colorTwo="#7da2ca";
 
-// initializing the random notes
-init();
-function init(){
-    jamBuddy.randomizeCurrentNotes();
-[noteOne, noteTwo] = jamBuddy.getCurrentNotes();
-firstNoteElement.innerText = noteOne;
-secondNoteElement.innerText = noteTwo;
+initNotes(document);
 
-}
-
-// Event listeners
-function reloadPage(window) {
-    console.log("")
-    window.location.reload();
-  }
-  
-document.getElementById('restart-btn').addEventListener('click', function() {
-    reloadPage(window);
-  });
-
-
-    giveUpButton.addEventListener("click", function() {
-        disableSubmitAndGiveUpButton();
-        clearTheBoxes();
-        doTheExplanation(noteOne, noteTwo);
-        console.log("click");
-    });
-    
-randomizeButton.addEventListener("click", () => {
-    clearTheBoxes();
-    switchOffAnswer()
-    ableSubmitAndGiveUpButton();
-    document.querySelector("#submit-distance").disabled=false;
+function initNotes(document) {
     jamBuddy.randomizeCurrentNotes();
     [noteOne, noteTwo] = jamBuddy.getCurrentNotes();
-    firstNoteElement.innerText = noteOne;
-    secondNoteElement.innerText = noteTwo;
+    document.querySelector("#first-note").innerText = noteOne;
+    document.querySelector("#second-note").innerText = noteTwo;
+}
+
+initNotes(document);
+
+function reloadPage(window) {
+    window.location.reload();
+}
+
+document.getElementById("restart-btn").addEventListener("click", function () {
+    reloadPage(window);
 });
 
-distanceForm.addEventListener("submit", function(event) {
+document.getElementById("give-up-btn").addEventListener("click", function () {
+    disableSubmitAndGiveUpButton();
+        document.querySelector("#submit-btn").style.backgroundColor = colorTwo;
+        document.querySelector("#give-up-btn").style.backgroundColor = colorTwo;
+        document.getElementById("input-field").disabled=true;
+    clearTheBoxes();
+    doTheExplanation(noteOne, noteTwo);
+});
+
+document.querySelector("#randomize-btn").addEventListener("click", () => {
+    clearTheBoxes();
+    switchOffAnswer();
+    ableSubmitAndGiveUpButton();
+        document.querySelector("#submit-btn").style.backgroundColor = colorOne;
+        document.querySelector("#give-up-btn").style.backgroundColor = colorOne;
+        document.getElementById("input-field").disabled=false;
+        
+    initNotes(document);
+});
+
+form.addEventListener("submit", function (event) {
     event.preventDefault();
-    const distance = parseInt(distanceInputElement.value);
+    const distance = parseInt(inputField.value);
     if (isNaN(distance)) {
         alert("Input can't be empty");
         return;
     }
-    
-    distanceInputElement.value = "";
+
+    inputField.value = "";
     switchOffAnswer();
     switchOffStreakMessage();
 
@@ -957,24 +949,25 @@ distanceForm.addEventListener("submit", function(event) {
         confetti({
             particleCount: 100,
             spread: 160,
-            origin: { y: 0.6 }
+            origin: { y: 0.6 },
         });
         showCorrectMessage();
         showAnswer(noteOne, noteTwo);
         streakCounter++;
-        document.querySelector("#submit-distance").disabled=true;
+        document.querySelector("#submit-btn").disabled = true;
+        document.querySelector("#give-up-btn").disabled = true;
+        document.querySelector("#submit-btn").style.backgroundColor = colorTwo;
+        document.querySelector("#give-up-btn").style.backgroundColor = colorTwo;
+        document.getElementById("input-field").disabled=true;
     } else {
         showIncorrectMessage();
         streakCounter = 0;
     }
-
     delayCode();
-    
 });
 
-// Functions
 function showCorrectMessage() {
-    correctMessageElement.style.display = "block";
+    document.getElementById("correctMessage").style.display = "block";
 }
 
 function showStreakMessage() {
@@ -987,26 +980,26 @@ function switchOffStreakMessage() {
 }
 
 function showIncorrectMessage() {
-    incorrectMessageElement.style.display = "block";
+    document.getElementById("incorrectMessage").style.display = "block";
 }
 
 function switchMessageOff() {
-    correctMessageElement.style.display = "none";
-    incorrectMessageElement.style.display = "none";
+    document.getElementById("correctMessage").style.display = "none";
+    document.getElementById("incorrectMessage").style.display = "none";
 }
 
 function disableSubmitAndGiveUpButton() {
-    document.querySelector("#submit-distance").disabled = true;
-    giveUpButton.disabled = true;
+    document.getElementById("submit-btn").disabled = true;
+    document.getElementById("give-up-btn").disabled = true;
 }
 
 function ableSubmitAndGiveUpButton() {
-    document.querySelector("#submit-distance").disabled = false;
-    giveUpButton.disabled = false;
+    document.getElementById("submit-btn").disabled = false;
+    document.getElementById("give-up-btn").disabled = false;
 }
 
 function delayCode() {
-    setTimeout(function() {
+    setTimeout(function () {
         switchMessageOff();
         showStreakMessage();
     }, 600);
@@ -1028,7 +1021,7 @@ function showAnswer(noteOne, noteTwo) {
     document.querySelector("#explanation").style.display = "block";
     document.querySelector("#answer-text").style.display = "none";
     document.querySelector(`#a${JamBuddy.musicalElements[noteOne]}`).style.backgroundColor = "red";
-    document.querySelector(`#a${JamBuddy.musicalElements[noteTwo]}`).style.backgroundColor = "Yellow";
+    document.querySelector(`#a${JamBuddy.musicalElements[noteTwo]}`).style.backgroundColor = "yellow";
 }
 
 function doTheExplanation(noteOne, noteTwo) {
@@ -1038,11 +1031,11 @@ function doTheExplanation(noteOne, noteTwo) {
     const two = JamBuddy.musicalElements[noteTwo];
 
     if (one < two) {
-        doCount(one, two, document.querySelector("#clockwise-answer"), function() {
+        doCount(one, two, document.querySelector("#clockwise-answer"), function () {
             doCount(two, one, document.querySelector("#anti-clockwise-answer"));
         });
     } else {
-        doCount(two, one, document.querySelector("#clockwise-answer"), function() {
+        doCount(two, one, document.querySelector("#clockwise-answer"), function () {
             doCount(one, two, document.querySelector("#anti-clockwise-answer"));
         });
     }
@@ -1068,7 +1061,7 @@ function doCount(num1, num2, id, callback) {
             }, 600);
         } else {
             clearInterval(intervalId);
-            if (typeof callback === 'function') {
+            if (typeof callback === "function") {
                 callback();
             }
             document.querySelector("#main-counter").innerText = "";
@@ -1077,7 +1070,7 @@ function doCount(num1, num2, id, callback) {
 }
 
 module.exports = {
-    init,
+    initNotes,
     reloadPage,
     showCorrectMessage,
     showStreakMessage,
@@ -1091,6 +1084,7 @@ module.exports = {
     clearTheBoxes,
     showAnswer,
     doTheExplanation,
+    doCount,
 };
 
 },{"./src/jam_buddy":5,"canvas-confetti":1}],3:[function(require,module,exports){
