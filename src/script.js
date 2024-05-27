@@ -1,4 +1,4 @@
-const { JamBuddy } = require("./src/jam_buddy");
+const { JamBuddy } = require("./jam_buddy");
 const confetti = require("canvas-confetti");
 
 const jamBuddy = new JamBuddy();
@@ -143,6 +143,8 @@ function showAnswer(noteOne, noteTwo) {
 }
 
 function doTheExplanation(noteOne, noteTwo) {
+    streakCounter = 0;
+    showStreakMessage();
     showAnswer(noteOne, noteTwo);
     document.querySelector("#answer-text").style.display = "block";
     const one = JamBuddy.musicalElements[noteOne];

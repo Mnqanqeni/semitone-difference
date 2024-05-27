@@ -5,7 +5,7 @@
   "main": "./src/jam_buddy.js",
   "scripts": {
     "test": "jasmine",
-    "bundle": "browserify script.js -o bundle.js"
+    "bundle": "browserify ./src/script.js -o ./bundle/bundle.js"
   },
   "repository": {
     "type": "git",

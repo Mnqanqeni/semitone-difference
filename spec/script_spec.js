@@ -27,7 +27,7 @@ describe('DOM Manipulation', function() {
     let confetti = { default: function(){ return true } }
     streakCounter = 0;
     
-    script = require('../script');
+    script = require('../src/script');
     script.noteOne = "A";
     script.noteTwo = "D";
 
