@@ -1026,6 +1026,25 @@ module.exports = { JamBuddy };
 },{"./helper_functions":2,"./helper_objects":3}],5:[function(require,module,exports){
 const { JamBuddy } = require("./jam_buddy");
 const confetti = require("canvas-confetti");
+const {
+    initNotes,
+    reloadPage,
+    disableSubmitAndGiveUpButton,
+    enableSubmitAndGiveUpButton,
+    showCorrectMessage,
+    showStreakMessage,
+    switchOffStreakMessage,
+    showIncorrectMessage,
+    switchMessageOff,
+    delayCode,
+    switchOffAnswer,
+    clearTheBoxes,
+    showAnswer,
+    doTheExplanation,
+    doCount,
+    lowerColorButton,
+    putColorButtonToNormal
+} = require("./script_helper_functions");
 
 const jamBuddy = new JamBuddy();
 let streakCounter = 0;
@@ -1035,49 +1054,34 @@ const streakNumberElement = document.getElementById("streak-number");
 
 const inputField = document.getElementById("input-field");
 const form = document.getElementById("distance-input-form");
-let colorOne="#007bff"
-let colorTwo="#7da2ca";
+let colorOne = "#007bff";
+let colorTwo = "#7da2ca";
 
-initNotes(document);
+// Initialize the notes on the page
+[noteOne, noteTwo] = initNotes(jamBuddy, document);
 
-function initNotes(document) {
-    jamBuddy.randomizeCurrentNotes();
-    [noteOne, noteTwo] = jamBuddy.getCurrentNotes();
-    document.querySelector("#first-note").innerText = noteOne;
-    document.querySelector("#second-note").innerText = noteTwo;
-}
+document.getElementById("restart-btn").addEventListener("click", () => reloadPage(window));
 
-initNotes(document);
-
-function reloadPage(window) {
-    window.location.reload();
-}
-
-document.getElementById("restart-btn").addEventListener("click", function () {
-    reloadPage(window);
-});
-
-document.getElementById("give-up-btn").addEventListener("click", function () {
-    disableSubmitAndGiveUpButton();
-        document.querySelector("#submit-btn").style.backgroundColor = colorTwo;
-        document.querySelector("#give-up-btn").style.backgroundColor = colorTwo;
-        document.getElementById("input-field").disabled=true;
-    clearTheBoxes();
-    doTheExplanation(noteOne, noteTwo);
+document.getElementById("give-up-btn").addEventListener("click", () => {
+    disableSubmitAndGiveUpButton(document);
+    lowerColorButton(document, colorTwo);
+    document.getElementById("input-field").disabled = true;
+    clearTheBoxes(document);
+    doTheExplanation(document, noteOne, noteTwo, streakCounter);
+    streakCounter=0;
+    showStreakMessage(document, streakCounter);
 });
 
 document.querySelector("#randomize-btn").addEventListener("click", () => {
-    clearTheBoxes();
-    switchOffAnswer();
-    ableSubmitAndGiveUpButton();
-        document.querySelector("#submit-btn").style.backgroundColor = colorOne;
-        document.querySelector("#give-up-btn").style.backgroundColor = colorOne;
-        document.getElementById("input-field").disabled=false;
-        
-    initNotes(document);
+    clearTheBoxes(document);
+    switchOffAnswer(document, noteOne, noteTwo);
+    enableSubmitAndGiveUpButton(document);
+    putColorButtonToNormal(document, colorOne);
+    document.getElementById("input-field").disabled = false;
+    [noteOne, noteTwo] = initNotes(jamBuddy, document);
 });
 
-form.addEventListener("submit", function (event) {
+form.addEventListener("submit", (event) => {
     event.preventDefault();
     const distance = parseInt(inputField.value);
     if (isNaN(distance)) {
@@ -1086,8 +1090,8 @@ form.addEventListener("submit", function (event) {
     }
 
     inputField.value = "";
-    switchOffAnswer();
-    switchOffStreakMessage();
+    switchOffAnswer(document, noteOne, noteTwo, jamBuddy);
+    switchOffStreakMessage(document);
 
     if (jamBuddy.checkAnswer(distance)) {
         confetti({
@@ -1095,104 +1099,137 @@ form.addEventListener("submit", function (event) {
             spread: 160,
             origin: { y: 0.6 },
         });
-        showCorrectMessage();
-        showAnswer(noteOne, noteTwo);
+        showCorrectMessage(document);
+        showAnswer(document, noteOne, noteTwo, jamBuddy);
         streakCounter++;
-        document.querySelector("#submit-btn").disabled = true;
-        document.querySelector("#give-up-btn").disabled = true;
+        disableSubmitAndGiveUpButton(document);
         document.querySelector("#submit-btn").style.backgroundColor = colorTwo;
         document.querySelector("#give-up-btn").style.backgroundColor = colorTwo;
-        document.getElementById("input-field").disabled=true;
+        document.getElementById("input-field").disabled = true;
     } else {
-        showIncorrectMessage();
+        showIncorrectMessage(document);
         streakCounter = 0;
     }
-    delayCode();
+    delayCode(document, streakCounter);
 });
 
-function showCorrectMessage() {
-    document.getElementById("correctMessage").style.display = "block";
+},{"./jam_buddy":4,"./script_helper_functions":6,"canvas-confetti":1}],6:[function(require,module,exports){
+// helpers.js
+const { JamBuddy } = require("./jam_buddy");
+function initNotes(jamBuddy, document) {
+    jamBuddy.randomizeCurrentNotes();
+    const [noteOne, noteTwo] = jamBuddy.getCurrentNotes();
+    document.querySelector("#first-note").innerText = noteOne;
+    document.querySelector("#second-note").innerText = noteTwo;
+    return [noteOne, noteTwo];
 }
 
-function showStreakMessage() {
-    streakNumberElement.innerText = streakCounter;
-    streakElement.style.display = "block";
+function reloadPage(window) {
+    window.location.reload();
 }
 
-function switchOffStreakMessage() {
-    streakElement.style.display = "none";
-}
-
-function showIncorrectMessage() {
-    document.getElementById("incorrectMessage").style.display = "block";
-}
-
-function switchMessageOff() {
-    document.getElementById("correctMessage").style.display = "none";
-    document.getElementById("incorrectMessage").style.display = "none";
-}
-
-function disableSubmitAndGiveUpButton() {
+function disableSubmitAndGiveUpButton(document) {
     document.getElementById("submit-btn").disabled = true;
     document.getElementById("give-up-btn").disabled = true;
 }
 
-function ableSubmitAndGiveUpButton() {
+function enableSubmitAndGiveUpButton(document) {
     document.getElementById("submit-btn").disabled = false;
     document.getElementById("give-up-btn").disabled = false;
 }
+function lowerColorButton(document, colorTwo) {
+    document.querySelector("#submit-btn").style.backgroundColor = colorTwo;
+    document.querySelector("#give-up-btn").style.backgroundColor = colorTwo;
+}
 
-function delayCode() {
-    setTimeout(function () {
-        switchMessageOff();
-        showStreakMessage();
+function putColorButtonToNormal(document, colorOne) {
+    document.querySelector("#submit-btn").style.backgroundColor = colorOne;
+    document.querySelector("#give-up-btn").style.backgroundColor = colorOne;
+}
+function showCorrectMessage(document) {
+    document.getElementById("correctMessage").style.display = "block";
+}
+
+function showStreakMessage(document, streakCounter) {
+    const streakElement = document.getElementById("streak");
+    const streakNumberElement = document.getElementById("streak-number");
+    streakNumberElement.innerText = streakCounter;
+    streakElement.style.display = "block";
+}
+
+function switchOffStreakMessage(document) {
+    document.getElementById("streak").style.display = "none";
+}
+
+function showIncorrectMessage(document) {
+    document.getElementById("incorrectMessage").style.display = "block";
+}
+
+function switchMessageOff(document) {
+    document.getElementById("correctMessage").style.display = "none";
+    document.getElementById("incorrectMessage").style.display = "none";
+}
+
+function delayCode(document, streakCounter) {
+    setTimeout(() => {
+        switchMessageOff(document);
+        showStreakMessage(document, streakCounter);
     }, 600);
 }
 
-function switchOffAnswer() {
+function switchOffAnswer(document, noteOne, noteTwo) {
     document.querySelector("#explanation").style.display = "none";
     document.querySelector(`#a${JamBuddy.musicalElements[noteOne]}`).style.backgroundColor = "#ccc";
     document.querySelector(`#a${JamBuddy.musicalElements[noteTwo]}`).style.backgroundColor = "#ccc";
 }
 
-function clearTheBoxes() {
+function clearTheBoxes(document) {
+    const arrayObject = [1, 4, 6, 9];
     for (let i = 0; i < 12; i++) {
-        document.querySelector(`#a${i}`).style.backgroundColor = "#ccc";
+        if (arrayObject.includes(i)) {
+            document.querySelector(`#a${i}a0`).style.backgroundColor = "#ccc";
+            document.querySelector(`#a${i}a1`).style.backgroundColor = "#ccc";
+        }else{
+            document.querySelector(`#a${i}`).style.backgroundColor = "#ccc";
+        }
     }
 }
 
-function showAnswer(noteOne, noteTwo) {
+function showAnswer(document, noteOne, noteTwo) {
+    const arrayObject = [1, 4, 6, 9];
+    const index1 = JamBuddy.musicalElements[noteOne];
+    const index2 = JamBuddy.musicalElements[noteTwo];
+
     document.querySelector("#explanation").style.display = "block";
     document.querySelector("#answer-text").style.display = "none";
-    document.querySelector(`#a${JamBuddy.musicalElements[noteOne]}`).style.backgroundColor = "red";
-    document.querySelector(`#a${JamBuddy.musicalElements[noteTwo]}`).style.backgroundColor = "yellow";
+    document.querySelector(`#a${index1}${arrayObject.includes(index1) ? `a${noteOne.includes("#") ? "0" : "1"}` : ""}`).style.backgroundColor = "red";
+    document.querySelector(`#a${index2}${arrayObject.includes(index2) ? `a${noteTwo.includes("#") ? "0" : "1"}` : ""}`).style.backgroundColor = "yellow";
 }
 
-function doTheExplanation(noteOne, noteTwo) {
-    streakCounter = 0;
-    showStreakMessage();
-    showAnswer(noteOne, noteTwo);
+function doTheExplanation(document, noteOne, noteTwo, streakCounter) {
+    showStreakMessage(document, streakCounter);
+    showAnswer(document, noteOne, noteTwo);
     document.querySelector("#answer-text").style.display = "block";
+
     const one = JamBuddy.musicalElements[noteOne];
     const two = JamBuddy.musicalElements[noteTwo];
 
     if (one < two) {
-        doCount(one, two, document.querySelector("#clockwise-answer"), function () {
-            doCount(two, one, document.querySelector("#anti-clockwise-answer"));
+        doCount(one, two, document.querySelector("#clockwise-answer"), document, () => {
+            doCount(two, one, document.querySelector("#anti-clockwise-answer"), document);
         });
     } else {
-        doCount(two, one, document.querySelector("#clockwise-answer"), function () {
-            doCount(one, two, document.querySelector("#anti-clockwise-answer"));
+        doCount(two, one, document.querySelector("#clockwise-answer"), document, () => {
+            doCount(one, two, document.querySelector("#anti-clockwise-answer"), document);
         });
     }
 }
 
-function doCount(num1, num2, id, callback) {
+function doCount(num1, num2, id, document, callback) {
     let count = 0;
     const totalNotes = 12;
 
     const intervalId = setInterval(() => {
-        let store;
         if (num1 !== num2) {
             num1 = (num1 + 1) % totalNotes;
             count++;
@@ -1200,7 +1237,7 @@ function doCount(num1, num2, id, callback) {
             document.querySelector("#main-counter").innerText = count;
 
             const element = document.querySelector(`#a${num1}`);
-            store = element.style.backgroundColor;
+            const store = element.style.backgroundColor;
             element.style.backgroundColor = "blue";
             setTimeout(() => {
                 element.style.backgroundColor = store;
@@ -1218,19 +1255,21 @@ function doCount(num1, num2, id, callback) {
 module.exports = {
     initNotes,
     reloadPage,
+    disableSubmitAndGiveUpButton,
+    enableSubmitAndGiveUpButton,
     showCorrectMessage,
     showStreakMessage,
     switchOffStreakMessage,
     showIncorrectMessage,
     switchMessageOff,
-    disableSubmitAndGiveUpButton,
-    ableSubmitAndGiveUpButton,
     delayCode,
     switchOffAnswer,
     clearTheBoxes,
     showAnswer,
     doTheExplanation,
     doCount,
+    lowerColorButton,
+    putColorButtonToNormal
 };
 
-},{"./jam_buddy":4,"canvas-confetti":1}]},{},[5]);
+},{"./jam_buddy":4}]},{},[5]);
