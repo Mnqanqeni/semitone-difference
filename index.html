@@ -12,7 +12,7 @@
 
 <body>
     <div id="container">
-        <h1>Semitones</h1>   
+        <h1>Semitones</h1>
         <p class="question">How many semi-tones between the notes below?</p>
         <div id="notes-display">
             <p>First Note: <span id="first-note"></span></p>
@@ -21,11 +21,12 @@
 
         <div id="distance-form">
             <form id="distance-input-form">
-                <input type="number" id="input-field" name="distance" min="1" max="11" placeholder="Enter the semi-tones">
+                <input type="number" id="input-field" name="distance" min="1" max="11"
+                    placeholder="Enter the semi-tones">
                 <button type="submit" id="submit-btn">Submit</button>
             </form>
         </div>
-        
+
         <div>
             <button id="give-up-btn">Give Up</button>
             <button id="randomize-btn">Randomize Notes</button>
@@ -41,27 +42,38 @@
                 <div class="box" style="transform: rotate(0deg) translate(140px) rotate(0deg);" id="a3"><span>C</span>
                 </div>
                 <div class="box" style="transform: rotate(30deg) translate(140px) rotate(-30deg);" id="a4">
-                    <span><span id="a4a0">C#</span>/<span id="a4a1">Db</span></span></div>
+                    <span><span id="a4a0">C#</span>/<span id="a4a1">Db</span></span>
+                </div>
                 <div class="box" style="transform: rotate(60deg) translate(140px) rotate(-60deg);" id="a5">
-                    <span>D</span></div>
+                    <span>D</span>
+                </div>
                 <div class="box" style="transform: rotate(90deg) translate(140px) rotate(-90deg);" id="a6">
-                    <span><span id="a6a0">D#</span>/<span id="a6a1">Eb</span></span></div>
+                    <span><span id="a6a0">D#</span>/<span id="a6a1">Eb</span></span>
+                </div>
                 <div class="box" style="transform: rotate(120deg) translate(140px) rotate(-120deg);" id="a7">
-                    <span>E</span></div>
+                    <span>E</span>
+                </div>
                 <div class="box" style="transform: rotate(150deg) translate(140px) rotate(-150deg);" id="a8">
-                    <span>F</span></div>
+                    <span>F</span>
+                </div>
                 <div class="box" style="transform: rotate(180deg) translate(140px) rotate(-180deg);" id="a9">
-                    <span><span id="a9a0">F#</span>/<span id="a9a1">Gb</span></span></div>
+                    <span><span id="a9a0">F#</span>/<span id="a9a1">Gb</span></span>
+                </div>
                 <div class="box" style="transform: rotate(210deg) translate(140px) rotate(-210deg);" id="a10">
-                    <span>G</span></div>
+                    <span>G</span>
+                </div>
                 <div class="box" style="transform: rotate(240deg) translate(140px) rotate(-240deg);" id="a11">
-                    <span>G#</span></div>
+                    <span>G#</span>
+                </div>
                 <div class="box" style="transform: rotate(270deg) translate(140px) rotate(-270deg);" id="a0">
-                    <span>A</span></div>
+                    <span>A</span>
+                </div>
                 <div class="box" style="transform: rotate(300deg) translate(140px) rotate(-300deg);" id="a1">
-                    <span><span id="a1a0">A#</span>/<span id="a1a1">Bb</span></span></div>
+                    <span><span id="a1a0">A#</span>/<span id="a1a1">Bb</span></span>
+                </div>
                 <div class="box" style="transform: rotate(330deg) translate(140px) rotate(-330deg);" id="a2">
-                    <span>B</span></div>
+                    <span>B</span>
+                </div>
             </div>
         </div>
         <div id="correctMessage">Correct</div>
@@ -69,8 +81,6 @@
         <div id="streak">Streak: <span id="streak-number">0</span></div>
     </div>
     <script src="./bundle/bundle.js"></script>
-    <!-- <script src="./src/script_helper_functions.js"></script> -->
-    <!-- <script src="path/to/script.js"></script> -->
 </body>
 
 </html>
