@@ -1027,249 +1027,248 @@ module.exports = { JamBuddy };
 const { JamBuddy } = require("./jam_buddy");
 const confetti = require("canvas-confetti");
 const {
-    initNotes,
-    reloadPage,
-    disableSubmitAndGiveUpButton,
-    enableSubmitAndGiveUpButton,
-    showCorrectMessage,
-    showStreakMessage,
-    switchOffStreakMessage,
-    showIncorrectMessage,
-    switchMessageOff,
-    delayCode,
-    switchOffAnswer,
-    clearTheBoxes,
-    showAnswer,
-    doTheExplanation,
-    doCount,
-    lowerColorButton,
-    putColorButtonToNormal
+  initNotes,
+  reloadPage,
+  toggleButtons,
+  changeButtonColor,
+  displayAnswerMessage,
+  showStreakMessage,
+  switchOffStreakMessage,
+  delayCode,
+  switchOffAnswer,
+  clearTheBoxes,
+  showAnswer,
+  doTheExplanation,
+  guiElements
 } = require("./script_helper_functions");
 
 const jamBuddy = new JamBuddy();
 let streakCounter = 0;
 let noteOne, noteTwo;
-const streakElement = document.getElementById("streak");
-const streakNumberElement = document.getElementById("streak-number");
 
-const inputField = document.getElementById("input-field");
-const form = document.getElementById("distance-input-form");
-let colorOne = "#007bff";
-let colorTwo = "#7da2ca";
+const colorOne = "#007bff";
+const colorTwo = "#7da2ca";
 
-// Initialize the notes on the page
-[noteOne, noteTwo] = initNotes(jamBuddy, document);
+[noteOne, noteTwo] = initNotes(jamBuddy);
 
-document.getElementById("restart-btn").addEventListener("click", () => reloadPage(window));
+guiElements.restartButton.addEventListener("click", () => reloadPage(window));
 
-document.getElementById("give-up-btn").addEventListener("click", () => {
-    disableSubmitAndGiveUpButton(document);
-    lowerColorButton(document, colorTwo);
-    document.getElementById("input-field").disabled = true;
-    clearTheBoxes(document);
-    doTheExplanation(document, noteOne, noteTwo, streakCounter);
-    streakCounter=0;
-    showStreakMessage(document, streakCounter);
+guiElements.giveUpButton.addEventListener("click", () => {
+  toggleButtons("disable");
+  changeButtonColor(colorTwo);
+  guiElements.inputField.disabled = true;
+  clearTheBoxes(document);
+  doTheExplanation(document,noteOne, noteTwo, streakCounter);
+  streakCounter = 0;
+  showStreakMessage(streakCounter);
 });
 
-document.querySelector("#randomize-btn").addEventListener("click", () => {
-    clearTheBoxes(document);
-    switchOffAnswer(document, noteOne, noteTwo);
-    enableSubmitAndGiveUpButton(document);
-    putColorButtonToNormal(document, colorOne);
-    document.getElementById("input-field").disabled = false;
-    [noteOne, noteTwo] = initNotes(jamBuddy, document);
+guiElements.randomizeButton.addEventListener("click", () => {
+  clearTheBoxes(document);
+  switchOffAnswer(document,noteOne, noteTwo);
+  toggleButtons("enable");
+  changeButtonColor(colorOne);
+  guiElements.inputField.disabled = false;
+  [noteOne, noteTwo] = initNotes(jamBuddy);
 });
 
-form.addEventListener("submit", (event) => {
-    event.preventDefault();
-    const distance = parseInt(inputField.value);
-    if (isNaN(distance)) {
-        alert("Input can't be empty");
-        return;
-    }
+guiElements.form.addEventListener("submit", (event) => {
+  event.preventDefault();
+  const distance = parseInt(guiElements.inputField.value);
+  if (isNaN(distance)) {
+    alert("Input can't be empty");
+    return;
+  }
 
-    inputField.value = "";
-    switchOffAnswer(document, noteOne, noteTwo, jamBuddy);
-    switchOffStreakMessage(document);
+  guiElements.inputField.value = "";
+  switchOffAnswer(document,noteOne, noteTwo);
+  switchOffStreakMessage();
 
-    if (jamBuddy.checkAnswer(distance)) {
-        confetti({
-            particleCount: 100,
-            spread: 160,
-            origin: { y: 0.6 },
-        });
-        showCorrectMessage(document);
-        showAnswer(document, noteOne, noteTwo, jamBuddy);
-        streakCounter++;
-        disableSubmitAndGiveUpButton(document);
-        document.querySelector("#submit-btn").style.backgroundColor = colorTwo;
-        document.querySelector("#give-up-btn").style.backgroundColor = colorTwo;
-        document.getElementById("input-field").disabled = true;
-    } else {
-        showIncorrectMessage(document);
-        streakCounter = 0;
-    }
-    delayCode(document, streakCounter);
+  if (jamBuddy.checkAnswer(distance)) {
+    confetti({
+      particleCount: 100,
+      spread: 160,
+      origin: { y: 0.6 },
+    });
+    displayAnswerMessage("correct");
+    showAnswer(document,noteOne, noteTwo);
+    streakCounter++;
+    toggleButtons("disable");
+    changeButtonColor(colorTwo);
+    guiElements.inputField.disabled = true;
+  } else {
+    displayAnswerMessage("incorrect");
+    streakCounter = 0;
+  }
+  delayCode(streakCounter);
 });
 
 },{"./jam_buddy":4,"./script_helper_functions":6,"canvas-confetti":1}],6:[function(require,module,exports){
-// helpers.js
 const { JamBuddy } = require("./jam_buddy");
-function initNotes(jamBuddy, document) {
-    jamBuddy.randomizeCurrentNotes();
-    const [noteOne, noteTwo] = jamBuddy.getCurrentNotes();
-    document.querySelector("#first-note").innerText = noteOne;
-    document.querySelector("#second-note").innerText = noteTwo;
-    return [noteOne, noteTwo];
+const guiElements = {
+  form: document.getElementById("distance-input-form"),
+  streakElement: document.getElementById("streak"),
+  streakNumberElement: document.getElementById("streak-number"),
+  inputField: document.getElementById("input-field"),
+  restartButton: document.getElementById("restart-btn"),
+  giveUpButton: document.getElementById("give-up-btn"),
+  randomizeButton: document.querySelector("#randomize-btn"),
+  submitButton: document.getElementById("submit-btn"),
+  correctMessage: document.getElementById("correctMessage"),
+  incorrectMessage: document.getElementById("incorrectMessage"),
+  explanation: document.querySelector("#explanation"),
+  answerText: document.querySelector("#answer-text"),
+  mainCounter: document.querySelector("#main-counter"),
+  clockwiseAnswer: document.querySelector("#clockwise-answer"),
+  antiClockwiseAnswer: document.querySelector("#anti-clockwise-answer"),
+  firstNote: document.querySelector("#first-note"),
+  secondNote: document.querySelector("#second-note"),
+};
+
+function initNotes(jamBuddy) {
+  jamBuddy.randomizeCurrentNotes();
+  const [noteOne, noteTwo] = jamBuddy.getCurrentNotes();
+  guiElements.firstNote.innerText = noteOne;
+  guiElements.secondNote.innerText = noteTwo;
+  return [noteOne, noteTwo];
 }
 
 function reloadPage(window) {
-    window.location.reload();
+  window.location.reload();
 }
 
-function disableSubmitAndGiveUpButton(document) {
-    document.getElementById("submit-btn").disabled = true;
-    document.getElementById("give-up-btn").disabled = true;
+function toggleButtons(status) {
+  const isDisabled = status === "disable";
+  guiElements.submitButton.disabled = isDisabled;
+  guiElements.giveUpButton.disabled = isDisabled;
 }
 
-function enableSubmitAndGiveUpButton(document) {
-    document.getElementById("submit-btn").disabled = false;
-    document.getElementById("give-up-btn").disabled = false;
-}
-function lowerColorButton(document, colorTwo) {
-    document.querySelector("#submit-btn").style.backgroundColor = colorTwo;
-    document.querySelector("#give-up-btn").style.backgroundColor = colorTwo;
+function changeButtonColor(color) {
+  guiElements.submitButton.style.backgroundColor = color;
+  guiElements.giveUpButton.style.backgroundColor = color;
 }
 
-function putColorButtonToNormal(document, colorOne) {
-    document.querySelector("#submit-btn").style.backgroundColor = colorOne;
-    document.querySelector("#give-up-btn").style.backgroundColor = colorOne;
-}
-function showCorrectMessage(document) {
-    document.getElementById("correctMessage").style.display = "block";
+function displayAnswerMessage(status) {
+  guiElements.correctMessage.style.display = status === "correct" ? "block" : "none";
+  guiElements.incorrectMessage.style.display = status === "incorrect" ? "block" : "none";
 }
 
-function showStreakMessage(document, streakCounter) {
-    const streakElement = document.getElementById("streak");
-    const streakNumberElement = document.getElementById("streak-number");
-    streakNumberElement.innerText = streakCounter;
-    streakElement.style.display = "block";
+function showStreakMessage(streakCounter) {
+  guiElements.streakNumberElement.innerText = streakCounter;
+  guiElements.streakElement.style.display = "block";
 }
 
-function switchOffStreakMessage(document) {
-    document.getElementById("streak").style.display = "none";
+function switchOffStreakMessage() {
+  guiElements.streakElement.style.display = "none";
 }
 
-function showIncorrectMessage(document) {
-    document.getElementById("incorrectMessage").style.display = "block";
-}
-
-function switchMessageOff(document) {
-    document.getElementById("correctMessage").style.display = "none";
-    document.getElementById("incorrectMessage").style.display = "none";
-}
-
-function delayCode(document, streakCounter) {
-    setTimeout(() => {
-        switchMessageOff(document);
-        showStreakMessage(document, streakCounter);
-    }, 600);
-}
-
-function switchOffAnswer(document, noteOne, noteTwo) {
-    document.querySelector("#explanation").style.display = "none";
-    document.querySelector(`#a${JamBuddy.musicalElements[noteOne]}`).style.backgroundColor = "#ccc";
-    document.querySelector(`#a${JamBuddy.musicalElements[noteTwo]}`).style.backgroundColor = "#ccc";
+function switchMessageOff() {
+  guiElements.correctMessage.style.display = "none";
+  guiElements.incorrectMessage.style.display = "none";
 }
 
 function clearTheBoxes(document) {
-    const arrayObject = [1, 4, 6, 9];
-    for (let i = 0; i < 12; i++) {
-        if (arrayObject.includes(i)) {
-            document.querySelector(`#a${i}a0`).style.backgroundColor = "#ccc";
-            document.querySelector(`#a${i}a1`).style.backgroundColor = "#ccc";
-        }else{
-            document.querySelector(`#a${i}`).style.backgroundColor = "#ccc";
-        }
-    }
-}
-
-function showAnswer(document, noteOne, noteTwo) {
-    const arrayObject = [1, 4, 6, 9];
-    const index1 = JamBuddy.musicalElements[noteOne];
-    const index2 = JamBuddy.musicalElements[noteTwo];
-
-    document.querySelector("#explanation").style.display = "block";
-    document.querySelector("#answer-text").style.display = "none";
-    document.querySelector(`#a${index1}${arrayObject.includes(index1) ? `a${noteOne.includes("#") ? "0" : "1"}` : ""}`).style.backgroundColor = "red";
-    document.querySelector(`#a${index2}${arrayObject.includes(index2) ? `a${noteTwo.includes("#") ? "0" : "1"}` : ""}`).style.backgroundColor = "yellow";
-}
-
-function doTheExplanation(document, noteOne, noteTwo, streakCounter) {
-    showStreakMessage(document, streakCounter);
-    showAnswer(document, noteOne, noteTwo);
-    document.querySelector("#answer-text").style.display = "block";
-
-    const one = JamBuddy.musicalElements[noteOne];
-    const two = JamBuddy.musicalElements[noteTwo];
-
-    if (one < two) {
-        doCount(one, two, document.querySelector("#clockwise-answer"), document, () => {
-            doCount(two, one, document.querySelector("#anti-clockwise-answer"), document);
-        });
+  const arrayObject = [1, 4, 6, 9];
+  for (let i = 0; i < 12; i++) {
+    if (arrayObject.includes(i)) {
+      document.querySelector(`#a${i}a0`).style.backgroundColor = "#ccc";
+      document.querySelector(`#a${i}a1`).style.backgroundColor = "#ccc";
     } else {
-        doCount(two, one, document.querySelector("#clockwise-answer"), document, () => {
-            doCount(one, two, document.querySelector("#anti-clockwise-answer"), document);
-        });
+      document.querySelector(`#a${i}`).style.backgroundColor = "#ccc";
     }
+  }
 }
 
-function doCount(num1, num2, id, document, callback) {
-    let count = 0;
-    const totalNotes = 12;
+function switchOffAnswer(document,noteOne, noteTwo) {
+  guiElements.explanation.style.display = "none";
+  document.querySelector(`#a${JamBuddy.musicalElements[noteOne]}`).style.backgroundColor = "#ccc";
+  document.querySelector(`#a${JamBuddy.musicalElements[noteTwo]}`).style.backgroundColor = "#ccc";
+}
 
-    const intervalId = setInterval(() => {
-        if (num1 !== num2) {
-            num1 = (num1 + 1) % totalNotes;
-            count++;
-            id.innerText = count;
-            document.querySelector("#main-counter").innerText = count;
+function delayCode(streakCounter) {
+  setTimeout(() => {
+    switchMessageOff();
+    showStreakMessage(streakCounter);
+  }, 600);
+}
 
-            const element = document.querySelector(`#a${num1}`);
-            const store = element.style.backgroundColor;
-            element.style.backgroundColor = "blue";
-            setTimeout(() => {
-                element.style.backgroundColor = store;
-            }, 600);
-        } else {
-            clearInterval(intervalId);
-            if (typeof callback === "function") {
-                callback();
-            }
-            document.querySelector("#main-counter").innerText = "";
-        }
-    }, 600);
+function showAnswer(document,noteOne, noteTwo) {
+  const arrayObject = [1, 4, 6, 9];
+  const index1 = JamBuddy.musicalElements[noteOne];
+  const index2 = JamBuddy.musicalElements[noteTwo];
+
+  guiElements.explanation.style.display = "block";
+  guiElements.answerText.style.display = "none";
+
+  const getColorSelector = (index, note) =>
+    `#a${index}${arrayObject.includes(index) ? `a${note.includes("#") ? "0" : "1"}` : ""}`;
+
+  document.querySelector(getColorSelector(index1, noteOne)).style.backgroundColor = "red";
+  document.querySelector(getColorSelector(index2, noteTwo)).style.backgroundColor = "yellow";
+}
+
+function doTheExplanation(document,noteOne, noteTwo, streakCounter) {
+  showStreakMessage(streakCounter);
+  showAnswer(document,noteOne, noteTwo);
+  guiElements.answerText.style.display = "block";
+
+  const one = JamBuddy.musicalElements[noteOne];
+  const two = JamBuddy.musicalElements[noteTwo];
+
+  if (one < two) {
+    doCount(one, two, guiElements.clockwiseAnswer, () => {
+      doCount(two, one, guiElements.antiClockwiseAnswer);
+    });
+  } else {
+    doCount(two, one, guiElements.clockwiseAnswer, () => {
+      doCount(one, two, guiElements.antiClockwiseAnswer);
+    });
+  }
+}
+
+function doCount(num1, num2, id, callback) {
+  let count = 0;
+  const totalNotes = 12;
+
+  const intervalId = setInterval(() => {
+    if (num1 !== num2) {
+      num1 = (num1 + 1) % totalNotes;
+      count++;
+      id.innerText = count;
+      guiElements.mainCounter.innerText = count;
+
+      const element = document.querySelector(`#a${num1}`);
+      const store = element.style.backgroundColor;
+      element.style.backgroundColor = "blue";
+      setTimeout(() => {
+        element.style.backgroundColor = store;
+      }, 600);
+    } else {
+      clearInterval(intervalId);
+      if (typeof callback === "function") {
+        callback();
+      }
+      guiElements.mainCounter.innerText = "";
+    }
+  }, 600);
 }
 
 module.exports = {
-    initNotes,
-    reloadPage,
-    disableSubmitAndGiveUpButton,
-    enableSubmitAndGiveUpButton,
-    showCorrectMessage,
-    showStreakMessage,
-    switchOffStreakMessage,
-    showIncorrectMessage,
-    switchMessageOff,
-    delayCode,
-    switchOffAnswer,
-    clearTheBoxes,
-    showAnswer,
-    doTheExplanation,
-    doCount,
-    lowerColorButton,
-    putColorButtonToNormal
+  initNotes,
+  reloadPage,
+  toggleButtons,
+  changeButtonColor,
+  displayAnswerMessage,
+  showStreakMessage,
+  switchOffStreakMessage,
+  switchMessageOff,
+  delayCode,
+  switchOffAnswer,
+  clearTheBoxes,
+  showAnswer,
+  doTheExplanation,
+  doCount,
+  guiElements
 };
 
 },{"./jam_buddy":4}]},{},[5]);
