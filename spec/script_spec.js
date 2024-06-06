@@ -1,6 +1,6 @@
 const { JamBuddy } = require("../src/jam_buddy");
 
-let script, jamBuddy,guiElements,scriptHelperFunctions;
+let script, jamBuddy, guiElements, scriptHelperFunctions;
 
 describe("DOM Manipulation", function () {
   let firstNoteElement,
@@ -53,10 +53,7 @@ describe("DOM Manipulation", function () {
     randomizeButton = guiElements.randomizeButton;
     inputField = guiElements.inputField;
     streakCounter = 0;
-    spyOn(
-      scriptHelperFunctions,
-      "toggleButtons"
-    ).and.callThrough();
+    spyOn(scriptHelperFunctions, "toggleButtons").and.callThrough();
   });
 
   it("should initialize notes and display them", function () {
@@ -110,9 +107,7 @@ describe("DOM Manipulation", function () {
       spyOn(scriptHelperFunctions, "clearTheBoxes").and.stub();
       spyOn(scriptHelperFunctions, "doTheExplanation").and.stub();
       giveUpBtn.click();
-      expect(
-        scriptHelperFunctions.toggleButtons
-      ).toHaveBeenCalled();
+      expect(scriptHelperFunctions.toggleButtons).toHaveBeenCalled();
       expect(scriptHelperFunctions.clearTheBoxes).toHaveBeenCalled();
       expect(scriptHelperFunctions.doTheExplanation).toHaveBeenCalled();
     });
@@ -126,24 +121,6 @@ describe("DOM Manipulation", function () {
       expect(giveUpBtn.disabled).toBe(true);
       expect(submitBtn.disabled).toBe(true);
     });
-
-    // it("should maintain the gray background color for elements when the give up button is clicked", function () {
-    //   spyOn(scriptHelperFunctions, "showAnswer").and.stub();
-    //   for (let i = 0; i < 12; i++) {
-    //     let element = document.querySelector(`#a${i}`);
-    //     element.style.backgroundColor = "rgb(204, 204, 204)";
-    //   }
-    //   scriptHelperFunctions.showAnswer(
-    //     script.noteOne,
-    //     script.noteTwo
-    //   );
-    //   scriptHelperFunctions.clearTheBoxes();
-    //   for (let i = 0; i < 12; i++) {
-    //     let element = document.querySelector(`#a${i}`);
-    //     expect(element.style.backgroundColor).toBe("rgb(204, 204, 204)");
-    //   }
-    // });
-    
   });
 
   describe("randomize event listener", function () {
@@ -167,9 +144,7 @@ describe("DOM Manipulation", function () {
 
       expect(scriptHelperFunctions.clearTheBoxes).toHaveBeenCalled();
       expect(scriptHelperFunctions.switchOffAnswer).toHaveBeenCalled();
-      expect(
-        scriptHelperFunctions.toggleButtons
-      ).toHaveBeenCalled();
+      expect(scriptHelperFunctions.toggleButtons).toHaveBeenCalled();
       expect(scriptHelperFunctions.initNotes).toHaveBeenCalled();
     });
 
@@ -202,15 +177,18 @@ describe("DOM Manipulation", function () {
         }
 
         inputField.value = "";
+
         scriptHelperFunctions.switchOffAnswer(
+          document,
           script.noteOne,
-          script.noteTwo,
+          script.noteTwo
         );
         scriptHelperFunctions.switchOffStreakMessage();
 
         if (jamBuddy.checkAnswer(distance)) {
           scriptHelperFunctions.displayAnswerMessage("correct");
           scriptHelperFunctions.showAnswer(
+            document,
             script.noteOne,
             script.noteTwo
           );
@@ -232,7 +210,7 @@ describe("DOM Manipulation", function () {
     });
 
     it("should call switchOffAnswer and switchOffStreakMessage when the submit button is clicked", function () {
-      spyOn(scriptHelperFunctions, "switchOffAnswer").and.callThrough();
+      spyOn(scriptHelperFunctions, "switchOffAnswer");
       spyOn(scriptHelperFunctions, "switchOffStreakMessage");
       inputField.value = "5";
       submitBtn.click();
@@ -240,57 +218,62 @@ describe("DOM Manipulation", function () {
       expect(scriptHelperFunctions.switchOffStreakMessage).toHaveBeenCalled();
     });
 
-    // it("should show an alert when the submit button is clicked with an invalid input", function () {
-    //   inputField.value = "hello";
-    //   submitBtn.click();
-    //   expect(mockWindow.alert).toHaveBeenCalled();
-    // });
+    it("should show an alert when the submit button is clicked with an invalid input", function () {
+      inputField.value = "hello";
+      submitBtn.click();
+      expect(mockWindow.alert).toHaveBeenCalled();
+    });
 
-    // it("should handle a correct answer correctly", function () {
-    //   spyOn(scriptHelperFunctions, "switchOffAnswer");
-    //   spyOn(scriptHelperFunctions, "switchOffStreakMessage");
-    //   spyOn(scriptHelperFunctions, "displayAnswerMessage");
-    //   spyOn(scriptHelperFunctions, "showAnswer");
-    //   spyOn(jamBuddy, "checkAnswer").and.returnValue(true);
+    it("should handle a correct answer correctly", function () {
+      spyOn(scriptHelperFunctions, "switchOffAnswer");
+      spyOn(scriptHelperFunctions, "switchOffStreakMessage");
+      spyOn(scriptHelperFunctions, "displayAnswerMessage");
+      spyOn(scriptHelperFunctions, "showAnswer");
+      spyOn(jamBuddy, "checkAnswer").and.returnValue(true);
 
-    //   inputField.value = "5";
+      inputField.value = "5";
 
-    //   submitBtn.click();
+      submitBtn.click();
 
-    //   expect(scriptHelperFunctions.switchOffAnswer).toHaveBeenCalled();
-    //   expect(scriptHelperFunctions.switchOffStreakMessage).toHaveBeenCalled();
-    //   expect(scriptHelperFunctions.displayAnswerMessage).toHaveBeenCalledWith("correct");
-    //   expect(scriptHelperFunctions.showAnswer).toHaveBeenCalled();
-    //   expect(streakCounter).toBe(1);
-    //   expect(submitBtn.disabled).toBe(true);
-    // });
+      expect(scriptHelperFunctions.switchOffAnswer).toHaveBeenCalled();
+      expect(scriptHelperFunctions.switchOffStreakMessage).toHaveBeenCalled();
+      expect(scriptHelperFunctions.displayAnswerMessage).toHaveBeenCalledWith(
+        "correct"
+      );
+      expect(scriptHelperFunctions.showAnswer).toHaveBeenCalled();
+      expect(streakCounter).toBe(1);
+      expect(submitBtn.disabled).toBe(true);
+    });
 
-    // it("should call showAnswer with the correct arguments when the submit button is clicked", function () {
-    //   spyOn(scriptHelperFunctions, "showAnswer").and.stub();
-    //   jamBuddy.setCurrentNotes(["A", "D"]);
-    //   inputField.value = "5";
-    //   submitBtn.click();
-    //   expect(scriptHelperFunctions.showAnswer).toHaveBeenCalledWith(
-    //     "A",
-    //     "D"
-    //   );
-    // });
+    it("should call showAnswer with the correct arguments when the submit button is clicked", function () {
+      spyOn(scriptHelperFunctions, "showAnswer");
+      jamBuddy.setCurrentNotes(["A", "D"]);
+      inputField.value = "5";
+      submitBtn.click();
+      expect(scriptHelperFunctions.showAnswer).toHaveBeenCalledWith(
+        document,
+        "A",
+        "D"
+      );
+    });
 
-    // it("should handle an incorrect answer correctly", function () {
-    //   spyOn(scriptHelperFunctions, "switchOffAnswer");
-    //   spyOn(scriptHelperFunctions, "switchOffStreakMessage");
-    //   spyOn(scriptHelperFunctions, "displayAnswerMessage");
-    //   spyOn(jamBuddy, "checkAnswer").and.returnValue(false);
+    it("should handle an incorrect answer correctly", function () {
+      spyOn(scriptHelperFunctions, "switchOffAnswer");
+      spyOn(scriptHelperFunctions, "switchOffStreakMessage");
+      spyOn(scriptHelperFunctions, "displayAnswerMessage");
+      spyOn(jamBuddy, "checkAnswer").and.returnValue(false);
 
-    //   inputField.value = "5";
+      inputField.value = "5";
 
-    //   submitBtn.click();
+      submitBtn.click();
 
-    //   expect(scriptHelperFunctions.switchOffAnswer).toHaveBeenCalled();
-    //   expect(scriptHelperFunctions.switchOffStreakMessage).toHaveBeenCalled();
-    //   expect(scriptHelperFunctions.displayAnswerMessage).toHaveBeenCalledWith("incorrect");
-    //   expect(streakCounter).toBe(0);
-    //   expect(submitBtn.disabled).toBe(false);
-    // });
+      expect(scriptHelperFunctions.switchOffAnswer).toHaveBeenCalled();
+      expect(scriptHelperFunctions.switchOffStreakMessage).toHaveBeenCalled();
+      expect(scriptHelperFunctions.displayAnswerMessage).toHaveBeenCalledWith(
+        "incorrect"
+      );
+      expect(streakCounter).toBe(0);
+      expect(submitBtn.disabled).toBe(false);
+    });
   });
 });

@@ -13,7 +13,7 @@ const {
   clearTheBoxes,
   showAnswer,
   doTheExplanation,
-  guiElements
+  guiElements,
 } = require("./script_helper_functions");
 
 const jamBuddy = new JamBuddy();
@@ -32,14 +32,14 @@ guiElements.giveUpButton.addEventListener("click", () => {
   changeButtonColor(colorTwo);
   guiElements.inputField.disabled = true;
   clearTheBoxes(document);
-  doTheExplanation(document,noteOne, noteTwo, streakCounter);
+  doTheExplanation(document, noteOne, noteTwo, streakCounter);
   streakCounter = 0;
   showStreakMessage(streakCounter);
 });
 
 guiElements.randomizeButton.addEventListener("click", () => {
   clearTheBoxes(document);
-  switchOffAnswer(document,noteOne, noteTwo);
+  switchOffAnswer(document, noteOne, noteTwo);
   toggleButtons("enable");
   changeButtonColor(colorOne);
   guiElements.inputField.disabled = false;
@@ -55,7 +55,7 @@ guiElements.form.addEventListener("submit", (event) => {
   }
 
   guiElements.inputField.value = "";
-  switchOffAnswer(document,noteOne, noteTwo);
+  switchOffAnswer(document, noteOne, noteTwo);
   switchOffStreakMessage();
 
   if (jamBuddy.checkAnswer(distance)) {
@@ -65,7 +65,7 @@ guiElements.form.addEventListener("submit", (event) => {
       origin: { y: 0.6 },
     });
     displayAnswerMessage("correct");
-    showAnswer(document,noteOne, noteTwo);
+    showAnswer(document, noteOne, noteTwo);
     streakCounter++;
     toggleButtons("disable");
     changeButtonColor(colorTwo);

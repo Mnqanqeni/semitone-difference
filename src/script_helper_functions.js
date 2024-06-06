@@ -43,8 +43,10 @@ function changeButtonColor(color) {
 }
 
 function displayAnswerMessage(status) {
-  guiElements.correctMessage.style.display = status === "correct" ? "block" : "none";
-  guiElements.incorrectMessage.style.display = status === "incorrect" ? "block" : "none";
+  guiElements.correctMessage.style.display =
+    status === "correct" ? "block" : "none";
+  guiElements.incorrectMessage.style.display =
+    status === "incorrect" ? "block" : "none";
 }
 
 function showStreakMessage(streakCounter) {
@@ -73,10 +75,14 @@ function clearTheBoxes(document) {
   }
 }
 
-function switchOffAnswer(document,noteOne, noteTwo) {
+function switchOffAnswer(document, noteOne, noteTwo) {
   guiElements.explanation.style.display = "none";
-  document.querySelector(`#a${JamBuddy.musicalElements[noteOne]}`).style.backgroundColor = "#ccc";
-  document.querySelector(`#a${JamBuddy.musicalElements[noteTwo]}`).style.backgroundColor = "#ccc";
+  document.querySelector(
+    `#a${JamBuddy.musicalElements[noteOne]}`
+  ).style.backgroundColor = "#ccc";
+  document.querySelector(
+    `#a${JamBuddy.musicalElements[noteTwo]}`
+  ).style.backgroundColor = "#ccc";
 }
 
 function delayCode(streakCounter) {
@@ -86,7 +92,7 @@ function delayCode(streakCounter) {
   }, 600);
 }
 
-function showAnswer(document,noteOne, noteTwo) {
+function showAnswer(document, noteOne, noteTwo) {
   const arrayObject = [1, 4, 6, 9];
   const index1 = JamBuddy.musicalElements[noteOne];
   const index2 = JamBuddy.musicalElements[noteTwo];
@@ -95,15 +101,21 @@ function showAnswer(document,noteOne, noteTwo) {
   guiElements.answerText.style.display = "none";
 
   const getColorSelector = (index, note) =>
-    `#a${index}${arrayObject.includes(index) ? `a${note.includes("#") ? "0" : "1"}` : ""}`;
+    `#a${index}${
+      arrayObject.includes(index) ? `a${note.includes("#") ? "0" : "1"}` : ""
+    }`;
 
-  document.querySelector(getColorSelector(index1, noteOne)).style.backgroundColor = "red";
-  document.querySelector(getColorSelector(index2, noteTwo)).style.backgroundColor = "yellow";
+  document.querySelector(
+    getColorSelector(index1, noteOne)
+  ).style.backgroundColor = "red";
+  document.querySelector(
+    getColorSelector(index2, noteTwo)
+  ).style.backgroundColor = "yellow";
 }
 
-function doTheExplanation(document,noteOne, noteTwo, streakCounter) {
+function doTheExplanation(document, noteOne, noteTwo, streakCounter) {
   showStreakMessage(streakCounter);
-  showAnswer(document,noteOne, noteTwo);
+  showAnswer(document, noteOne, noteTwo);
   guiElements.answerText.style.display = "block";
 
   const one = JamBuddy.musicalElements[noteOne];
@@ -162,5 +174,5 @@ module.exports = {
   showAnswer,
   doTheExplanation,
   doCount,
-  guiElements
+  guiElements,
 };

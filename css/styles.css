@@ -39,36 +39,42 @@ body {
 #randomize-btn {
     border-radius: 5px;
 }
-#explanation{
+
+#explanation {
     display: none;
 }
-h1,h3 {
+
+h1,
+h3 {
     color: #fff;
 }
 
-h3{
+h3 {
     font-weight: 100px;
 }
-label{
+
+label {
     color: #fff;
     font-size: 30px;
 }
+
 p {
     color: #fff;
     font-size: 30px;
 }
 
-p span{
-    background-color:  #007bff;
+p span {
+    background-color: #007bff;
 }
 
-h3 span{
-    background-color:  #007bff;
+h3 span {
+    background-color: #007bff;
 }
 
 #notes-display {
     margin: 2%;
 }
+
 #input-field {
     width: 100%;
     padding: 10px;
@@ -76,14 +82,17 @@ h3 span{
     border: 1px solid #ccc;
     margin-bottom: 10px;
 }
-.question{
+
+.question {
     margin: 2%;
     font-weight: bold;
 }
-#main-counter{
+
+#main-counter {
     font-size: 100px;
     color: #007bff;
 }
+
 button {
     background-color: #007bff;
     color: #fff;
@@ -131,18 +140,19 @@ button:hover {
     justify-content: center;
     align-items: center;
     margin: auto;
-  }
-  .box {
+}
+
+.box {
     position: absolute;
     width: 60px;
-    height: 20px; 
+    height: 20px;
     background-color: #ccc;
     justify-content: center;
     align-items: center;
     border-radius: 5px;
-  }
+}
 
-  #distance-form {
+#distance-form {
     margin-top: 20px;
     display: flex;
     justify-content: center;
@@ -159,7 +169,8 @@ button:hover {
 #distance-input {
     padding: 5px;
     margin-bottom: 10px;
-    width: 200px; /* Adjust the width as needed */
+    width: 200px;
+    /* Adjust the width as needed */
 }
 
 #submit-distance {
