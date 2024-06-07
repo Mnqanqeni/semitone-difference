@@ -950,21 +950,21 @@ const errorMessages = {
 };
 
 const musicalElementsNotesObject = {
-  "A": 0,
+  A: 0,
   "A#": 1,
-  "Bb": 1,
-  "B": 2,
-  "C": 3,
+  Bb: 1,
+  B: 2,
+  C: 3,
   "C#": 4,
-  "Db": 4,
-  "D": 5,
+  Db: 4,
+  D: 5,
   "D#": 6,
-  "Eb": 6,
-  "E": 7,
-  "F": 8,
+  Eb: 6,
+  E: 7,
+  F: 8,
   "F#": 9,
-  "Gb": 9,
-  "G": 10,
+  Gb: 9,
+  G: 10,
   "G#": 11,
 };
 
@@ -1039,7 +1039,7 @@ const {
   clearTheBoxes,
   showAnswer,
   doTheExplanation,
-  guiElements
+  guiElements,
 } = require("./script_helper_functions");
 
 const jamBuddy = new JamBuddy();
@@ -1058,14 +1058,14 @@ guiElements.giveUpButton.addEventListener("click", () => {
   changeButtonColor(colorTwo);
   guiElements.inputField.disabled = true;
   clearTheBoxes(document);
-  doTheExplanation(document,noteOne, noteTwo, streakCounter);
+  doTheExplanation(document, noteOne, noteTwo, streakCounter);
   streakCounter = 0;
   showStreakMessage(streakCounter);
 });
 
 guiElements.randomizeButton.addEventListener("click", () => {
   clearTheBoxes(document);
-  switchOffAnswer(document,noteOne, noteTwo);
+  switchOffAnswer(document, noteOne, noteTwo);
   toggleButtons("enable");
   changeButtonColor(colorOne);
   guiElements.inputField.disabled = false;
@@ -1081,7 +1081,7 @@ guiElements.form.addEventListener("submit", (event) => {
   }
 
   guiElements.inputField.value = "";
-  switchOffAnswer(document,noteOne, noteTwo);
+  switchOffAnswer(document, noteOne, noteTwo);
   switchOffStreakMessage();
 
   if (jamBuddy.checkAnswer(distance)) {
@@ -1091,7 +1091,7 @@ guiElements.form.addEventListener("submit", (event) => {
       origin: { y: 0.6 },
     });
     displayAnswerMessage("correct");
-    showAnswer(document,noteOne, noteTwo);
+    showAnswer(document, noteOne, noteTwo);
     streakCounter++;
     toggleButtons("disable");
     changeButtonColor(colorTwo);
@@ -1105,25 +1105,7 @@ guiElements.form.addEventListener("submit", (event) => {
 
 },{"./jam_buddy":4,"./script_helper_functions":6,"canvas-confetti":1}],6:[function(require,module,exports){
 const { JamBuddy } = require("./jam_buddy");
-const guiElements = {
-  form: document.getElementById("distance-input-form"),
-  streakElement: document.getElementById("streak"),
-  streakNumberElement: document.getElementById("streak-number"),
-  inputField: document.getElementById("input-field"),
-  restartButton: document.getElementById("restart-btn"),
-  giveUpButton: document.getElementById("give-up-btn"),
-  randomizeButton: document.querySelector("#randomize-btn"),
-  submitButton: document.getElementById("submit-btn"),
-  correctMessage: document.getElementById("correctMessage"),
-  incorrectMessage: document.getElementById("incorrectMessage"),
-  explanation: document.querySelector("#explanation"),
-  answerText: document.querySelector("#answer-text"),
-  mainCounter: document.querySelector("#main-counter"),
-  clockwiseAnswer: document.querySelector("#clockwise-answer"),
-  antiClockwiseAnswer: document.querySelector("#anti-clockwise-answer"),
-  firstNote: document.querySelector("#first-note"),
-  secondNote: document.querySelector("#second-note"),
-};
+const {guiElements} = require("./script_helper_objects");
 
 function initNotes(jamBuddy) {
   jamBuddy.randomizeCurrentNotes();
@@ -1149,8 +1131,10 @@ function changeButtonColor(color) {
 }
 
 function displayAnswerMessage(status) {
-  guiElements.correctMessage.style.display = status === "correct" ? "block" : "none";
-  guiElements.incorrectMessage.style.display = status === "incorrect" ? "block" : "none";
+  guiElements.correctMessage.style.display =
+    status === "correct" ? "block" : "none";
+  guiElements.incorrectMessage.style.display =
+    status === "incorrect" ? "block" : "none";
 }
 
 function showStreakMessage(streakCounter) {
@@ -1179,10 +1163,14 @@ function clearTheBoxes(document) {
   }
 }
 
-function switchOffAnswer(document,noteOne, noteTwo) {
+function switchOffAnswer(document, noteOne, noteTwo) {
   guiElements.explanation.style.display = "none";
-  document.querySelector(`#a${JamBuddy.musicalElements[noteOne]}`).style.backgroundColor = "#ccc";
-  document.querySelector(`#a${JamBuddy.musicalElements[noteTwo]}`).style.backgroundColor = "#ccc";
+  document.querySelector(
+    `#a${JamBuddy.musicalElements[noteOne]}`
+  ).style.backgroundColor = "#ccc";
+  document.querySelector(
+    `#a${JamBuddy.musicalElements[noteTwo]}`
+  ).style.backgroundColor = "#ccc";
 }
 
 function delayCode(streakCounter) {
@@ -1192,7 +1180,7 @@ function delayCode(streakCounter) {
   }, 600);
 }
 
-function showAnswer(document,noteOne, noteTwo) {
+function showAnswer(document, noteOne, noteTwo) {
   const arrayObject = [1, 4, 6, 9];
   const index1 = JamBuddy.musicalElements[noteOne];
   const index2 = JamBuddy.musicalElements[noteTwo];
@@ -1201,15 +1189,21 @@ function showAnswer(document,noteOne, noteTwo) {
   guiElements.answerText.style.display = "none";
 
   const getColorSelector = (index, note) =>
-    `#a${index}${arrayObject.includes(index) ? `a${note.includes("#") ? "0" : "1"}` : ""}`;
+    `#a${index}${
+      arrayObject.includes(index) ? `a${note.includes("#") ? "0" : "1"}` : ""
+    }`;
 
-  document.querySelector(getColorSelector(index1, noteOne)).style.backgroundColor = "red";
-  document.querySelector(getColorSelector(index2, noteTwo)).style.backgroundColor = "yellow";
+  document.querySelector(
+    getColorSelector(index1, noteOne)
+  ).style.backgroundColor = "red";
+  document.querySelector(
+    getColorSelector(index2, noteTwo)
+  ).style.backgroundColor = "yellow";
 }
 
-function doTheExplanation(document,noteOne, noteTwo, streakCounter) {
+function doTheExplanation(document, noteOne, noteTwo, streakCounter) {
   showStreakMessage(streakCounter);
-  showAnswer(document,noteOne, noteTwo);
+  showAnswer(document, noteOne, noteTwo);
   guiElements.answerText.style.display = "block";
 
   const one = JamBuddy.musicalElements[noteOne];
@@ -1268,7 +1262,30 @@ module.exports = {
   showAnswer,
   doTheExplanation,
   doCount,
-  guiElements
+  guiElements,
 };
 
-},{"./jam_buddy":4}]},{},[5]);
+},{"./jam_buddy":4,"./script_helper_objects":7}],7:[function(require,module,exports){
+const guiElements = {
+  form: document.getElementById("distance-input-form"),
+  streakElement: document.getElementById("streak"),
+  streakNumberElement: document.getElementById("streak-number"),
+  inputField: document.getElementById("input-field"),
+  restartButton: document.getElementById("restart-btn"),
+  giveUpButton: document.getElementById("give-up-btn"),
+  randomizeButton: document.querySelector("#randomize-btn"),
+  submitButton: document.getElementById("submit-btn"),
+  correctMessage: document.getElementById("correctMessage"),
+  incorrectMessage: document.getElementById("incorrectMessage"),
+  explanation: document.querySelector("#explanation"),
+  answerText: document.querySelector("#answer-text"),
+  mainCounter: document.querySelector("#main-counter"),
+  clockwiseAnswer: document.querySelector("#clockwise-answer"),
+  antiClockwiseAnswer: document.querySelector("#anti-clockwise-answer"),
+  firstNote: document.querySelector("#first-note"),
+  secondNote: document.querySelector("#second-note"),
+};
+
+module.exports = { guiElements };
+
+},{}]},{},[5]);

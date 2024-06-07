@@ -38,7 +38,7 @@ describe("DOM Manipulation", function () {
     jamBuddy = new JamBuddy();
 
     script = require("../src/script");
-    guiElements = require("../src/script_helper_functions").guiElements;
+    guiElements = require("../src/script_helper_objects").guiElements;
     scriptHelperFunctions = require("../src/script_helper_functions");
     script.noteOne = "A";
     script.noteTwo = "D";
