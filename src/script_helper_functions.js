@@ -156,5 +156,4 @@ module.exports = {
   showAnswer,
   doTheExplanation,
   doCount,
-  guiElements,
 };
