@@ -1105,7 +1105,7 @@ guiElements.form.addEventListener("submit", (event) => {
 
 },{"./jam_buddy":4,"./script_helper_functions":6,"canvas-confetti":1}],6:[function(require,module,exports){
 const { JamBuddy } = require("./jam_buddy");
-const {guiElements} = require("./script_helper_objects");
+const { guiElements } = require("./script_helper_objects");
 
 function initNotes(jamBuddy) {
   jamBuddy.randomizeCurrentNotes();

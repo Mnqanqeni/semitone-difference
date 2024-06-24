@@ -21,12 +21,6 @@ function validateNotesArray(arrayNotes, musicalElementsArray) {
   }
 }
 
-function getIndexes(currentNotes) {
-  const index1 = musicalElementsNotesObject[currentNotes[0]];
-  const index2 = musicalElementsNotesObject[currentNotes[1]];
-  return [index1, index2];
-}
-
 function validateDistance(distance) {
   if (typeof distance !== "number") {
     throw new Error(errorMessages.onlyDatatypeOfNumber);
@@ -39,12 +33,7 @@ function validateDistance(distance) {
   }
 }
 
-const getRandomNote = (arrayOfAllNotes) =>
-  arrayOfAllNotes[Math.floor(Math.random() * arrayOfAllNotes.length)];
-
 module.exports = {
   validateDistance,
   validateNotesArray,
-  getIndexes,
-  getRandomNote,
 };

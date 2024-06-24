@@ -1,9 +1,8 @@
 const {
   validateDistance,
   validateNotesArray,
-  getIndexes,
-  getRandomNote,
-} = require("./helper_functions");
+
+} = require("./validate");
 const { musicalElementsNotesObject } = require("./helper_objects");
 
 class JamBuddy {
@@ -47,5 +46,14 @@ class JamBuddy {
     return cyclicDistance.includes(distance);
   }
 }
+
+function getIndexes(currentNotes) {
+  const index1 = musicalElementsNotesObject[currentNotes[0]];
+  const index2 = musicalElementsNotesObject[currentNotes[1]];
+  return [index1, index2];
+}
+
+const getRandomNote = (arrayOfAllNotes) =>
+  arrayOfAllNotes[Math.floor(Math.random() * arrayOfAllNotes.length)];
 
 module.exports = { JamBuddy };
