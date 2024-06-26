@@ -880,58 +880,6 @@
 })(), module, false));
 
 },{}],2:[function(require,module,exports){
-const {
-  errorMessages,
-  musicalElementsNotesObject,
-} = require("./helper_objects");
-const maxDistance = 11;
-
-function validateNotesArray(arrayNotes, musicalElementsArray) {
-  if (arrayNotes.length !== 2) {
-    throw new Error(errorMessages.notTwoElements);
-  } else if (!arrayNotes.every((note) => musicalElementsArray.includes(note))) {
-    throw new Error(errorMessages.notesNotValid);
-  } else if (arrayNotes[0] === arrayNotes[1]) {
-    throw new Error(errorMessages.noteDuplicated);
-  } else if (
-    musicalElementsNotesObject[arrayNotes[0]] ===
-    musicalElementsNotesObject[arrayNotes[1]]
-  ) {
-    throw new Error(
-      errorMessages.inharmonicEquivalentNotesError(arrayNotes[0], arrayNotes[1])
-    );
-  }
-}
-
-function getIndexes(currentNotes) {
-  const index1 = musicalElementsNotesObject[currentNotes[0]];
-  const index2 = musicalElementsNotesObject[currentNotes[1]];
-  return [index1, index2];
-}
-
-function validateDistance(distance) {
-  if (typeof distance !== "number") {
-    throw new Error(errorMessages.onlyDatatypeOfNumber);
-  } else if (!Number.isInteger(distance)) {
-    throw new Error(errorMessages.mustBeWholeNumber);
-  } else if (distance > maxDistance || distance === 0) {
-    throw new Error(errorMessages.distanceOutOfRange);
-  } else if (distance < 0) {
-    throw new Error(errorMessages.negativeDistance);
-  }
-}
-
-const getRandomNote = (arrayOfAllNotes) =>
-  arrayOfAllNotes[Math.floor(Math.random() * arrayOfAllNotes.length)];
-
-module.exports = {
-  validateDistance,
-  validateNotesArray,
-  getIndexes,
-  getRandomNote,
-};
-
-},{"./helper_objects":3}],3:[function(require,module,exports){
 const errorMessages = {
   notTwoElements: "The input must consist of exactly two elements to be valid.",
   notesNotValid:
@@ -970,13 +918,12 @@ const musicalElementsNotesObject = {
 
 module.exports = { errorMessages, musicalElementsNotesObject };
 
-},{}],4:[function(require,module,exports){
+},{}],3:[function(require,module,exports){
 const {
   validateDistance,
   validateNotesArray,
-  getIndexes,
-  getRandomNote,
-} = require("./helper_functions");
+
+} = require("./validate");
 const { musicalElementsNotesObject } = require("./helper_objects");
 
 class JamBuddy {
@@ -1021,26 +968,40 @@ class JamBuddy {
   }
 }
 
+function getIndexes(currentNotes) {
+  const index1 = musicalElementsNotesObject[currentNotes[0]];
+  const index2 = musicalElementsNotesObject[currentNotes[1]];
+  return [index1, index2];
+}
+
+const getRandomNote = (arrayOfAllNotes) =>
+  arrayOfAllNotes[Math.floor(Math.random() * arrayOfAllNotes.length)];
+
 module.exports = { JamBuddy };
 
-},{"./helper_functions":2,"./helper_objects":3}],5:[function(require,module,exports){
+},{"./helper_objects":2,"./validate":5}],4:[function(require,module,exports){
 const { JamBuddy } = require("./jam_buddy");
 const confetti = require("canvas-confetti");
-const {
-  initNotes,
-  reloadPage,
-  toggleButtons,
-  changeButtonColor,
-  displayAnswerMessage,
-  showStreakMessage,
-  switchOffStreakMessage,
-  delayCode,
-  switchOffAnswer,
-  clearTheBoxes,
-  showAnswer,
-  doTheExplanation,
-  guiElements,
-} = require("./script_helper_functions");
+
+const guiElements = {
+  form: document.getElementById("distance-input-form"),
+  streakElement: document.getElementById("streak"),
+  streakNumberElement: document.getElementById("streak-number"),
+  inputField: document.getElementById("input-field"),
+  restartButton: document.getElementById("restart-btn"),
+  giveUpButton: document.getElementById("give-up-btn"),
+  randomizeButton: document.querySelector("#randomize-btn"),
+  submitButton: document.getElementById("submit-btn"),
+  correctMessage: document.getElementById("correctMessage"),
+  incorrectMessage: document.getElementById("incorrectMessage"),
+  explanation: document.querySelector("#explanation"),
+  answerText: document.querySelector("#answer-text"),
+  mainCounter: document.querySelector("#main-counter"),
+  clockwiseAnswer: document.querySelector("#clockwise-answer"),
+  antiClockwiseAnswer: document.querySelector("#anti-clockwise-answer"),
+  firstNote: document.querySelector("#first-note"),
+  secondNote: document.querySelector("#second-note"),
+};
 
 const jamBuddy = new JamBuddy();
 let streakCounter = 0;
@@ -1051,7 +1012,16 @@ const colorTwo = "#7da2ca";
 
 [noteOne, noteTwo] = initNotes(jamBuddy);
 
-guiElements.restartButton.addEventListener("click", () => reloadPage(window));
+restartEventListener(guiElements);
+giveUpEventListener(guiElements);
+randomizeEventListener(guiElements);
+submitEventListener(guiElements);
+
+function restartEventListener(guiElements) {
+  guiElements.restartButton.addEventListener("click", () => reloadPage(window));
+}
+ 
+function giveUpEventListener(guiElements) {
 
 guiElements.giveUpButton.addEventListener("click", () => {
   toggleButtons("disable");
@@ -1063,6 +1033,9 @@ guiElements.giveUpButton.addEventListener("click", () => {
   showStreakMessage(streakCounter);
 });
 
+}
+
+function randomizeEventListener(gui) {
 guiElements.randomizeButton.addEventListener("click", () => {
   clearTheBoxes(document);
   switchOffAnswer(document, noteOne, noteTwo);
@@ -1072,6 +1045,9 @@ guiElements.randomizeButton.addEventListener("click", () => {
   [noteOne, noteTwo] = initNotes(jamBuddy);
 });
 
+}
+
+function submitEventListener(guiElements) {
 guiElements.form.addEventListener("submit", (event) => {
   event.preventDefault();
   const distance = parseInt(guiElements.inputField.value);
@@ -1102,10 +1078,7 @@ guiElements.form.addEventListener("submit", (event) => {
   }
   delayCode(streakCounter);
 });
-
-},{"./jam_buddy":4,"./script_helper_functions":6,"canvas-confetti":1}],6:[function(require,module,exports){
-const { JamBuddy } = require("./jam_buddy");
-const { guiElements } = require("./script_helper_objects");
+}
 
 function initNotes(jamBuddy) {
   jamBuddy.randomizeCurrentNotes();
@@ -1206,18 +1179,14 @@ function doTheExplanation(document, noteOne, noteTwo, streakCounter) {
   showAnswer(document, noteOne, noteTwo);
   guiElements.answerText.style.display = "block";
 
-  const one = JamBuddy.musicalElements[noteOne];
-  const two = JamBuddy.musicalElements[noteTwo];
+  let one = JamBuddy.musicalElements[noteOne];
+  let two = JamBuddy.musicalElements[noteTwo];
 
-  if (one < two) {
+  [one, two] = (one < two) ? [one, two] : [two, one];
+
     doCount(one, two, guiElements.clockwiseAnswer, () => {
       doCount(two, one, guiElements.antiClockwiseAnswer);
     });
-  } else {
-    doCount(two, one, guiElements.clockwiseAnswer, () => {
-      doCount(one, two, guiElements.antiClockwiseAnswer);
-    });
-  }
 }
 
 function doCount(num1, num2, id, callback) {
@@ -1244,48 +1213,69 @@ function doCount(num1, num2, id, callback) {
       }
       guiElements.mainCounter.innerText = "";
     }
-  }, 600);
+  }, 900);
 }
 
 module.exports = {
-  initNotes,
-  reloadPage,
   toggleButtons,
   changeButtonColor,
   displayAnswerMessage,
-  showStreakMessage,
   switchOffStreakMessage,
   switchMessageOff,
-  delayCode,
-  switchOffAnswer,
   clearTheBoxes,
-  showAnswer,
+  switchOffAnswer,
+  delayCode,
   doTheExplanation,
+  showStreakMessage, 
+  showAnswer,
   doCount,
+  initNotes,
+  reloadPage,
   guiElements,
+  restartEventListener,
+  giveUpEventListener,
+  randomizeEventListener,
+  submitEventListener,
+}
+},{"./jam_buddy":3,"canvas-confetti":1}],5:[function(require,module,exports){
+const {
+  errorMessages,
+  musicalElementsNotesObject,
+} = require("./helper_objects");
+const maxDistance = 11;
+
+function validateNotesArray(arrayNotes, musicalElementsArray) {
+  if (arrayNotes.length !== 2) {
+    throw new Error(errorMessages.notTwoElements);
+  } else if (!arrayNotes.every((note) => musicalElementsArray.includes(note))) {
+    throw new Error(errorMessages.notesNotValid);
+  } else if (arrayNotes[0] === arrayNotes[1]) {
+    throw new Error(errorMessages.noteDuplicated);
+  } else if (
+    musicalElementsNotesObject[arrayNotes[0]] ===
+    musicalElementsNotesObject[arrayNotes[1]]
+  ) {
+    throw new Error(
+      errorMessages.inharmonicEquivalentNotesError(arrayNotes[0], arrayNotes[1])
+    );
+  }
+}
+
+function validateDistance(distance) {
+  if (typeof distance !== "number") {
+    throw new Error(errorMessages.onlyDatatypeOfNumber);
+  } else if (!Number.isInteger(distance)) {
+    throw new Error(errorMessages.mustBeWholeNumber);
+  } else if (distance > maxDistance || distance === 0) {
+    throw new Error(errorMessages.distanceOutOfRange);
+  } else if (distance < 0) {
+    throw new Error(errorMessages.negativeDistance);
+  }
+}
+
+module.exports = {
+  validateDistance,
+  validateNotesArray,
 };
 
-},{"./jam_buddy":4,"./script_helper_objects":7}],7:[function(require,module,exports){
-const guiElements = {
-  form: document.getElementById("distance-input-form"),
-  streakElement: document.getElementById("streak"),
-  streakNumberElement: document.getElementById("streak-number"),
-  inputField: document.getElementById("input-field"),
-  restartButton: document.getElementById("restart-btn"),
-  giveUpButton: document.getElementById("give-up-btn"),
-  randomizeButton: document.querySelector("#randomize-btn"),
-  submitButton: document.getElementById("submit-btn"),
-  correctMessage: document.getElementById("correctMessage"),
-  incorrectMessage: document.getElementById("incorrectMessage"),
-  explanation: document.querySelector("#explanation"),
-  answerText: document.querySelector("#answer-text"),
-  mainCounter: document.querySelector("#main-counter"),
-  clockwiseAnswer: document.querySelector("#clockwise-answer"),
-  antiClockwiseAnswer: document.querySelector("#anti-clockwise-answer"),
-  firstNote: document.querySelector("#first-note"),
-  secondNote: document.querySelector("#second-note"),
-};
-
-module.exports = { guiElements };
-
-},{}]},{},[5]);
+},{"./helper_objects":2}]},{},[4]);

@@ -30,10 +30,10 @@ const colorTwo = "#7da2ca";
 
 [noteOne, noteTwo] = initNotes(jamBuddy);
 
-restartEventListener();
-giveUpEventListener();
-randomizeEventListener();
-submitEventListener();
+restartEventListener(guiElements);
+giveUpEventListener(guiElements);
+randomizeEventListener(guiElements);
+submitEventListener(guiElements);
 
 function restartEventListener(guiElements) {
   guiElements.restartButton.addEventListener("click", () => reloadPage(window));
@@ -197,8 +197,9 @@ function doTheExplanation(document, noteOne, noteTwo, streakCounter) {
   showAnswer(document, noteOne, noteTwo);
   guiElements.answerText.style.display = "block";
 
-  const one = JamBuddy.musicalElements[noteOne];
-  const two = JamBuddy.musicalElements[noteTwo];
+  let one = JamBuddy.musicalElements[noteOne];
+  let two = JamBuddy.musicalElements[noteTwo];
+
   [one, two] = (one < two) ? [one, two] : [two, one];
 
     doCount(one, two, guiElements.clockwiseAnswer, () => {
@@ -230,7 +231,7 @@ function doCount(num1, num2, id, callback) {
       }
       guiElements.mainCounter.innerText = "";
     }
-  }, 600);
+  }, 900);
 }
 
 module.exports = {

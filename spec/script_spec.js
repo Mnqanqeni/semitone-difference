@@ -1,285 +1,166 @@
-const { JamBuddy } = require("../src/jam_buddy");
+const { JSDOM } = require('jsdom');
+const { 
+  toggleButtons, 
+  changeButtonColor, 
+  displayAnswerMessage, 
+  switchOffStreakMessage, 
+  switchMessageOff, 
+  clearTheBoxes, 
+  switchOffAnswer, 
+  delayCode, 
+  doTheExplanation, 
+  showStreakMessage, 
+  showAnswer, 
+  doCount, 
+  initNotes, 
+  reloadPage, 
+  guiElements, 
+  restartEventListener, 
+  giveUpEventListener, 
+  randomizeEventListener, 
+  submitEventListener 
+} = require('../src/jam_buddy');
 
-let script, jamBuddy, guiElements;
+describe('JamBuddy', function() {
+  let dom;
+  let document;
+  let window;
+  
+  beforeEach(function() {
+    // Set up a mock DOM
+    const fs = require('fs');
+    const path = require('path');
+    const html = fs.readFileSync(path.resolve(__dirname, '../index.html'), 'utf-8');
+    dom = new JSDOM(html);
+    window = dom.window;
+    document = window.document;
 
-describe("DOM Manipulation", function () {
-  let firstNoteElement,
-    secondNoteElement,
-    giveUpBtn,
-    randomizeButton,
-    inputField,
-    submitBtn,
-    restartBtn,
-    mockWindow,
-    streakCounter;
-
-  beforeAll(function () {
-    const { JSDOM } = require("jsdom");
-    const fs = require("fs");
-    const path = require("path");
-
-    const html = fs.readFileSync(
-      path.resolve(__dirname, "../index.html"),
-      "utf-8"
-    );
-    const { window } = new JSDOM(html);
     global.window = window;
-    global.document = window.document;
+    global.document = document;
 
-    mockWindow = {
-      location: {
-        reload: jasmine.createSpy(),
-      },
-      alert: jasmine.createSpy(),
+    // Update guiElements to use the mock DOM
+    const guiElements = {
+      form: document.getElementById("distance-input-form"),
+      streakElement: document.getElementById("streak"),
+      streakNumberElement: document.getElementById("streak-number"),
+      inputField: document.getElementById("input-field"),
+      restartButton: document.getElementById("restart-btn"),
+      giveUpButton: document.getElementById("give-up-btn"),
+      randomizeButton: document.querySelector("#randomize-btn"),
+      submitButton: document.getElementById("submit-btn"),
+      correctMessage: document.getElementById("correctMessage"),
+      incorrectMessage: document.getElementById("incorrectMessage"),
+      explanation: document.querySelector("#explanation"),
+      answerText: document.querySelector("#answer-text"),
+      mainCounter: document.querySelector("#main-counter"),
+      clockwiseAnswer: document.querySelector("#clockwise-answer"),
+      antiClockwiseAnswer: document.querySelector("#anti-clockwise-answer"),
+      firstNote: document.querySelector("#first-note"),
+      secondNote: document.querySelector("#second-note"),
     };
-    global.window = mockWindow;
-    global.document = window.document;
-
-    jamBuddy = new JamBuddy();
-
-    guiElements = require("../src/script").guiElements;
-    script = require("../src/script");
-    script.noteOne = "A";
-    script.noteTwo = "D";
-
-    form = guiElements.form;
-
-    firstNoteElement = guiElements.firstNote;
-    secondNoteElement = guiElements.secondNote;
-    giveUpBtn = guiElements.giveUpButton;
-    submitBtn = guiElements.submitButton;
-    restartBtn = guiElements.restartButton;
-    randomizeButton = guiElements.randomizeButton;
-    inputField = guiElements.inputField;
-    streakCounter = 0;
-    spyOn(script, "toggleButtons").and.callThrough();
+    
   });
 
-  it("should initialize notes and display them", function () {
-    // expect(firstNoteElement).not.toBeNull();
-    // expect(secondNoteElement).not.toBeNull();
-    // expect(firstNoteElement.innerText).not.toBe("");
-    // expect(secondNoteElement.innerText).not.toBe("");
+  it('should toggle buttons', function() {
+    toggleButtons('disable');
+    expect(guiElements.submitButton.disabled).toBe(true);
+    expect(guiElements.giveUpButton.disabled).toBe(true);
+    toggleButtons('enable');
+    expect(guiElements.submitButton.disabled).toBe(false);
+    expect(guiElements.giveUpButton.disabled).toBe(false);
   });
 
-  // describe("restart event listener", function () {
-  //   beforeEach(function () {
-  //     restartBtn.addEventListener("click", function () {
-  //       script.reloadPage(window);
-  //     });
-  //   });
+  it('should change button color', function() {
+    const color = '#ff0000';
+    changeButtonColor(color);
+    expect(guiElements.submitButton.style.backgroundColor).toBe(color);
+    expect(guiElements.giveUpButton.style.backgroundColor).toBe(color);
+  });
 
-  //   it("should call reloadPage when the restart button is clicked", function () {
-  //     spyOn(script, "reloadPage");
-  //     restartBtn.click();
-  //     expect(script.reloadPage).toHaveBeenCalled();
-  //   });
+  it('should display correct answer message', function() {
+    displayAnswerMessage('correct');
+    expect(guiElements.correctMessage.style.display).toBe('block');
+    expect(guiElements.incorrectMessage.style.display).toBe('none');
+  });
 
-  //   it("should reload the page when the restart button is clicked", function () {
-  //     restartBtn.click();
-  //     expect(mockWindow.location.reload).toHaveBeenCalled();
-  //   });
-  // });
+  it('should display incorrect answer message', function() {
+    displayAnswerMessage('incorrect');
+    expect(guiElements.correctMessage.style.display).toBe('none');
+    expect(guiElements.incorrectMessage.style.display).toBe('block');
+  });
 
-  // describe("give up event listener", function () {
-  //   beforeEach(function () {
-  //     giveUpBtn.addEventListener("click", function () {
-  //       script.toggleButtons("disable");
-  //       script.changeButtonColor("#7da2ca");
-  //       inputField.disabled = true;
-  //       script.clearTheBoxes();
-  //       script.doTheExplanation(
-  //         script.noteOne,
-  //         script.noteTwo,
-  //         streakCounter
-  //       );
-  //       streakCounter = 0;
-  //       script.showStreakMessage(streakCounter);
-  //     });
-  //   });
+  it('should switch off streak message', function() {
+    switchOffStreakMessage();
+    expect(guiElements.streakElement.style.display).toBe('none');
+  });
 
-  //   afterEach(function () {
-  //     script.toggleButtons("enable");
-  //   });
+  it('should switch off messages', function() {
+    switchMessageOff();
+    expect(guiElements.correctMessage.style.display).toBe('none');
+    expect(guiElements.incorrectMessage.style.display).toBe('none');
+  });
 
-  //   it("should call toggleButtons, clearTheBoxes, and doTheExplanation when the give up button is clicked", function () {
-  //     spyOn(script, "clearTheBoxes").and.stub();
-  //     spyOn(script, "doTheExplanation").and.stub();
-  //     giveUpBtn.click();
-  //     expect(script.toggleButtons).toHaveBeenCalled();
-  //     expect(script.clearTheBoxes).toHaveBeenCalled();
-  //     expect(script.doTheExplanation).toHaveBeenCalled();
-  //   });
+  it('should clear the boxes', function() {
+    clearTheBoxes(document);
+    for (let i = 0; i < 12; i++) {
+      expect(document.querySelector(`#a${i}a0`).style.backgroundColor).toBe('#ccc');
+      expect(document.querySelector(`#a${i}a1`).style.backgroundColor).toBe('#ccc');
+    }
+  });
 
-  //   it("should disable submit and give up buttons when the give up button is clicked", function () {
-  //     giveUpBtn.disabled = false;
-  //     submitBtn.disabled = false;
-  //     spyOn(script, "clearTheBoxes").and.stub();
-  //     spyOn(script, "doTheExplanation").and.stub();
-  //     giveUpBtn.click();
-  //     expect(giveUpBtn.disabled).toBe(true);
-  //     expect(submitBtn.disabled).toBe(true);
-  //   });
-  // });
+  it('should switch off answer', function() {
+    switchOffAnswer(document, 'C', 'D');
+    expect(guiElements.explanation.style.display).toBe('none');
+    expect(document.querySelector('#a0').style.backgroundColor).toBe('#ccc');
+    expect(document.querySelector('#a2').style.backgroundColor).toBe('#ccc');
+  });
 
-  // describe("randomize event listener", function () {
-  //   beforeEach(function () {
-  //     randomizeButton.addEventListener("click", () => {
-  //       script.clearTheBoxes();
-  //       script.switchOffAnswer();
-  //       script.toggleButtons("enable");
-  //       script.changeButtonColor("#007bff");
-  //       inputField.disabled = false;
-  //       script.initNotes(jamBuddy);
-  //     });
-  //   });
+  it('should show the streak message', function() {
+    showStreakMessage(3);
+    expect(guiElements.streakNumberElement.innerText).toBe('3');
+    expect(guiElements.streakElement.style.display).toBe('block');
+  });
 
-  //   it("should call clearTheBoxes, switchOffAnswer, toggleButtons, and initNotes when the randomize button is clicked", function () {
-  //     spyOn(script, "clearTheBoxes");
-  //     spyOn(script, "switchOffAnswer");
-  //     spyOn(script, "initNotes");
+  it('should show the answer', function() {
+    showAnswer(document, 'C', 'D');
+    expect(guiElements.explanation.style.display).toBe('block');
+    expect(document.querySelector('#a0a0').style.backgroundColor).toBe('red');
+    expect(document.querySelector('#a2a1').style.backgroundColor).toBe('yellow');
+  });
 
-  //     randomizeButton.click();
+  it('should reload the page', function() {
+    spyOn(window.location, 'reload');
+    reloadPage(window);
+    expect(window.location.reload).toHaveBeenCalled();
+  });
 
-  //     expect(script.clearTheBoxes).toHaveBeenCalled();
-  //     expect(script.switchOffAnswer).toHaveBeenCalled();
-  //     expect(script.toggleButtons).toHaveBeenCalled();
-  //     expect(script.initNotes).toHaveBeenCalled();
-  //   });
+  it('should restart the event listener', function() {
+    spyOn(window.location, 'reload');
+    restartEventListener(guiElements);
+    guiElements.restartButton.click();
+    expect(window.location.reload).toHaveBeenCalled();
+  });
 
-  //   it("should enable submit and give up buttons when the randomize button is clicked", function () {
-  //     giveUpBtn.disabled = true;
-  //     submitBtn.disabled = true;
-  //     script.toggleButtons("enable");
-  //     expect(giveUpBtn.disabled).toBe(false);
-  //     expect(submitBtn.disabled).toBe(false);
-  //   });
+  it('should give up the event listener', function() {
+    spyOn(window, 'alert');
+    giveUpEventListener(guiElements);
+    guiElements.giveUpButton.click();
+    expect(guiElements.inputField.disabled).toBe(true);
+    expect(guiElements.submitButton.disabled).toBe(true);
+    expect(guiElements.giveUpButton.disabled).toBe(true);
+  });
 
-  //   it("should update notes when the randomize button is clicked", function () {
-  //     spyOn(script, "initNotes").and.callThrough();
-  //     firstNoteElement.innerText = "k";
-  //     secondNoteElement.innerText = "z";
-  //     script.initNotes(jamBuddy);
-  //     expect("k").not.toBe(firstNoteElement.innerText);
-  //     expect("z").not.toBe(secondNoteElement.innerText);
-  //   });
-  // });
+  it('should randomize event listener', function() {
+    randomizeEventListener(guiElements);
+    guiElements.randomizeButton.click();
+    expect(guiElements.inputField.disabled).toBe(false);
+  });
 
-  // describe("submit event listener", function () {
-  //   beforeEach(function () {
-  //     form.addEventListener("click", (event) => {
-  //       event.preventDefault();
-  //       const distance = parseInt(inputField.value);
-  //       if (isNaN(distance)) {
-  //         window.alert("Input can't be empty");
-  //         return;
-  //       }
-
-  //       inputField.value = "";
-
-  //       script.switchOffAnswer(
-  //         document,
-  //         script.noteOne,
-  //         script.noteTwo
-  //       );
-  //       script.switchOffStreakMessage();
-
-  //       if (jamBuddy.checkAnswer(distance)) {
-  //         script.displayAnswerMessage("correct");
-  //         script.showAnswer(
-  //           document,
-  //           script.noteOne,
-  //           script.noteTwo
-  //         );
-  //         streakCounter++;
-  //         script.toggleButtons("disable");
-  //         submitBtn.style.backgroundColor = "#7da2ca";
-  //         giveUpBtn.style.backgroundColor = "#7da2ca";
-  //         inputField.disabled = true;
-  //       } else {
-  //         script.displayAnswerMessage("incorrect");
-  //         streakCounter = 0;
-  //       }
-  //       script.delayCode(streakCounter);
-  //     });
-  //   });
-  //   afterEach(function () {
-  //     script.toggleButtons("enable");
-  //     streakCounter = 0;
-  //     inputField.value = "";
-  //   });
-    
-  //   it("should call switchOffAnswer and switchOffStreakMessage when the submit button is clicked", function () {
-  //     inputField.value = "";
-  //     submitBtn.click();
-  //     expect(window.alert).toHaveBeenCalled();
-  //   })
-    
-  //   it("should call switchOffAnswer and switchOffStreakMessage when the submit button is clicked", function () {
-  //     spyOn(script, "switchOffAnswer");
-  //     spyOn(script, "switchOffStreakMessage");
-  //     inputField.value = "5";
-  //     submitBtn.click();
-  //     expect(script.switchOffAnswer).toHaveBeenCalled();
-  //     expect(script.switchOffStreakMessage).toHaveBeenCalled();
-  //   });
-
-  //   it("should show an alert when the submit button is clicked with an invalid input", function () {
-  //     inputField.value = "hello";
-  //     submitBtn.click();
-  //     expect(mockWindow.alert).toHaveBeenCalled();
-  //   });
-
-  //   it("should handle a correct answer correctly", function () {
-  //     spyOn(script, "switchOffAnswer");
-  //     spyOn(script, "switchOffStreakMessage");
-  //     spyOn(script, "displayAnswerMessage");
-  //     spyOn(script, "showAnswer");
-  //     spyOn(jamBuddy, "checkAnswer").and.returnValue(true);
-
-  //     inputField.value = "5";
-
-  //     submitBtn.click();
-
-  //     expect(script.switchOffAnswer).toHaveBeenCalled();
-  //     expect(script.switchOffStreakMessage).toHaveBeenCalled();
-  //     expect(script.displayAnswerMessage).toHaveBeenCalledWith(
-  //       "correct"
-  //     );
-  //     expect(script.showAnswer).toHaveBeenCalled();
-  //     expect(streakCounter).toBe(1);
-  //     expect(submitBtn.disabled).toBe(true);
-  //   });
-
-  //   it("should call showAnswer with the correct arguments when the submit button is clicked", function () {
-  //     spyOn(script, "showAnswer");
-  //     jamBuddy.setCurrentNotes(["A", "D"]);
-  //     inputField.value = "5";
-  //     submitBtn.click();
-  //     expect(script.showAnswer).toHaveBeenCalledWith(
-  //       document,
-  //       "A",
-  //       "D"
-  //     );
-  //   });
-
-  //   it("should handle an incorrect answer correctly", function () {
-  //     spyOn(script, "switchOffAnswer");
-  //     spyOn(script, "switchOffStreakMessage");
-  //     spyOn(script, "displayAnswerMessage");
-  //     spyOn(jamBuddy, "checkAnswer").and.returnValue(false);
-
-  //     inputField.value = "5";
-
-  //     submitBtn.click();
-
-  //     expect(script.switchOffAnswer).toHaveBeenCalled();
-  //     expect(script.switchOffStreakMessage).toHaveBeenCalled();
-  //     expect(script.displayAnswerMessage).toHaveBeenCalledWith(
-  //       "incorrect"
-  //     );
-  //     expect(streakCounter).toBe(0);
-  //     expect(submitBtn.disabled).toBe(false);
-  //   });
-  // });
+  it('should submit event listener', function() {
+    spyOn(window, 'alert');
+    submitEventListener(guiElements);
+    const event = new dom.window.Event('submit');
+    guiElements.form.dispatchEvent(event);
+    expect(window.alert).toHaveBeenCalledWith("Input can't be empty");
+  });
 });
