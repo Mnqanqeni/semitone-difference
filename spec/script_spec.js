@@ -1,34 +1,10 @@
 const { JSDOM } = require('jsdom');
-const { 
-  toggleButtons, 
-  changeButtonColor, 
-  displayAnswerMessage, 
-  switchOffStreakMessage, 
-  switchMessageOff, 
-  clearTheBoxes, 
-  switchOffAnswer, 
-  delayCode, 
-  doTheExplanation, 
-  showStreakMessage, 
-  showAnswer, 
-  doCount, 
-  initNotes, 
-  reloadPage, 
-  guiElements, 
-  restartEventListener, 
-  giveUpEventListener, 
-  randomizeEventListener, 
-  submitEventListener 
-} = require('../src/jam_buddy');
 
 describe('JamBuddy', function() {
   let dom;
   let document;
   let window;
-  
-  beforeEach(function() {
-    // Set up a mock DOM
-    const fs = require('fs');
+  const fs = require('fs');
     const path = require('path');
     const html = fs.readFileSync(path.resolve(__dirname, '../index.html'), 'utf-8');
     dom = new JSDOM(html);
@@ -38,7 +14,27 @@ describe('JamBuddy', function() {
     global.window = window;
     global.document = document;
 
-    // Update guiElements to use the mock DOM
+    const { 
+      toggleButtons, 
+      changeButtonColor, 
+      displayAnswerMessage, 
+      switchOffStreakMessage, 
+      switchMessageOff, 
+      clearTheBoxes, 
+      switchOffAnswer, 
+      delayCode, 
+      doTheExplanation, 
+      showStreakMessage, 
+      showAnswer, 
+      doCount, 
+      initNotes, 
+      reloadPage, 
+      restartEventListener, 
+      giveUpEventListener, 
+      randomizeEventListener, 
+      submitEventListener 
+    } = require('../src/script');
+
     const guiElements = {
       form: document.getElementById("distance-input-form"),
       streakElement: document.getElementById("streak"),
@@ -58,6 +54,12 @@ describe('JamBuddy', function() {
       firstNote: document.querySelector("#first-note"),
       secondNote: document.querySelector("#second-note"),
     };
+  
+  beforeEach(function() {
+    // Set up a mock DOM
+
+    // Update guiElements to use the mock DOM
+    
     
   });
 
