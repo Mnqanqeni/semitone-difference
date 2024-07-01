@@ -69,6 +69,7 @@ function submitEventListener(guiElements) {
 guiElements.form.addEventListener("submit", (event) => {
   event.preventDefault();
   const distance = parseInt(guiElements.inputField.value);
+  
   if (isNaN(distance)) {
     alert("Input can't be empty");
     return;
