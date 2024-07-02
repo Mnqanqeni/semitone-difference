@@ -33,7 +33,7 @@ const colorTwo = "#7da2ca";
 restartEventListener(guiElements);
 giveUpEventListener(guiElements);
 randomizeEventListener(guiElements);
-submitEventListener(guiElements);
+submitEventListener(guiElements,jamBuddy);
 
 function restartEventListener(guiElements) {
   guiElements.restartButton.addEventListener("click", () => reloadPage(window));
@@ -65,17 +65,19 @@ guiElements.randomizeButton.addEventListener("click", () => {
 
 }
 
-function submitEventListener(guiElements) {
+function submitEventListener(guiElements,jamBuddy) {
+  
 guiElements.form.addEventListener("submit", (event) => {
   event.preventDefault();
   const distance = parseInt(guiElements.inputField.value);
   
   if (isNaN(distance)) {
-    alert("Input can't be empty");
+    window.alert("Input can't be empty");
     return;
   }
 
   guiElements.inputField.value = "";
+
   switchOffAnswer(document, noteOne, noteTwo);
   switchOffStreakMessage();
 

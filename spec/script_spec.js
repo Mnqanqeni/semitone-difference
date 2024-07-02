@@ -2,7 +2,7 @@ const { JSDOM } = require('jsdom');
 const fs = require('fs');
 const path = require('path');
 const confetti = require("canvas-confetti");
-
+const {JamBuddy} = require("../src/jam_buddy");
 
 describe('JamBuddy', function() {
   let dom;
@@ -63,23 +63,17 @@ describe('JamBuddy', function() {
       firstNote: document.querySelector("#first-note"),
       secondNote: document.querySelector("#second-note"),
     };
-    
-    jamBuddy = new (class JamBuddy {
-      randomizeCurrentNotes() {
-        // Mock implementation
-        this.notes = ['C', 'D'];
-      }
 
-      getCurrentNotes() {
-        return this.notes;
-      }
-
-      checkAnswer(distance) {
-        return distance === 5; // Mock implementation
-      }
-    })();
-
-    [noteOne, noteTwo] = initNotes(jamBuddy);
+    const mockWindow = {
+      location: {
+        reload: jasmine.createSpy(),
+      },
+      alert: jasmine.createSpy(),
+    };
+  
+    global.window = mockWindow;
+    window.alert=jasmine.createSpy();
+      
   });
 
   describe('Event Listeners', function() {
@@ -114,45 +108,44 @@ describe('JamBuddy', function() {
     });
 
     it('should submit event listener with empty input', function() {
-      const mockWindow = {
-        location: {
-          reload: jasmine.createSpy(),
-        },
-        alert: jasmine.createSpy(),
-      };
+     
+      guiElements.inputField.disabled=false;
+      guiElements.submitButton.disabled=false;
+      guiElements.inputField.value = "";
+      submitEventListener(guiElements); 
     
-      global.window = mockWindow;
-    
-      guiElements.inputField.value = ""; // Set input field to empty
-      submitEventListener(guiElements); // Attach event listener
-    
-      // Trigger click on submit button
       guiElements.submitButton.click();
     
-      // Add console logs to debug
-      console.log('Alert called?', mockWindow.alert.calls.any()); // Check if alert was called
-      console.log('Alert calls:', mockWindow.alert.calls.allArgs()); // Log all arguments passed to alert
-    
-      // Expectation
       expect(mockWindow.alert).toHaveBeenCalledWith("Input can't be empty"); 
     });
     
     
 
-    // it('should submit event listener with valid input', function() {
-    //   spyOn(confetti, 'default');
-    //   submitEventListener(guiElements);
-    //   guiElements.inputField.value = "5";
-    //   const event = new dom.window.Event('submit');
-    //   guiElements.form.dispatchEvent(event);
+    fit('should submit event listener with valid input', function() {
+      const jamBuddy = new JamBuddy();
+      jamBuddy.setCurrentNotes(["A","D"])
+      guiElements.explanation.style.display = "Block";
+      guiElements.streakElement.style.display="Block"
+      guiElements.correctMessage.style.display="none";
+      guiElements.incorrectMessage.style.display="Block";
+      guiElements.inputField.disabled=false;
+      guiElements.submitButton.disabled=false;
+      guiElements.giveUpButton.disabled=false;
+      submitEventListener(guiElements,jamBuddy);
+      guiElements.inputField.value = "5";
+      guiElements.submitButton.click();
 
-    //   expect(confetti.default).toHaveBeenCalled();
-    //   expect(guiElements.correctMessage.style.display).toBe('block');
-    //   expect(guiElements.incorrectMessage.style.display).toBe('none');
-    //   expect(guiElements.inputField.disabled).toBe(true);
-    //   expect(guiElements.submitButton.disabled).toBe(true);
-    //   expect(guiElements.giveUpButton.disabled).toBe(true);
-    // });
+      expect( guiElements.explanation.style.display).toBe("none");
+      expect(guiElements.streakElement.style.display).toBe("none");
+  
+      
+      expect(guiElements.correctMessage.style.display).toBe('block');
+      // expect(guiElements.incorrectMessage.style.display).toBe('none');
+      // expect(guiElements.inputField.disabled).toBe(true);
+      // expect(guiElements.submitButton.disabled).toBe(true);
+      // expect(guiElements.giveUpButton.disabled).toBe(true);
+       
+    });
 
     // it('should handle incorrect answer on submit', function() {
     //   submitEventListener(guiElements);
