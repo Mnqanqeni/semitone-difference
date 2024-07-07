@@ -1,8 +1,4 @@
-const {
-  validateDistance,
-  validateNotesArray,
-
-} = require("./validate");
+const { validateDistance, validateNotesArray } = require("./validate");
 const { musicalElementsNotesObject } = require("./helper_objects");
 
 class JamBuddy {

@@ -78,7 +78,6 @@ function submitEventListener(guiElements) {
     switchOffStreakMessage();
 
     if (jamBuddy.checkAnswer(distance)) {
-
       confetti({
         particleCount: 100,
         spread: 160,
@@ -185,7 +184,8 @@ function showAnswer(document) {
   guiElements.answerText.style.display = "none";
 
   const getColorSelector = (index, note) =>
-    `#a${index}${arrayObject.includes(index) ? `a${note.includes("#") ? "0" : "1"}` : ""
+    `#a${index}${
+      arrayObject.includes(index) ? `a${note.includes("#") ? "0" : "1"}` : ""
     }`;
 
   document.querySelector(
@@ -239,25 +239,9 @@ function doCount(num1, num2, id, callback) {
 }
 
 module.exports = {
-  toggleButtons,
-  changeButtonColor,
-  displayAnswerMessage,
-  switchOffStreakMessage,
-  switchMessageOff,
-  clearTheBoxes,
-  switchOffAnswer,
-  delayCode,
-  doTheExplanation,
-  showStreakMessage,
-  showAnswer,
-  doCount,
-  initNotes,
-  reloadPage,
-  guiElements,
   restartEventListener,
   giveUpEventListener,
   randomizeEventListener,
   submitEventListener,
   jamBuddy,
-  confetti
 };

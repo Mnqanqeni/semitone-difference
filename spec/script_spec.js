@@ -1,8 +1,6 @@
 const { JSDOM } = require("jsdom");
 const fs = require("fs");
 const path = require("path");
-const exp = require("constants");
-const { prototype } = require("events");
 const confetti = {
   default: jasmine.createSpy(),
 };
@@ -86,7 +84,7 @@ describe("script", function () {
     });
 
     describe("giveUpEventListener", function () {
-      beforeEach(function(){
+      beforeEach(function () {
         giveUpEventListener(guiElements);
         guiElements.inputField.disabled = false;
         guiElements.giveUpButton.disabled = false;
@@ -110,7 +108,7 @@ describe("script", function () {
     });
 
     describe("randomizeEventListener", function () {
-      beforeEach(function (){
+      beforeEach(function () {
         randomizeEventListener(guiElements);
       });
 
@@ -121,7 +119,7 @@ describe("script", function () {
     });
 
     describe("submitEventListener", function () {
-      beforeEach(function(){
+      beforeEach(function () {
         jamBuddy.setCurrentNotes(["A", "D"]);
         guiElements.explanation.style.display = "none";
         guiElements.streakElement.style.display = "block";
@@ -131,8 +129,8 @@ describe("script", function () {
         guiElements.answerText.style.display = "block";
         guiElements.inputField.value = "5";
         submitEventListener(guiElements);
-      })
-      
+      });
+
       it("should trigger an alert when submitted with an empty input field", function () {
         const mockWindow = {
           location: {
@@ -153,39 +151,39 @@ describe("script", function () {
         guiElements.submitButton.click();
         expect(guiElements.explanation.style.display).toBe("block");
       });
-    
+
       it("should hide the streak element when submitted with valid input", function () {
         guiElements.submitButton.click();
         expect(guiElements.streakElement.style.display).toBe("none");
       });
-    
+
       it("should disable the input field when submitted with valid input", function () {
         guiElements.submitButton.click();
         expect(guiElements.inputField.disabled).toBe(true);
       });
-    
+
       it("should hide the answer text when submitted with valid input", function () {
         guiElements.submitButton.click();
         expect(guiElements.answerText.style.display).toBe("none");
       });
-    
+
       it("should set the background color of the first note to red when submitted with valid input", function () {
         guiElements.firstNote.style.backgroundColor = "white";
         guiElements.submitButton.click();
         expect(guiElements.firstNote.style.backgroundColor).toBe("red");
       });
-    
+
       it("should set the background color of the second note to yellow when submitted with valid input", function () {
         guiElements.secondNote.style.backgroundColor = "white";
         guiElements.submitButton.click();
         expect(guiElements.secondNote.style.backgroundColor).toBe("yellow");
       });
-    
+
       it("should disable the submit button when submitted with valid input", function () {
         guiElements.submitButton.click();
         expect(guiElements.submitButton.disabled).toBe(true);
       });
-    
+
       it("should disable the give up button when submitted with valid input", function () {
         guiElements.submitButton.click();
         expect(guiElements.giveUpButton.disabled).toBe(true);
