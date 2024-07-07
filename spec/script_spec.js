@@ -96,7 +96,6 @@ describe("script", function () {
       it("should disable input field when triggered", function () {
         guiElements.giveUpButton.click();
         expect(guiElements.inputField.disabled).toBe(true);
-        
       });
 
       it("should disable give up button when triggered", function () {
@@ -115,15 +114,26 @@ describe("script", function () {
         randomizeEventListener(guiElements);
       });
 
-      it("should randomize event listener", function () {
+      it("should enable input field when triggered", function () {
         guiElements.randomizeButton.click();
         expect(guiElements.inputField.disabled).toBe(false);
       });
     });
 
     describe("submitEventListener", function () {
+      beforeEach(function(){
+        jamBuddy.setCurrentNotes(["A", "D"]);
+        guiElements.explanation.style.display = "none";
+        guiElements.streakElement.style.display = "block";
+        guiElements.inputField.disabled = false;
+        guiElements.submitButton.disabled = false;
+        guiElements.giveUpButton.disabled = false;
+        guiElements.answerText.style.display = "block";
+        guiElements.inputField.value = "5";
+        submitEventListener(guiElements);
+      })
       
-      it("should  trigger the alert when the the is a submit of an empty field", function () {
+      it("should trigger an alert when submitted with an empty input field", function () {
         const mockWindow = {
           location: {
             reload: jasmine.createSpy(),
@@ -133,40 +143,55 @@ describe("script", function () {
 
         global.window = mockWindow;
 
-        guiElements.inputField.disabled = false;
-        guiElements.submitButton.disabled = false;
         guiElements.inputField.value = "";
-        submitEventListener(guiElements);
-
         guiElements.submitButton.click();
 
         expect(mockWindow.alert).toHaveBeenCalledWith("Input can't be empty");
       });
 
-      it("should submit event listener with valid input", function () {
-        
-        jamBuddy.setCurrentNotes(["A", "D"]);
-        guiElements.explanation.style.display = "none";
-        guiElements.streakElement.style.display = "block";
-        guiElements.inputField.disabled = false;
-        guiElements.submitButton.disabled = false;
-        guiElements.giveUpButton.disabled = false;
-        guiElements.answerText.style.display = "block";
-        guiElements.inputField.value = "5";
-
+      it("should display the explanation block when submitted with valid input", function () {
         guiElements.submitButton.click();
-
         expect(guiElements.explanation.style.display).toBe("block");
+      });
+    
+      it("should hide the streak element when submitted with valid input", function () {
+        guiElements.submitButton.click();
         expect(guiElements.streakElement.style.display).toBe("none");
+      });
+    
+      it("should disable the input field when submitted with valid input", function () {
+        guiElements.submitButton.click();
         expect(guiElements.inputField.disabled).toBe(true);
+      });
+    
+      it("should hide the answer text when submitted with valid input", function () {
+        guiElements.submitButton.click();
         expect(guiElements.answerText.style.display).toBe("none");
+      });
+    
+      it("should set the background color of the first note to red when submitted with valid input", function () {
+        guiElements.firstNote.style.backgroundColor = "white";
+        guiElements.submitButton.click();
         expect(guiElements.firstNote.style.backgroundColor).toBe("red");
+      });
+    
+      it("should set the background color of the second note to yellow when submitted with valid input", function () {
+        guiElements.secondNote.style.backgroundColor = "white";
+        guiElements.submitButton.click();
         expect(guiElements.secondNote.style.backgroundColor).toBe("yellow");
+      });
+    
+      it("should disable the submit button when submitted with valid input", function () {
+        guiElements.submitButton.click();
         expect(guiElements.submitButton.disabled).toBe(true);
+      });
+    
+      it("should disable the give up button when submitted with valid input", function () {
+        guiElements.submitButton.click();
         expect(guiElements.giveUpButton.disabled).toBe(true);
       });
 
-      it("should handle incorrect answer on submit", function () {
+      it("should handle incorrect answers on submit", function () {
         submitEventListener(guiElements);
         guiElements.inputField.value = "3";
 
