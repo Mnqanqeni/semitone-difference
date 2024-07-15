@@ -29,17 +29,18 @@ const colorOne = "#007bff";
 const colorTwo = "#7da2ca";
 
 [noteOne, noteTwo] = initNotes(jamBuddy);
+document.addEventListener("DOMContentLoaded", () => {
+  restartEventListener();
+  giveUpEventListener();
+  randomizeEventListener();
+  submitEventListener();
+});
 
-restartEventListener(guiElements);
-giveUpEventListener(guiElements);
-randomizeEventListener(guiElements);
-submitEventListener(guiElements, jamBuddy);
-
-function restartEventListener(guiElements) {
+function restartEventListener() {
   guiElements.restartButton.addEventListener("click", () => reloadPage(window));
 }
 
-function giveUpEventListener(guiElements) {
+function giveUpEventListener() {
   guiElements.giveUpButton.addEventListener("click", () => {
     toggleButtons("disable");
     changeButtonColor(colorTwo);
@@ -51,7 +52,7 @@ function giveUpEventListener(guiElements) {
   });
 }
 
-function randomizeEventListener(gui) {
+function randomizeEventListener() {
   guiElements.randomizeButton.addEventListener("click", () => {
     clearTheBoxes(document);
     switchOffAnswer(document, noteOne, noteTwo);
@@ -62,7 +63,7 @@ function randomizeEventListener(gui) {
   });
 }
 
-function submitEventListener(guiElements) {
+function submitEventListener() {
   guiElements.form.addEventListener("submit", (event) => {
     event.preventDefault();
     const distance = parseInt(guiElements.inputField.value);
@@ -244,4 +245,5 @@ module.exports = {
   randomizeEventListener,
   submitEventListener,
   jamBuddy,
+  guiElements,
 };

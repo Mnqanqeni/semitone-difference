@@ -919,11 +919,7 @@ const musicalElementsNotesObject = {
 module.exports = { errorMessages, musicalElementsNotesObject };
 
 },{}],3:[function(require,module,exports){
-const {
-  validateDistance,
-  validateNotesArray,
-
-} = require("./validate");
+const { validateDistance, validateNotesArray } = require("./validate");
 const { musicalElementsNotesObject } = require("./helper_objects");
 
 class JamBuddy {
@@ -1011,76 +1007,74 @@ const colorOne = "#007bff";
 const colorTwo = "#7da2ca";
 
 [noteOne, noteTwo] = initNotes(jamBuddy);
+document.addEventListener("DOMContentLoaded", () => {
+restartEventListener();
+giveUpEventListener();
+randomizeEventListener();
+submitEventListener();
+})
 
-restartEventListener(guiElements);
-giveUpEventListener(guiElements);
-randomizeEventListener(guiElements);
-submitEventListener(guiElements,jamBuddy);
-
-function restartEventListener(guiElements) {
+function restartEventListener() {
   guiElements.restartButton.addEventListener("click", () => reloadPage(window));
 }
- 
-function giveUpEventListener(guiElements) {
 
-guiElements.giveUpButton.addEventListener("click", () => {
-  toggleButtons("disable");
-  changeButtonColor(colorTwo);
-  guiElements.inputField.disabled = true;
-  clearTheBoxes(document);
-  doTheExplanation(document, noteOne, noteTwo, streakCounter);
-  streakCounter = 0;
-  showStreakMessage(streakCounter);
-});
-
-}
-
-function randomizeEventListener(gui) {
-guiElements.randomizeButton.addEventListener("click", () => {
-  clearTheBoxes(document);
-  switchOffAnswer(document, noteOne, noteTwo);
-  toggleButtons("enable");
-  changeButtonColor(colorOne);
-  guiElements.inputField.disabled = false;
-  [noteOne, noteTwo] = initNotes(jamBuddy);
-});
-
-}
-
-function submitEventListener(guiElements,jamBuddy) {
-  
-guiElements.form.addEventListener("submit", (event) => {
-  event.preventDefault();
-  const distance = parseInt(guiElements.inputField.value);
-  
-  if (isNaN(distance)) {
-    window.alert("Input can't be empty");
-    return;
-  }
-
-  guiElements.inputField.value = "";
-
-  switchOffAnswer(document, noteOne, noteTwo);
-  switchOffStreakMessage();
-
-  if (jamBuddy.checkAnswer(distance)) {
-    confetti({
-      particleCount: 100,
-      spread: 160,
-      origin: { y: 0.6 },
-    });
-    displayAnswerMessage("correct");
-    showAnswer(document, noteOne, noteTwo);
-    streakCounter++;
+function giveUpEventListener() {
+  guiElements.giveUpButton.addEventListener("click", () => {
     toggleButtons("disable");
     changeButtonColor(colorTwo);
     guiElements.inputField.disabled = true;
-  } else {
-    displayAnswerMessage("incorrect");
+    clearTheBoxes(document);
+    doTheExplanation(document, noteOne, noteTwo, streakCounter);
     streakCounter = 0;
-  }
-  delayCode(streakCounter);
-});
+    showStreakMessage(streakCounter);
+  });
+}
+
+function randomizeEventListener() {
+  guiElements.randomizeButton.addEventListener("click", () => {
+    clearTheBoxes(document);
+    switchOffAnswer(document, noteOne, noteTwo);
+    toggleButtons("enable");
+    changeButtonColor(colorOne);
+    guiElements.inputField.disabled = false;
+    [noteOne, noteTwo] = initNotes(jamBuddy);
+  });
+}
+
+function submitEventListener() {
+  guiElements.form.addEventListener("submit", (event) => {
+    event.preventDefault();
+    const distance = parseInt(guiElements.inputField.value);
+
+    if (isNaN(distance)) {
+      window.alert("Input can't be empty");
+      return;
+    }
+
+    guiElements.inputField.value = "";
+
+    switchOffAnswer(document, noteOne, noteTwo);
+    switchOffStreakMessage();
+
+    if (jamBuddy.checkAnswer(distance)) {
+      confetti({
+        particleCount: 100,
+        spread: 160,
+        origin: { y: 0.6 },
+      });
+
+      displayAnswerMessage("correct");
+      showAnswer(document, noteOne, noteTwo);
+      streakCounter++;
+      toggleButtons("disable");
+      changeButtonColor(colorTwo);
+      guiElements.inputField.disabled = true;
+    } else {
+      displayAnswerMessage("incorrect");
+      streakCounter = 0;
+    }
+    delayCode(streakCounter);
+  });
 }
 
 function initNotes(jamBuddy) {
@@ -1156,7 +1150,11 @@ function delayCode(streakCounter) {
   }, 600);
 }
 
-function showAnswer(document, noteOne, noteTwo) {
+function showAnswer(document) {
+  let noteOne;
+  let noteTwo;
+  [noteOne, noteTwo] = jamBuddy.getCurrentNotes();
+
   const arrayObject = [1, 4, 6, 9];
   const index1 = JamBuddy.musicalElements[noteOne];
   const index2 = JamBuddy.musicalElements[noteTwo];
@@ -1185,11 +1183,11 @@ function doTheExplanation(document, noteOne, noteTwo, streakCounter) {
   let one = JamBuddy.musicalElements[noteOne];
   let two = JamBuddy.musicalElements[noteTwo];
 
-  [one, two] = (one < two) ? [one, two] : [two, one];
+  [one, two] = one < two ? [one, two] : [two, one];
 
-    doCount(one, two, guiElements.clockwiseAnswer, () => {
-      doCount(two, one, guiElements.antiClockwiseAnswer);
-    });
+  doCount(one, two, guiElements.clockwiseAnswer, () => {
+    doCount(two, one, guiElements.antiClockwiseAnswer);
+  });
 }
 
 function doCount(num1, num2, id, callback) {
@@ -1220,26 +1218,14 @@ function doCount(num1, num2, id, callback) {
 }
 
 module.exports = {
-  toggleButtons,
-  changeButtonColor,
-  displayAnswerMessage,
-  switchOffStreakMessage,
-  switchMessageOff,
-  clearTheBoxes,
-  switchOffAnswer,
-  delayCode,
-  doTheExplanation,
-  showStreakMessage, 
-  showAnswer,
-  doCount,
-  initNotes,
-  reloadPage,
-  guiElements,
   restartEventListener,
   giveUpEventListener,
   randomizeEventListener,
   submitEventListener,
-}
+  jamBuddy,
+  guiElements
+};
+
 },{"./jam_buddy":3,"canvas-confetti":1}],5:[function(require,module,exports){
 const {
   errorMessages,

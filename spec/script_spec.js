@@ -1,16 +1,12 @@
 const { JSDOM } = require("jsdom");
 const fs = require("fs");
 const path = require("path");
-const confetti = {
-  default: jasmine.createSpy(),
-};
 
 describe("script", function () {
   let dom;
   let document;
   let window;
   let guiElements;
-  let noteOne, noteTwo;
 
   const html = fs.readFileSync(
     path.resolve(__dirname, "../index.html"),
@@ -23,7 +19,6 @@ describe("script", function () {
 
   global.window = window;
   global.document = document;
-  global.confetti = jasmine.createSpy("confetti");
 
   const {
     restartEventListener,
@@ -35,21 +30,7 @@ describe("script", function () {
 
   beforeEach(function () {
     guiElements = {
-      form: document.getElementById("distance-input-form"),
-      streakElement: document.getElementById("streak"),
-      streakNumberElement: document.getElementById("streak-number"),
-      inputField: document.getElementById("input-field"),
-      restartButton: document.getElementById("restart-btn"),
-      giveUpButton: document.getElementById("give-up-btn"),
-      randomizeButton: document.querySelector("#randomize-btn"),
-      submitButton: document.getElementById("submit-btn"),
-      correctMessage: document.getElementById("correctMessage"),
-      incorrectMessage: document.getElementById("incorrectMessage"),
-      explanation: document.querySelector("#explanation"),
-      answerText: document.querySelector("#answer-text"),
-      mainCounter: document.querySelector("#main-counter"),
-      clockwiseAnswer: document.querySelector("#clockwise-answer"),
-      antiClockwiseAnswer: document.querySelector("#anti-clockwise-answer"),
+      ...require("../src/script").guiElements,
       firstNote: document.querySelector("#a0"),
       secondNote: document.querySelector("#a5"),
     };
@@ -77,7 +58,7 @@ describe("script", function () {
 
         global.window = mockWindow;
 
-        restartEventListener(guiElements);
+        restartEventListener();
         guiElements.restartButton.click();
         expect(mockWindow.location.reload).toHaveBeenCalled();
       });
@@ -85,7 +66,7 @@ describe("script", function () {
 
     describe("giveUpEventListener", function () {
       beforeEach(function () {
-        giveUpEventListener(guiElements);
+        giveUpEventListener();
         guiElements.inputField.disabled = false;
         guiElements.giveUpButton.disabled = false;
         guiElements.submitButton.disabled = false;
@@ -109,7 +90,7 @@ describe("script", function () {
 
     describe("randomizeEventListener", function () {
       beforeEach(function () {
-        randomizeEventListener(guiElements);
+        randomizeEventListener();
       });
 
       it("should enable input field when triggered", function () {
@@ -128,7 +109,7 @@ describe("script", function () {
         guiElements.giveUpButton.disabled = false;
         guiElements.answerText.style.display = "block";
         guiElements.inputField.value = "5";
-        submitEventListener(guiElements);
+        submitEventListener();
       });
 
       it("should trigger an alert when submitted with an empty input field", function () {
@@ -190,13 +171,14 @@ describe("script", function () {
       });
 
       it("should handle incorrect answers on submit", function () {
-        submitEventListener(guiElements);
+        jasmine.clock().install();
+        submitEventListener();
         guiElements.inputField.value = "3";
 
         guiElements.submitButton.click();
-        setTimeout(() => {
-          expect(guiElements.streakNumberElement.innerText).toBe("0");
-        }, 700);
+        jasmine.clock().tick(700);
+        expect(guiElements.streakNumberElement.innerText).toBe(0);
+        jasmine.clock().uninstall();
       });
     });
   });
