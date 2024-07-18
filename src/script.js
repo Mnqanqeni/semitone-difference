@@ -46,14 +46,15 @@ function giveUpEventListener() {
     changeButtonColor(colorTwo);
     guiElements.inputField.disabled = true;
     clearTheBoxes(document);
-    doTheExplanation(document, noteOne, noteTwo, streakCounter);
+    doTheExplanation(document, noteOne, noteTwo);
     streakCounter = 0;
-    showStreakMessage(streakCounter);
+    updateStrikes(streakCounter);
   });
 }
 
 function randomizeEventListener() {
   guiElements.randomizeButton.addEventListener("click", () => {
+    switchOffAnswerMessages();
     clearTheBoxes(document);
     switchOffAnswer(document, noteOne, noteTwo);
     toggleButtons("enable");
@@ -76,7 +77,6 @@ function submitEventListener() {
     guiElements.inputField.value = "";
 
     switchOffAnswer(document, noteOne, noteTwo);
-    switchOffStreakMessage();
 
     if (jamBuddy.checkAnswer(distance)) {
       confetti({
@@ -91,11 +91,12 @@ function submitEventListener() {
       toggleButtons("disable");
       changeButtonColor(colorTwo);
       guiElements.inputField.disabled = true;
+      updateStrikes(streakCounter);
     } else {
       displayAnswerMessage("incorrect");
       streakCounter = 0;
+      updateStrikes(streakCounter);
     }
-    delayCode(streakCounter);
   });
 }
 
@@ -129,18 +130,8 @@ function displayAnswerMessage(status) {
     status === "incorrect" ? "block" : "none";
 }
 
-function showStreakMessage(streakCounter) {
+function updateStrikes(streakCounter) {
   guiElements.streakNumberElement.innerText = streakCounter;
-  guiElements.streakElement.style.display = "block";
-}
-
-function switchOffStreakMessage() {
-  guiElements.streakElement.style.display = "none";
-}
-
-function switchMessageOff() {
-  guiElements.correctMessage.style.display = "none";
-  guiElements.incorrectMessage.style.display = "none";
 }
 
 function clearTheBoxes(document) {
@@ -163,13 +154,6 @@ function switchOffAnswer(document, noteOne, noteTwo) {
   document.querySelector(
     `#a${JamBuddy.musicalElements[noteTwo]}`
   ).style.backgroundColor = "#ccc";
-}
-
-function delayCode(streakCounter) {
-  setTimeout(() => {
-    switchMessageOff();
-    showStreakMessage(streakCounter);
-  }, 600);
 }
 
 function showAnswer(document) {
@@ -196,9 +180,12 @@ function showAnswer(document) {
     getColorSelector(index2, noteTwo)
   ).style.backgroundColor = "yellow";
 }
+function switchOffAnswerMessages() {
+  guiElements.correctMessage.style.display = "none";
+  guiElements.incorrectMessage.style.display = "none";
+}
 
-function doTheExplanation(document, noteOne, noteTwo, streakCounter) {
-  showStreakMessage(streakCounter);
+function doTheExplanation(document, noteOne, noteTwo) {
   showAnswer(document, noteOne, noteTwo);
   guiElements.answerText.style.display = "block";
 

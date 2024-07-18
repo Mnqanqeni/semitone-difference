@@ -1008,11 +1008,11 @@ const colorTwo = "#7da2ca";
 
 [noteOne, noteTwo] = initNotes(jamBuddy);
 document.addEventListener("DOMContentLoaded", () => {
-restartEventListener();
-giveUpEventListener();
-randomizeEventListener();
-submitEventListener();
-})
+  restartEventListener();
+  giveUpEventListener();
+  randomizeEventListener();
+  submitEventListener();
+});
 
 function restartEventListener() {
   guiElements.restartButton.addEventListener("click", () => reloadPage(window));
@@ -1024,14 +1024,15 @@ function giveUpEventListener() {
     changeButtonColor(colorTwo);
     guiElements.inputField.disabled = true;
     clearTheBoxes(document);
-    doTheExplanation(document, noteOne, noteTwo, streakCounter);
+    doTheExplanation(document, noteOne, noteTwo);
     streakCounter = 0;
-    showStreakMessage(streakCounter);
+    updateStrikes(streakCounter);
   });
 }
 
 function randomizeEventListener() {
   guiElements.randomizeButton.addEventListener("click", () => {
+    switchOffAnswerMessages();
     clearTheBoxes(document);
     switchOffAnswer(document, noteOne, noteTwo);
     toggleButtons("enable");
@@ -1054,7 +1055,6 @@ function submitEventListener() {
     guiElements.inputField.value = "";
 
     switchOffAnswer(document, noteOne, noteTwo);
-    switchOffStreakMessage();
 
     if (jamBuddy.checkAnswer(distance)) {
       confetti({
@@ -1069,11 +1069,11 @@ function submitEventListener() {
       toggleButtons("disable");
       changeButtonColor(colorTwo);
       guiElements.inputField.disabled = true;
+      updateStrikes(streakCounter)
     } else {
       displayAnswerMessage("incorrect");
       streakCounter = 0;
     }
-    delayCode(streakCounter);
   });
 }
 
@@ -1107,18 +1107,8 @@ function displayAnswerMessage(status) {
     status === "incorrect" ? "block" : "none";
 }
 
-function showStreakMessage(streakCounter) {
+function updateStrikes(streakCounter) {
   guiElements.streakNumberElement.innerText = streakCounter;
-  guiElements.streakElement.style.display = "block";
-}
-
-function switchOffStreakMessage() {
-  guiElements.streakElement.style.display = "none";
-}
-
-function switchMessageOff() {
-  guiElements.correctMessage.style.display = "none";
-  guiElements.incorrectMessage.style.display = "none";
 }
 
 function clearTheBoxes(document) {
@@ -1143,12 +1133,6 @@ function switchOffAnswer(document, noteOne, noteTwo) {
   ).style.backgroundColor = "#ccc";
 }
 
-function delayCode(streakCounter) {
-  setTimeout(() => {
-    switchMessageOff();
-    showStreakMessage(streakCounter);
-  }, 600);
-}
 
 function showAnswer(document) {
   let noteOne;
@@ -1174,9 +1158,12 @@ function showAnswer(document) {
     getColorSelector(index2, noteTwo)
   ).style.backgroundColor = "yellow";
 }
+function switchOffAnswerMessages(){
+  guiElements.correctMessage.style.display = "none";
+  guiElements.incorrectMessage.style.display = "none";
+}
 
-function doTheExplanation(document, noteOne, noteTwo, streakCounter) {
-  showStreakMessage(streakCounter);
+function doTheExplanation(document, noteOne, noteTwo) {
   showAnswer(document, noteOne, noteTwo);
   guiElements.answerText.style.display = "block";
 
@@ -1223,7 +1210,7 @@ module.exports = {
   randomizeEventListener,
   submitEventListener,
   jamBuddy,
-  guiElements
+  guiElements,
 };
 
 },{"./jam_buddy":3,"canvas-confetti":1}],5:[function(require,module,exports){
@@ -1234,13 +1221,15 @@ const {
 const maxDistance = 11;
 
 function validateNotesArray(arrayNotes, musicalElementsArray) {
-  if (arrayNotes.length !== 2) {
-    throw new Error(errorMessages.notTwoElements);
-  } else if (!arrayNotes.every((note) => musicalElementsArray.includes(note))) {
+  if (arrayNotes.length !== 2) throw new Error(errorMessages.notTwoElements);
+
+  if (!arrayNotes.every((note) => musicalElementsArray.includes(note)))
     throw new Error(errorMessages.notesNotValid);
-  } else if (arrayNotes[0] === arrayNotes[1]) {
+
+  if (arrayNotes[0] === arrayNotes[1])
     throw new Error(errorMessages.noteDuplicated);
-  } else if (
+
+  if (
     musicalElementsNotesObject[arrayNotes[0]] ===
     musicalElementsNotesObject[arrayNotes[1]]
   ) {
@@ -1251,15 +1240,16 @@ function validateNotesArray(arrayNotes, musicalElementsArray) {
 }
 
 function validateDistance(distance) {
-  if (typeof distance !== "number") {
+  if (typeof distance !== "number")
     throw new Error(errorMessages.onlyDatatypeOfNumber);
-  } else if (!Number.isInteger(distance)) {
+
+  if (!Number.isInteger(distance))
     throw new Error(errorMessages.mustBeWholeNumber);
-  } else if (distance > maxDistance || distance === 0) {
+
+  if (distance > maxDistance || distance === 0)
     throw new Error(errorMessages.distanceOutOfRange);
-  } else if (distance < 0) {
-    throw new Error(errorMessages.negativeDistance);
-  }
+
+  if (distance < 0) throw new Error(errorMessages.negativeDistance);
 }
 
 module.exports = {
