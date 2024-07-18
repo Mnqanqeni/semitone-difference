@@ -1,6 +1,13 @@
 const { JSDOM } = require("jsdom");
 const fs = require("fs");
 const path = require("path");
+let mockWindow = {
+  location: {
+    reload: jasmine.createSpy(),
+  },
+  alert: jasmine.createSpy(),
+};
+
 
 describe("script", function () {
   let dom;
@@ -35,13 +42,6 @@ describe("script", function () {
       secondNote: document.querySelector("#a5"),
     };
 
-    const mockWindow = {
-      location: {
-        reload: jasmine.createSpy(),
-      },
-      alert: jasmine.createSpy(),
-    };
-
     global.window = mockWindow;
     window.alert = jasmine.createSpy();
   });
@@ -49,15 +49,6 @@ describe("script", function () {
   describe("Event Listeners:", function () {
     describe("restartEventListener", function () {
       it("should trigger the reload function.", function () {
-        const mockWindow = {
-          location: {
-            reload: jasmine.createSpy(),
-          },
-          alert: jasmine.createSpy(),
-        };
-
-        global.window = mockWindow;
-
         restartEventListener();
         guiElements.restartButton.click();
         expect(mockWindow.location.reload).toHaveBeenCalled();
@@ -113,15 +104,6 @@ describe("script", function () {
       });
 
       it("should trigger an alert when submitted with an empty input field", function () {
-        const mockWindow = {
-          location: {
-            reload: jasmine.createSpy(),
-          },
-          alert: jasmine.createSpy(),
-        };
-
-        global.window = mockWindow;
-
         guiElements.inputField.value = "";
         guiElements.submitButton.click();
 
