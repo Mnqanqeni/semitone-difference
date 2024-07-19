@@ -4,7 +4,8 @@
   "description": "This project is a game development to practice basic music notes.",
   "main": "./src/jam_buddy.js",
   "scripts": {
-    "test": "jasmine"
+    "test": "jasmine",
+    "bundle": "browserify ./src/script.js -o ./bundle/bundle.js"
   },
   "repository": {
     "type": "git",
@@ -17,6 +18,19 @@
   },
   "homepage": "https://github.com/Umuzi-org/Ndiyakholwa-Mnqanqeni-199-semitone-difference-basic-algorithm-javascript#readme",
   "devDependencies": {
-    "jasmine": "^5.1.0"
+    "browserify": "^17.0.0",
+    "jasmine": "^5.1.0",
+    "jasmine-core": "^5.1.2",
+    "jsdom": "^24.0.0",
+    "karma": "^6.4.3",
+    "karma-chrome-launcher": "^3.2.0",
+    "karma-jasmine": "^5.1.0"
+  },
+  "dependencies": {
+    "canvas": "^2.11.2",
+    "canvas-confetti": "^1.9.3",
+    "fs": "^0.0.1-security",
+    "JSONStream": "^1.3.5",
+    "react-toastify": "^10.0.5"
   }
 }
