@@ -1,7 +1,7 @@
 const { JSDOM } = require("jsdom");
 const fs = require("fs");
 const path = require("path");
-let mockWindow = {
+const mockWindow = {
   location: {
     reload: jasmine.createSpy(),
   },

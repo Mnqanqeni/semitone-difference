@@ -1069,10 +1069,11 @@ function submitEventListener() {
       toggleButtons("disable");
       changeButtonColor(colorTwo);
       guiElements.inputField.disabled = true;
-      updateStrikes(streakCounter)
+      updateStrikes(streakCounter);
     } else {
       displayAnswerMessage("incorrect");
       streakCounter = 0;
+      updateStrikes(streakCounter);
     }
   });
 }
@@ -1133,7 +1134,6 @@ function switchOffAnswer(document, noteOne, noteTwo) {
   ).style.backgroundColor = "#ccc";
 }
 
-
 function showAnswer(document) {
   let noteOne;
   let noteTwo;
@@ -1158,7 +1158,7 @@ function showAnswer(document) {
     getColorSelector(index2, noteTwo)
   ).style.backgroundColor = "yellow";
 }
-function switchOffAnswerMessages(){
+function switchOffAnswerMessages() {
   guiElements.correctMessage.style.display = "none";
   guiElements.incorrectMessage.style.display = "none";
 }
