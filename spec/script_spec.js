@@ -28,7 +28,6 @@ describe("script", function () {
 
   const {
     restartEventListener,
-    giveUpEventListener,
     randomizeEventListener,
     submitEventListener,
     jamBuddy,
@@ -54,36 +53,6 @@ describe("script", function () {
       });
     });
 
-    describe("giveUpEventListener", function () {
-      beforeEach(function () {
-        giveUpEventListener();
-        guiElements.inputField.disabled = false;
-        guiElements.giveUpButton.disabled = false;
-        guiElements.submitButton.disabled = false;
-      });
-
-      it("should disable input field when triggered", function () {
-        guiElements.giveUpButton.click();
-        expect(guiElements.inputField.disabled).toBe(true);
-      });
-
-      it("should disable give up button when triggered", function () {
-        guiElements.giveUpButton.click();
-        expect(guiElements.giveUpButton.disabled).toBe(true);
-      });
-
-      it("should disable submit button when triggered", function () {
-        guiElements.giveUpButton.click();
-        expect(guiElements.submitButton.disabled).toBe(true);
-      });
-
-      it("should restart the streaks when triggered", function () {
-        guiElements.inputField.value = "3";
-        guiElements.giveUpButton.click();
-        expect(guiElements.streakNumberElement.innerText).toBe(0);
-      });
-    });
-
     describe("randomizeEventListener", function () {
       beforeEach(function () {
         randomizeEventListener();
@@ -104,14 +73,15 @@ describe("script", function () {
     describe("submitEventListener", function () {
       beforeEach(function () {
         jamBuddy.setCurrentNotes(["A", "D"]);
-        guiElements.explanation.style.display = "none";
-        guiElements.streakElement.style.display = "block";
         guiElements.inputField.disabled = false;
         guiElements.submitButton.disabled = false;
-        guiElements.giveUpButton.disabled = false;
-        guiElements.answerText.style.display = "block";
         guiElements.inputField.value = "5";
         submitEventListener();
+        jasmine.clock().install();
+      });
+
+      afterEach(function () {
+        jasmine.clock().uninstall();
       });
 
       it("should trigger an alert when submitted with an empty input field", function () {
@@ -121,26 +91,9 @@ describe("script", function () {
         expect(mockWindow.alert).toHaveBeenCalledWith("Input can't be empty");
       });
 
-      it("should display the explanation block when submitted with correct input answer", function () {
-        guiElements.submitButton.click();
-        expect(guiElements.explanation.style.display).toBe("block");
-      });
-
       it("should disable the input field when submitted with correct input answer", function () {
         guiElements.submitButton.click();
         expect(guiElements.inputField.disabled).toBe(true);
-      });
-
-      it("should set the background color of the first note to red when submitted with correct input answer", function () {
-        guiElements.firstNote.style.backgroundColor = "white";
-        guiElements.submitButton.click();
-        expect(guiElements.firstNote.style.backgroundColor).toBe("red");
-      });
-
-      it("should set the background color of the second note to yellow when submitted with correct input answer", function () {
-        guiElements.secondNote.style.backgroundColor = "white";
-        guiElements.submitButton.click();
-        expect(guiElements.secondNote.style.backgroundColor).toBe("yellow");
       });
 
       it("should disable the submit button when submitted with correct input answer", function () {
@@ -156,19 +109,8 @@ describe("script", function () {
       it("should display incorrect messages when submitted with incorrect input answer", function () {
         guiElements.inputField.value = "3";
         guiElements.submitButton.click();
+        jasmine.clock().tick(200);
         expect(guiElements.incorrectMessage.style.display).toBe("block");
-      });
-
-      it("should disable the give up button when submitted with correct input answer", function () {
-        guiElements.submitButton.click();
-        expect(guiElements.giveUpButton.disabled).toBe(true);
-      });
-
-      it("should reset the streaks when submitted with correct input answer", function () {
-        guiElements.streakNumberElement.innerText = 7;
-        guiElements.inputField.value = "3";
-        guiElements.submitButton.click();
-        expect(guiElements.streakNumberElement.innerText).toBe(0);
       });
     });
   });

@@ -20,12 +20,11 @@
 /* styles.css */
 
 body {
-  background-color: #f0f0f0;
+  background-color: #1b1a1a;
   display: flex;
   height: 100hv;
   align-items: center;
   text-align: center;
-  background-image: url(../assets/background.jpg);
 }
 
 #container {
