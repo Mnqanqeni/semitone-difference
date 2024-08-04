@@ -4,7 +4,6 @@ const confetti = require("canvas-confetti");
 const guiElements = {
   form: document.getElementById("distance-input-form"),
   inputField: document.getElementById("input-field"),
-  restartButton: document.getElementById("restart-btn"),
   randomizeButton: document.querySelector("#randomize-btn"),
   submitButton: document.getElementById("submit-btn"),
   correctMessage: document.getElementById("correctMessage"),
@@ -15,18 +14,12 @@ const guiElements = {
 };
 
 const jamBuddy = new JamBuddy();
-let noteOne, noteTwo;
 
-[noteOne, noteTwo] = initNotes(jamBuddy);
+let [noteOne, noteTwo] = initNotes(jamBuddy);
 document.addEventListener("DOMContentLoaded", () => {
-  restartEventListener();
   randomizeEventListener();
   submitEventListener();
 });
-
-function restartEventListener() {
-  guiElements.restartButton.addEventListener("click", () => reloadPage(window));
-}
 
 function randomizeEventListener() {
   guiElements.randomizeButton.addEventListener("click", () => {
@@ -73,10 +66,6 @@ function initNotes(jamBuddy) {
   return [noteOne, noteTwo];
 }
 
-function reloadPage(window) {
-  window.location.reload();
-}
-
 function toggleButtons(status) {
   const isDisabled = status === "disable";
   guiElements.submitButton.disabled = isDisabled;
@@ -91,7 +80,6 @@ function displayAnswerMessage(status) {
 }
 
 module.exports = {
-  restartEventListener,
   randomizeEventListener,
   submitEventListener,
   jamBuddy,

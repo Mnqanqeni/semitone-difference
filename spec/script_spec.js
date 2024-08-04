@@ -27,7 +27,6 @@ describe("script", function () {
   global.document = document;
 
   const {
-    restartEventListener,
     randomizeEventListener,
     submitEventListener,
     jamBuddy,
@@ -45,13 +44,6 @@ describe("script", function () {
   });
 
   describe("Event Listeners:", function () {
-    describe("restartEventListener", function () {
-      it("should trigger the reload function.", function () {
-        restartEventListener();
-        guiElements.restartButton.click();
-        expect(mockWindow.location.reload).toHaveBeenCalled();
-      });
-    });
 
     describe("randomizeEventListener", function () {
       beforeEach(function () {
