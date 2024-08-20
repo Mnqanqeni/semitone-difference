@@ -79,17 +79,17 @@ describe("script", function () {
 
       it("should restart the streaks when triggered", function () {
         guiElements.inputField.value = "3";
+        guiElements.streakNumberElement.innerText=2;
         guiElements.giveUpButton.click();
         expect(guiElements.streakNumberElement.innerText).toBe(0);
       });
     });
 
     describe("randomizeEventListener", function () {
-      beforeEach(function () {
-        randomizeEventListener();
-      });
+
 
       it("should enable input field when triggered", function () {
+        guiElements.inputField.disabled=true;
         guiElements.randomizeButton.click();
         expect(guiElements.inputField.disabled).toBe(false);
       });
@@ -111,7 +111,6 @@ describe("script", function () {
         guiElements.giveUpButton.disabled = false;
         guiElements.answerText.style.display = "block";
         guiElements.inputField.value = "5";
-        submitEventListener();
       });
 
       it("should trigger an alert when submitted with an empty input field", function () {
