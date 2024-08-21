@@ -1212,6 +1212,7 @@ module.exports = {
   jamBuddy,
   guiElements,
 };
+
 },{"./jam_buddy":3,"canvas-confetti":1}],5:[function(require,module,exports){
 const {
   errorMessages,

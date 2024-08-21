@@ -26,13 +26,7 @@ describe("script", function () {
   global.window = window;
   global.document = document;
 
-  const {
-    restartEventListener,
-    giveUpEventListener,
-    randomizeEventListener,
-    submitEventListener,
-    jamBuddy,
-  } = require("../src/script");
+  const { jamBuddy } = require("../src/script");
 
   beforeEach(function () {
     guiElements = {
@@ -48,7 +42,6 @@ describe("script", function () {
   describe("Event Listeners:", function () {
     describe("restartEventListener", function () {
       it("should trigger the reload function.", function () {
-        restartEventListener();
         guiElements.restartButton.click();
         expect(mockWindow.location.reload).toHaveBeenCalled();
       });
@@ -56,7 +49,6 @@ describe("script", function () {
 
     describe("giveUpEventListener", function () {
       beforeEach(function () {
-        giveUpEventListener();
         guiElements.inputField.disabled = false;
         guiElements.giveUpButton.disabled = false;
         guiElements.submitButton.disabled = false;
@@ -79,17 +71,15 @@ describe("script", function () {
 
       it("should restart the streaks when triggered", function () {
         guiElements.inputField.value = "3";
-        guiElements.streakNumberElement.innerText=2;
+        guiElements.streakNumberElement.innerText = 2;
         guiElements.giveUpButton.click();
         expect(guiElements.streakNumberElement.innerText).toBe(0);
       });
     });
 
     describe("randomizeEventListener", function () {
-
-
       it("should enable input field when triggered", function () {
-        guiElements.inputField.disabled=true;
+        guiElements.inputField.disabled = true;
         guiElements.randomizeButton.click();
         expect(guiElements.inputField.disabled).toBe(false);
       });
@@ -172,4 +162,3 @@ describe("script", function () {
     });
   });
 });
-
