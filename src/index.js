@@ -1,5 +1,4 @@
 const { JamBuddy } = require("./jam_buddy");
-const confetti = require("canvas-confetti");
 
 const guiElements = {
   form: document.getElementById("distance-input-form"),
@@ -19,6 +18,9 @@ const guiElements = {
   antiClockwiseAnswer: document.querySelector("#anti-clockwise-answer"),
   firstNote: document.querySelector("#first-note"),
   secondNote: document.querySelector("#second-note"),
+  correctMusic:document.getElementById('correct-music'),
+  wrongMusic :document.getElementById('wrong-music'),
+  backgroundMusic:document.getElementById("background-music")
 };
 
 const jamBuddy = new JamBuddy();
@@ -54,6 +56,8 @@ function giveUpEventListener() {
 
 function randomizeEventListener() {
   guiElements.randomizeButton.addEventListener("click", () => {
+    guiElements.correctMusic.pause();
+    guiElements.correctMusic.currentTime = 0
     switchOffAnswerMessages();
     clearTheBoxes(document);
     switchOffAnswer(document, noteOne, noteTwo);
@@ -79,11 +83,17 @@ function submitEventListener() {
     switchOffAnswer(document, noteOne, noteTwo);
 
     if (jamBuddy.checkAnswer(distance)) {
+      const colors = streakCounter > 5 ? ['#ff0000', '#00ff00', '#0000ff'] : ['#007bff', '#ffb700'];
+
       confetti({
-        particleCount: 100,
-        spread: 160,
+        particleCount: 100 + streakCounter * 10,
+        spread: 160 + streakCounter * 5,
         origin: { y: 0.6 },
+        colors: colors,
       });
+
+      
+      guiElements.correctMusic.play();
 
       displayAnswerMessage("correct");
       showAnswer(document, noteOne, noteTwo);
@@ -93,6 +103,8 @@ function submitEventListener() {
       guiElements.inputField.disabled = true;
       updateStrikes(streakCounter);
     } else {
+
+      guiElements.wrongMusic.play();
       displayAnswerMessage("incorrect");
       streakCounter = 0;
       updateStrikes(streakCounter);
@@ -105,6 +117,7 @@ function initNotes(jamBuddy) {
   const [noteOne, noteTwo] = jamBuddy.getCurrentNotes();
   guiElements.firstNote.innerText = noteOne;
   guiElements.secondNote.innerText = noteTwo;
+
   return [noteOne, noteTwo];
 }
 
@@ -230,7 +243,7 @@ module.exports = {
   restartEventListener,
   giveUpEventListener,
   randomizeEventListener,
-  submitEventListener,
+  // submitEventListener,
   jamBuddy,
   guiElements,
 };

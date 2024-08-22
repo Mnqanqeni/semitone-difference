@@ -26,11 +26,11 @@ describe("script", function () {
   global.window = window;
   global.document = document;
 
-  const { jamBuddy } = require("../src/script");
+  const { jamBuddy } = require("../src/index");
 
   beforeEach(function () {
     guiElements = {
-      ...require("../src/script").guiElements,
+      ...require("../src/index").guiElements,
       firstNote: document.querySelector("#a0"),
       secondNote: document.querySelector("#a5"),
     };
