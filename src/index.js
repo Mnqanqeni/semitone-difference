@@ -1,4 +1,6 @@
 const { JamBuddy } = require("./jam_buddy");
+const confetti = require('canvas-confetti').default;
+window.confetti = confetti;
 
 const guiElements = {
   form: document.getElementById("distance-input-form"),
@@ -39,7 +41,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 function restartEventListener() {
-  guiElements.restartButton.addEventListener("click", () => reloadPage(window));
+  guiElements.restartButton.addEventListener("click", () => reloadPage(location));
 }
 
 function giveUpEventListener() {
@@ -84,15 +86,14 @@ function submitEventListener() {
 
     if (jamBuddy.checkAnswer(distance)) {
       const colors = streakCounter > 5 ? ['#ff0000', '#00ff00', '#0000ff'] : ['#007bff', '#ffb700'];
+  
+        window.confetti({
+          particleCount: 100 + streakCounter * 10,
+          spread: 160 + streakCounter * 5,
+          origin: { y: 0.6 },
+          colors: colors,
+        });
 
-      confetti({
-        particleCount: 100 + streakCounter * 10,
-        spread: 160 + streakCounter * 5,
-        origin: { y: 0.6 },
-        colors: colors,
-      });
-
-      
       guiElements.correctMusic.play();
 
       displayAnswerMessage("correct");
@@ -121,8 +122,8 @@ function initNotes(jamBuddy) {
   return [noteOne, noteTwo];
 }
 
-function reloadPage(window) {
-  window.location.reload();
+function reloadPage(location) {
+  location.href = location.href;
 }
 
 function toggleButtons(status) {
@@ -243,7 +244,8 @@ module.exports = {
   restartEventListener,
   giveUpEventListener,
   randomizeEventListener,
-  // submitEventListener,
+  submitEventListener,
+  reloadPage,
   jamBuddy,
   guiElements,
 };
