@@ -206,6 +206,7 @@ function switchOffAnswerMessages() {
 function doTheExplanation(document, noteOne, noteTwo) {
   guiElements.clockwiseAnswer.innerText="";
   guiElements.antiClockwiseAnswer.innerText="";
+  guiElements.mainCounter.innerText = "";
   showAnswer(document, noteOne, noteTwo);
   guiElements.answerText.style.display = "block";
 
