@@ -28,6 +28,7 @@ const guiElements = {
 const jamBuddy = new JamBuddy();
 let streakCounter = 0;
 let noteOne, noteTwo;
+let doCountIntervalId;
 
 const colorOne = "#007bff";
 const colorTwo = "#7da2ca";
@@ -67,6 +68,9 @@ function randomizeEventListener() {
     changeButtonColor(colorOne);
     guiElements.inputField.disabled = false;
     [noteOne, noteTwo] = initNotes(jamBuddy);
+    if (doCountIntervalId) {
+      clearInterval(doCountIntervalId);
+    }
   });
 }
 
@@ -200,6 +204,8 @@ function switchOffAnswerMessages() {
 }
 
 function doTheExplanation(document, noteOne, noteTwo) {
+  guiElements.clockwiseAnswer.innerText="";
+  guiElements.antiClockwiseAnswer.innerText="";
   showAnswer(document, noteOne, noteTwo);
   guiElements.answerText.style.display = "block";
 
@@ -217,7 +223,7 @@ function doCount(num1, num2, id, callback) {
   let count = 0;
   const totalNotes = 12;
 
-  const intervalId = setInterval(() => {
+  doCountIntervalId = setInterval(() => {
     if (num1 !== num2) {
       num1 = (num1 + 1) % totalNotes;
       count++;
@@ -231,7 +237,7 @@ function doCount(num1, num2, id, callback) {
         element.style.backgroundColor = store;
       }, 600);
     } else {
-      clearInterval(intervalId);
+      clearInterval(doCountIntervalId);
       if (typeof callback === "function") {
         callback();
       }

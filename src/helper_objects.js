@@ -32,6 +32,7 @@ const musicalElementsNotesObject = {
   Gb: 9,
   G: 10,
   "G#": 11,
+  "Ab": 11,
 };
 
 module.exports = { errorMessages, musicalElementsNotesObject };
