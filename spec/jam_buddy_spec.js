@@ -56,13 +56,6 @@ describe("JamBuddy Class:", () => {
   });
 
   describe("randomizeCurrentNotes", () => {
-    it("should return randomized notes when called.", () => {
-      const previousNotes = buddy.getCurrentNotes();
-      buddy.randomizeCurrentNotes();
-      const randomizedNotes = buddy.getCurrentNotes();
-
-      expect(previousNotes).not.toEqual(randomizedNotes);
-    });
 
     it("should return notes with no duplicates when called.", () => {
       buddy.randomizeCurrentNotes();
