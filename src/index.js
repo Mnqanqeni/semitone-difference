@@ -181,9 +181,10 @@ function showAnswer(document) {
 
   const index1 = JamBuddy.musicalElements[noteOne];
   const index2 = JamBuddy.musicalElements[noteTwo];
-
+  guiElements.mainCounter.innerText = "";
   guiElements.explanation.style.display = "block";
   guiElements.answerText.style.display = "none";
+
 
   const getColorSelector = (index, note) =>
     `#a${index}${
