@@ -32,6 +32,7 @@ let doCountIntervalId;
 
 const colorOne = "#007bff";
 const colorTwo = "#7da2ca";
+const enharmonicEquivelantsIndexArray = [1, 4, 6, 9,11];
 
 [noteOne, noteTwo] = initNotes(jamBuddy);
 document.addEventListener("DOMContentLoaded", () => {
@@ -153,9 +154,8 @@ function updateStrikes(streakCounter) {
 }
 
 function clearTheBoxes(document) {
-  const arrayObject = [1, 4, 6, 9];
   for (let i = 0; i < 12; i++) {
-    if (arrayObject.includes(i)) {
+    if (enharmonicEquivelantsIndexArray.includes(i)) {
       document.querySelector(`#a${i}a0`).style.backgroundColor = "#ccc";
       document.querySelector(`#a${i}a1`).style.backgroundColor = "#ccc";
     } else {
@@ -179,16 +179,16 @@ function showAnswer(document) {
   let noteTwo;
   [noteOne, noteTwo] = jamBuddy.getCurrentNotes();
 
-  const arrayObject = [1, 4, 6, 9];
   const index1 = JamBuddy.musicalElements[noteOne];
   const index2 = JamBuddy.musicalElements[noteTwo];
-
+  guiElements.mainCounter.innerText = "";
   guiElements.explanation.style.display = "block";
   guiElements.answerText.style.display = "none";
 
+
   const getColorSelector = (index, note) =>
     `#a${index}${
-      arrayObject.includes(index) ? `a${note.includes("#") ? "0" : "1"}` : ""
+      enharmonicEquivelantsIndexArray.includes(index) ? `a${note.includes("#") ? "0" : "1"}` : ""
     }`;
 
   document.querySelector(
