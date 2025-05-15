@@ -1,9 +1,8 @@
-import { JamBuddy } from './jam_buddy';
+import { JamBuddy } from './jam_buddy.js';
 import confetti from 'canvas-confetti';
 window.confetti = confetti;
 import '../css/styles.css';
-import correctMusic from '../assets/music/victory.mp3';
-import wrongMusic from '../assets/music/wrong.mp3';
+
 
 
 

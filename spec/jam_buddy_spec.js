@@ -1,5 +1,5 @@
-const { JamBuddy } = require("../src/jam_buddy");
-const { errorMessages } = require("../src/helper_objects");
+import { JamBuddy } from "../src/jam_buddy.js";
+import { errorMessages } from "../src/helper_objects.js";
 
 describe("JamBuddy Class:", () => {
   let buddy;

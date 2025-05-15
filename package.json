@@ -1,6 +1,7 @@
 {
   "name": "ndiyakholwa-mnqanqeni-199-semitone-difference-basic-algorithm-javascript",
   "version": "1.0.0",
+  "type": "module",
   "description": "semitone difference - basic algorithm (199) For raw project instructions see: http://syllabus.africacode.net/projects/semitone-challenge/basic-algorithm/",
   "main": "webpack.config.js",
   "scripts": {

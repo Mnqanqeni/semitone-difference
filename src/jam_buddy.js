@@ -1,5 +1,5 @@
-import { validateDistance,validateNotesArray } from "./validate";
-import { musicalElementsNotesObject } from "./helper_objects";
+import { validateDistance,validateNotesArray } from "./validate.js";
+import { musicalElementsNotesObject } from "./helper_objects.js";
 
 export class JamBuddy {
   static #musicalElements = musicalElementsNotesObject;

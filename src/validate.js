@@ -1,7 +1,4 @@
-const {
-  errorMessages,
-  musicalElementsNotesObject,
-} = require("./helper_objects");
+import { errorMessages,musicalElementsNotesObject } from "./helper_objects.js";
 const maxDistance = 11;
 
 export function validateNotesArray(arrayNotes, musicalElementsArray) {
