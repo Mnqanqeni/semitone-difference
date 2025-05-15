@@ -1,7 +1,7 @@
-const { validateDistance, validateNotesArray } = require("./validate");
-const { musicalElementsNotesObject } = require("./helper_objects");
+import { validateDistance,validateNotesArray } from "./validate";
+import { musicalElementsNotesObject } from "./helper_objects";
 
-class JamBuddy {
+export class JamBuddy {
   static #musicalElements = musicalElementsNotesObject;
   #currentNotes = [];
 
@@ -51,5 +51,3 @@ function getIndexes(currentNotes) {
 
 const getRandomNote = (arrayOfAllNotes) =>
   arrayOfAllNotes[Math.floor(Math.random() * arrayOfAllNotes.length)];
-
-module.exports = { JamBuddy };

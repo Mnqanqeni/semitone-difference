@@ -1,6 +1,12 @@
-const { JamBuddy } = require("./jam_buddy");
-const confetti = require('canvas-confetti').default;
+import { JamBuddy } from './jam_buddy';
+import confetti from 'canvas-confetti';
 window.confetti = confetti;
+import '../css/styles.css';
+import correctMusic from '../assets/music/victory.mp3';
+import wrongMusic from '../assets/music/wrong.mp3';
+
+
+
 
 const guiElements = {
   form: document.getElementById("distance-input-form"),
@@ -247,7 +253,7 @@ function doCount(num1, num2, id, callback) {
   }, 900);
 }
 
-module.exports = {
+export {
   restartEventListener,
   giveUpEventListener,
   randomizeEventListener,

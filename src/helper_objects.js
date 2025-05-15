@@ -1,4 +1,4 @@
-const errorMessages = {
+export  const errorMessages = {
   notTwoElements: "The input must consist of exactly two elements to be valid.",
   notesNotValid:
     "The provided notes are not valid. Please refer to the following array for valid notes: ['A', 'A#', 'Bb', 'B', 'C', 'C#', 'Db', 'D', 'D#', 'Eb', 'E', 'F', 'F#', 'Gb', 'G', 'G#'].",
@@ -15,7 +15,7 @@ const errorMessages = {
     `${note1} and ${note2} are inharmonic equivalent notes; there is no semitone between them.`,
 };
 
-const musicalElementsNotesObject = {
+export const musicalElementsNotesObject = {
   A: 0,
   "A#": 1,
   Bb: 1,
@@ -35,4 +35,3 @@ const musicalElementsNotesObject = {
   "Ab": 11,
 };
 
-module.exports = { errorMessages, musicalElementsNotesObject };

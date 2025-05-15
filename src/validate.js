@@ -4,7 +4,7 @@ const {
 } = require("./helper_objects");
 const maxDistance = 11;
 
-function validateNotesArray(arrayNotes, musicalElementsArray) {
+export function validateNotesArray(arrayNotes, musicalElementsArray) {
   if (arrayNotes.length !== 2) throw new Error(errorMessages.notTwoElements);
 
   if (!arrayNotes.every((note) => musicalElementsArray.includes(note)))
@@ -23,7 +23,7 @@ function validateNotesArray(arrayNotes, musicalElementsArray) {
   }
 }
 
-function validateDistance(distance) {
+export function validateDistance(distance) {
   if (typeof distance !== "number")
     throw new Error(errorMessages.onlyDatatypeOfNumber);
 
@@ -36,7 +36,3 @@ function validateDistance(distance) {
   if (distance < 0) throw new Error(errorMessages.negativeDistance);
 }
 
-module.exports = {
-  validateDistance,
-  validateNotesArray,
-};
