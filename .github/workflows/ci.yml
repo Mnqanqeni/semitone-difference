@@ -1,4 +1,4 @@
-name: CI
+name: Test Project
 on: push
 jobs:
   runs-on: ubuntu-latest
