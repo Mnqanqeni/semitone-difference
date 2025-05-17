@@ -3,10 +3,6 @@ import confetti from 'canvas-confetti';
 window.confetti = confetti;
 import '../css/styles.css';
 
-
-
-
-
 const guiElements = {
   form: document.getElementById("distance-input-form"),
   streakElement: document.getElementById("streak"),
